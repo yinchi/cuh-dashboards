@@ -1,0 +1,18 @@
+[BASIC]
+
+good-names=i,
+           j,
+           r,
+           x,
+           y,
+           _,
+           df,
+           fn,
+           qc  # quality control
+
+[MESSAGES CONTROL]
+
+disable=too-many-arguments,
+        too-many-instance-attributes,
+        too-many-locals,
+        too-many-statements

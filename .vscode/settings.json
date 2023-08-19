@@ -1,0 +1,10 @@
+{
+    "editor.rulers": [
+        100
+    ],
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "autopep8.args": [
+        "--max-line-length=100"
+    ]
+}

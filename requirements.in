@@ -1,5 +1,9 @@
 ipykernel
 nbstripout
 
+pydantic
+
 pandas
 plotly
+
+salabim
