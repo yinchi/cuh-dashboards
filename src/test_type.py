@@ -20,9 +20,9 @@ class TestType(pyd.BaseModel):
     y: ZeroToTen
 
 
-print(TestType(x=4, y=10))
+print(TestType(x=4, y=10).model_dump_json())
 
 try:
-    print(TestType(x=11, y=-1))
+    print(TestType(x=11, y=-1).model_dump_json())
 except pyd.ValidationError as exc:
     print(exc)
