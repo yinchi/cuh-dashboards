@@ -5,5 +5,6 @@ pydantic
 
 pandas
 plotly
+openpyxl
 
 salabim

@@ -1,9 +1,13 @@
 """Module defining the simulation model."""
-import json
+import os
+from pprint import pprint
 import typing as ty
 
+import openpyxl as xl
 import pandas as pd
 import pydantic as pyd
+
+import excel as xlh
 
 Probability = pyd.confloat(ge=0, le=1)
 
@@ -11,6 +15,13 @@ Probability = pyd.confloat(ge=0, le=1)
 class ArrivalSchedule(pyd.BaseModel):
     """An arrival schedule for specimens."""
     rates: ty.Sequence[pyd.NonNegativeFloat]
+
+    @pyd.field_validator('rates', mode='after')
+    @classmethod
+    def _is_length_168(cls, seq: ty.Sequence[pyd.NonNegativeFloat]):
+        """Enforce sequence length on  ``day_flags`` argument."""
+        assert len(seq) == 168, 'Length of sequence must be 168.'
+        return seq
 
     @staticmethod
     def from_pd(df: pd.DataFrame) -> 'ArrivalSchedule':
@@ -46,12 +57,14 @@ class ResourceSchedule(pyd.BaseModel):
     def _is_length_7(cls, seq: ty.Sequence[bool]):
         """Enforce sequence length on  ``day_flags`` argument."""
         assert len(seq) == 7, 'Length of sequence must be 7.'
+        return seq
 
     @pyd.field_validator('allocation', mode='after')
     @classmethod
     def _is_length_48(cls, seq: ty.Sequence[bool]):
         """Enforce sequence length on  ``allocation`` argument."""
         assert len(seq) == 48, 'Length of sequence must be 48.'
+        return seq
 
     @staticmethod
     def from_pd(df: pd.DataFrame, row_name: str) -> 'ResourceSchedule':
@@ -193,7 +206,7 @@ The field titles in this class **MUST** match the rows of the Excel input file \
                   description='Time to book in the specimen, if the specimen was received '
                   'internally, i.e. it already exists on the EPIC sytem.')
     booking_in_external: DistributionInfo =\
-        pyd.Field(title='Booking-in (internal)',
+        pyd.Field(title='Booking-in (external)',
                   description='Time to book in the specimen, if the specimen was received '
                   'externally, i.e. a new entry must be created on EPIC.')
     booking_in_investigation_internal_easy: DistributionInfo =\
@@ -205,13 +218,13 @@ The field titles in this class **MUST** match the rows of the Excel input file \
                   description='Time to conduct a booking-in investigation for an internal '
                   'specimen, if the investigation is classified as "hard".')
     booking_in_investigation_external: DistributionInfo =\
-        pyd.Field(title='Booking-in investigation (internal, easy)',
+        pyd.Field(title='Booking-in investigation (external)',
                   description='Time to conduct a booking-in investigation for an '
                   'external specimen.')
     cut_up_bms: DistributionInfo =\
         pyd.Field(title='Cut-up (BMS)', description='Time to conduct a BMS cut-up.')
     cut_up_pool: DistributionInfo =\
-        pyd.Field(title='Cut-up (Pool)', description='Time to conduct a pool cut-up.')
+        pyd.Field(title='Cut-up (pool)', description='Time to conduct a pool cut-up.')
     cut_up_large_specimens: DistributionInfo =\
         pyd.Field(title='Cut-up (large specimens)',
                   description='Time to conduct a large specimens cut-up.')
@@ -224,10 +237,10 @@ The field titles in this class **MUST** match the rows of the Excel input file \
         pyd.Field(title='Unload bone station',
                   description='Time to unload a batch of blocks into a bone station.')
     load_into_decalc_oven: DistributionInfo =\
-        pyd.Field(title='Load bone station',
+        pyd.Field(title='Load into decalc oven',
                   description='Time to load a single block into a bone station.')
     unload_from_decalc_oven: DistributionInfo =\
-        pyd.Field(title='Load bone station',
+        pyd.Field(title='Unload from decalc oven',
                   description='Time to unload a single block into a bone station.')
     load_processing_machine: DistributionInfo =\
         pyd.Field(title='Load processing machine',
@@ -267,26 +280,26 @@ The field titles in this class **MUST** match the rows of the Excel input file \
                   description='Time to produce large-section slides from a block. '
                   'These are regular-sized slides, but with larger tissue sections.')
     microtomy_megas: DistributionInfo =\
-        pyd.Field(title='Microtomy (mega)',
+        pyd.Field(title='Microtomy (megas)',
                   description='Time to produce mega slides from a mega block.')
     load_staining_machine_regular: DistributionInfo =\
         pyd.Field(title='Load staining machine (regular)',
                   description='Time to load a batch of regular-sized slides into a '
                   'staining machine.')
     load_staining_machine_megas: DistributionInfo =\
-        pyd.Field(title='Load staining machine (regular)',
+        pyd.Field(title='Load staining machine (megas)',
                   description='Time to load a batch of mega slides into a staining machine.')
     staining_regular: DistributionInfo =\
-        pyd.Field(title='Load staining machine (regular)',
+        pyd.Field(title='Staining (regular)',
                   description='Time to stain a batch of regular slides.')
     staining_megas: DistributionInfo =\
-        pyd.Field(title='Load staining machine (regular)',
+        pyd.Field(title='Staining (megas)',
                   description='Time to stain a batch of mega slides.')
     unload_staining_machine_regular: DistributionInfo =\
-        pyd.Field(title='Load staining machine (regular)',
+        pyd.Field(title='Unload staining machine (regular)',
                   description='Time to unload a batch of regular slides from a staining machine.')
     unload_staining_machine_megas: DistributionInfo =\
-        pyd.Field(title='Load staining machine (regular)',
+        pyd.Field(title='Unload staining machine (megas)',
                   description='Time to unload a batch of mega slides from a staining machine.')
     load_coverslip_machine_regular: DistributionInfo =\
         pyd.Field(title='Load coverslip machine (regular)',
@@ -295,10 +308,10 @@ The field titles in this class **MUST** match the rows of the Excel input file \
         pyd.Field(title='Coverslipping (regular)',
                   description='Time to affix coverslips to a batch of regular slides.')
     coverslip_megas: DistributionInfo =\
-        pyd.Field(title='Load coverslip machine (regular)',
+        pyd.Field(title='Coverslipping (megas)',
                   description='Time to affix a coverslip to a mega slide (manual task).')
     unload_coverslip_machine_regular: DistributionInfo =\
-        pyd.Field(title='Load coverslip machine (regular)',
+        pyd.Field(title='Unload coverslip machine (regular)',
                   description='Time to unload a batch of regular slides into a coverslip machine.')
     labelling: DistributionInfo =\
         pyd.Field(title='Labelling', description='Time to label a slide.')
@@ -313,13 +326,13 @@ The field titles in this class **MUST** match the rows of the Excel input file \
         pyd.Field(title='Scanning (regular)',
                   description='Time to scan a batch of regular slides.')
     scanning_megas: DistributionInfo =\
-        pyd.Field(title='Scanning (regular)',
+        pyd.Field(title='Scanning (megas)',
                   description='Time to scan a batch of mega slides.')
     unload_scanning_machine_regular: DistributionInfo =\
         pyd.Field(title='Unload scanning machine (regular)',
                   description='Time to unload a batch of regular slides from a scanning machine.')
     unload_scanning_machine_megas: DistributionInfo =\
-        pyd.Field(title='Unload scanning machine (regular)',
+        pyd.Field(title='Unload scanning machine (megas)',
                   description='Time to unload a batch of mega slides from a scanning machine.')
     block_and_quality_check: DistributionInfo =\
         pyd.Field(title='Block and quality check',
@@ -504,12 +517,83 @@ and therefore should not contain any spaces or symbols."""
 class Config(pyd.BaseModel):
     """Configuration settings for the histopathlogy department model."""
 
-    arrival_schedules: ArrivalSchedules
-    resources_info: ResourcesInfo
-    task_durations_info: TaskDurationsInfo
-    batch_sizes: BatchSizes
-    global_vars: Globals
+    arrival_schedules: ArrivalSchedules = pyd.Field(title='Arrival Schedules')
+    resources_info: ResourcesInfo = pyd.Field(title='Resources')
+    task_durations_info: TaskDurationsInfo = pyd.Field(title='Task Durations')
+    batch_sizes: BatchSizes = pyd.Field(title='Batch Sizes')
+    global_vars: Globals = pyd.Field(title='Global Variables')
+
+    sim_hours: pyd.NonNegativeFloat = pyd.Field(title='Simulation length (hours)')
+    num_reps: pyd.NonNegativeInt = pyd.Field(title='Number of simulation replications')
+
+    @staticmethod
+    def from_excel(path: os.PathLike, sim_hours: float, num_reps: int):
+        """Load a config from an Excel file."""
+        wbook = xl.load_workbook(path, data_only=True)
+        arrival_schedule_cancer_df = xlh.get_table(
+            wbook, sheet_name='Arrival Schedules', name='ArrivalScheduleCancer'
+        ).set_index('Hour')
+        arrival_schedule_noncancer_df = xlh.get_table(
+            wbook, sheet_name='Arrival Schedules', name='ArrivalScheduleNonCancer'
+        ).set_index('Hour')
+        arrival_schedules = ArrivalSchedules(
+            cancer=ArrivalSchedule.from_pd(arrival_schedule_cancer_df),
+            noncancer=ArrivalSchedule.from_pd(arrival_schedule_noncancer_df)
+        )
+
+        resources_df = xlh.get_table(
+            wbook, sheet_name='Resources', name='Resources').fillna(0.0).set_index('Resource')
+        resources_info = {key: ResourceInfo(
+            name=field.title,
+            type=field.json_schema_extra['resource_type'],
+            schedule=ResourceSchedule.from_pd(resources_df, row_name=field.title)
+        ) for key, field in ResourcesInfo.model_fields.items()}
+        resources_info = ResourcesInfo(**resources_info)
+
+        tasks_df = xlh.get_table(
+            wbook, sheet_name='Task Durations', name='TaskDurations').set_index('Task')
+        task_durations_info = {key: DistributionInfo(
+            type=tasks_df.loc[field.title, 'Distribution'],
+            low=tasks_df.loc[field.title, 'Optimistic'],
+            mode=tasks_df.loc[field.title, 'Most Likely'],
+            high=tasks_df.loc[field.title, 'Pessimistic'],
+            time_unit=tasks_df.loc[field.title, 'Units'],
+        ) for key, field in TaskDurationsInfo.model_fields.items()}
+        task_durations_info = TaskDurationsInfo(**task_durations_info)
+
+        batch_sizes_df = xlh.get_table(
+            wbook, sheet_name='Batch Sizes', name='BatchSizes').set_index('Batch Name')
+        batch_sizes = {key: batch_sizes_df.loc[field.title, 'Size']
+                       for key, field in BatchSizes.model_fields.items()}
+
+        globals_float = {
+            key: xlh.get_name(wbook, field.title) for key, field in Globals.model_fields.items()
+            if field.annotation == float
+        }
+        globals_dists = {
+            key: IntDistributionInfo(
+                type=xlh.get_name(wbook, field.title)[0],
+                low=xlh.get_name(wbook, field.title)[1],
+                mode=xlh.get_name(wbook, field.title)[2],
+                high=xlh.get_name(wbook, field.title)[3]
+            )
+            for key, field in Globals.model_fields.items()
+            if field.annotation == IntDistributionInfo
+        }
+        global_vars = Globals(**globals_float, **globals_dists)
+
+        # Call __init__()
+        return Config(
+            arrival_schedules=arrival_schedules,
+            resources_info=resources_info,
+            task_durations_info=task_durations_info,
+            batch_sizes=batch_sizes,
+            global_vars=global_vars,
+            sim_hours=sim_hours,
+            num_reps=num_reps
+        )
 
 
 if __name__ == '__main__':
-    print(json.dumps(Config.model_json_schema(), indent=2))
+    config = Config.from_excel('../config.xlsx', 6*7*24, 10)
+    print(config.model_dump_json())
