@@ -3,3 +3,5 @@ test.db
 ~$*.xlsx
 
 __pycache__
+docs/build
+docs/source/apidoc
