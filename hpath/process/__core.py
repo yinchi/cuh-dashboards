@@ -2,18 +2,18 @@
 These definitions are exported to the top level of histopath.process
 using the ``__all__`` keyword."""
 
-from collections.abc import Callable
 import itertools
-from typing import TYPE_CHECKING, Type, Union
+from typing import TYPE_CHECKING, Type, Union, Callable
 
 import salabim as sim
-from salabim.salabim import Environment
+from salabim import Environment
 
 from ..specimens import Batch, Component, Priority, Specimen
 from ..util import ARR_RATE_INTERVAL_HOURS, RESOURCE_ALLOCATION_INTERVAL_HOURS
 
 if TYPE_CHECKING:
-    from ..model import ArrivalSchedule, Model, ResourceSchedule
+    from ..model import Model
+    from ..config import ArrivalSchedule, ResourceSchedule
 
 
 class ArrivalGenerator(Component):

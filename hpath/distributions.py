@@ -128,9 +128,17 @@ class IntPERT:
 
     def __init__(self, low: int, mode: int, high: int, env: sim.Environment):
         self.low = low
+        """Minimum of the distribution."""
+
         self.mode = mode
+        """Mode of the distribution."""
+
         self.high = high
+        """Maximum of the distribution."""
+
         self.pert = PERT(low-mode-0.5, 0, high-mode+0.5, env=env)
+        """Underlying continuous PERT distribution, i.e.
+        ``PERT(low-mode-0.5, 0, high-mode+0.5)``."""
 
     def sample(self) -> int:
         """Sample the distribution."""

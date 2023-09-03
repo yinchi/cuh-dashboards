@@ -1,8 +1,7 @@
 """Compute KPIs for a model from simulation results."""
-from collections.abc import Iterable
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypedDict, Iterable
 
 import numpy as np
 import pandas as pd
@@ -191,10 +190,12 @@ Progress = TypedDict('Progress', {
     '12': float,
     '21': float
 })
+"""Returns the proportion of specimens completed within 7, 10, 12, and 21 days."""
 
 LabProgress = TypedDict('LabProgress', {
     '3': float
 })
+"""Returns the proportion of specimens with lab component completed within three days."""
 
 
 @dataclass(kw_only=True)
@@ -249,14 +250,14 @@ class Report:
                 tat_dist(mdl, [7, 10, 12, 21]).TAT.tolist()
             )),
             lab_progress=dict(zip(['3'], tat_dist(mdl, [3]).TAT_lab.tolist())),
-            tat_by_stage=ChartData.from_pandas(tat_by_stage(mdl)).fake_min_max(),
+            tat_by_stage=ChartData.from_pandas(tat_by_stage(mdl)),
             resource_allocation={
                 res.name(): ChartData.from_pandas(allocation_timeseries(res))
                 for res in util.dc_values(mdl.resources)
             },
-            wip_by_stage=MultiChartData.from_pandas(wip_hourlies(mdl)).fake_min_max(),
-            utilization_by_resource=ChartData.from_pandas(utilisation_means(mdl)).fake_min_max(),
-            q_length_by_resource=ChartData.from_pandas(q_length_means(mdl)).fake_min_max(),
+            wip_by_stage=MultiChartData.from_pandas(wip_hourlies(mdl)),
+            utilization_by_resource=ChartData.from_pandas(utilisation_means(mdl)),
+            q_length_by_resource=ChartData.from_pandas(q_length_means(mdl)),
             hourly_utilization_by_resource=MultiChartData.from_pandas(
-                utilisation_hourlies(mdl))#  .fake_min_max()
-        ).fake_min_max()
+                utilisation_hourlies(mdl)),
+        )

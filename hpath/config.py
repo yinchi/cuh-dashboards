@@ -1,4 +1,10 @@
-"""Module defining the configuration settings for the histopathology simulation model."""
+"""Module defining the configuration settings for the histopathology simulation model.
+
+The configuration settings are defined using Pydantic, and are fully convertable to JSON.
+To actually run a simulation, the configuration settings (as a :py:class:`hpath.config.Config`
+object) are converted to a :py:class:`hpath.model.Model` object, which contain the actual Python
+objects used for :py:class:`~salabim.Resource` tracking, etc.
+"""
 from datetime import datetime
 import os
 import typing as ty

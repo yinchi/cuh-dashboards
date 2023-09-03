@@ -148,7 +148,37 @@ class Wips:
 
 
 class Model(sim.Environment):
-    """The simulation model."""
+    """The simulation model.
+
+    Attributes:
+        num_reps (int):
+            The number of simulation replications to run the model.
+        sim_length (float):
+            The duration of each simulation replication.
+        created (float):
+            UNIX timestamp of the model configuration's creation time.
+        analysis_id (int | None):
+            ID of the multi-scenario analysis, if this model is part of one.
+        resources (Resources):
+            The resources associated with this model, as a dataclass instance.
+        task_durations:
+            Dataclass instance containing the task durations for the model.
+        batch_sizes (hpath.config.BatchSizes):
+            Dataclass instance containing the batch sizes for various tasks in the model.
+        globals (hpath.config.Globals)
+            Dataclass instance containing global variables for the model.
+
+            **Note:** during initialisation from a
+            :py:class:`hpath.config.Config` object, globals of type
+            :py:class:`hpath.config.IntDistributionInfo` are converted to instances of the matching
+            distribution type in :py:mod:`hpath.distributions`.
+        completed_specimens (salabim.Store):
+            A store containing completed specimens, so that statistics can be computed.
+        wips (Wips):
+            Dataclass instance containing work-in-progress counters for the model.
+        processes (dict[str, hpath.process.Process | hpath.process.BatchingProcess | hpath.process.CollationProcess]):
+            Dict mapping strings to the processes of the simulation model.
+    """
 
     def __init__(self, config: Config, **kwargs) -> None:
         """Constructor.
@@ -171,10 +201,10 @@ class Model(sim.Environment):
         object initialisation."""
         super().setup()
 
-        self.num_reps = config.num_reps
-        self.sim_length = self.env.hours(config.sim_hours)
-        self.created = config.created
-        self.analysis_id = config.analysis_id
+        self.num_reps: int = config.num_reps
+        self.sim_length: float = self.env.hours(config.sim_hours)
+        self.created: float = config.created
+        self.analysis_id: int | None = config.analysis_id
 
         # ARRIVALS
         ArrivalGenerator(
@@ -194,7 +224,8 @@ class Model(sim.Environment):
         )
 
         # RESOURCES AND RESOURCE SCHEDULERS
-        self.resources = Resources(self)
+        self.resources: Resources = Resources(self)
+
         for name, resource in dc_items(self.resources):
             resource: sim.Resource
             resource_info: ResourceInfo = getattr(config.resources_info, name)
@@ -245,6 +276,7 @@ class Model(sim.Environment):
 
         # REGISTER PROCESSES
         self.processes: dict[str, ProcessType] = {}
+
         process.p10_reception.register(self)
         process.p20_cutup.register(self)
         process.p30_processing.register(self)
@@ -259,6 +291,7 @@ class Model(sim.Environment):
         self.u01 = sim.Uniform(0, 1, time_unit=None, env=self)
 
     def run(self) -> None:  # pylint: disable=arguments-differ
+        """Run the simulation for the duration set in ``self.sim_length``."""
         super().run(duration=self.sim_length)
 
 

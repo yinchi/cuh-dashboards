@@ -5,3 +5,6 @@ test.db
 __pycache__
 docs/build
 docs/source/apidoc
+
+test*.out
+test*.json
