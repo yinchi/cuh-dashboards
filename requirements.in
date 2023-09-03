@@ -1,6 +1,7 @@
 ipykernel
 nbstripout
 
+dacite
 pydantic
 
 pandas
@@ -8,6 +9,7 @@ plotly
 openpyxl
 
 salabim
+greenlet
 
 sphinx
 sphinx_rtd_theme

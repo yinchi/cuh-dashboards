@@ -1,4 +1,5 @@
-"""Module defining the simulation model."""
+"""Module defining the configuration settings for the histopathology simulation model."""
+from datetime import datetime
 import os
 import typing as ty
 
@@ -9,6 +10,7 @@ import pydantic as pyd
 from . import excel as xlh
 
 Probability = pyd.confloat(ge=0, le=1)
+
 
 class ArrivalSchedule(pyd.BaseModel):
     """An arrival schedule for specimens."""
@@ -132,7 +134,7 @@ class ResourcesInfo(pyd.BaseModel):
     scanning_machine_regular: ResourceInfo = pyd.Field(
         title='Scanning machine (regular)', json_schema_extra={'resource_type': 'machine'})
     scanning_machine_megas: ResourceInfo = pyd.Field(
-            title='Scanning machine (megas)', json_schema_extra={'resource_type': 'machine'})
+        title='Scanning machine (megas)', json_schema_extra={'resource_type': 'machine'})
 
     @staticmethod
     def from_pd(df: pd.DataFrame) -> 'ResourcesInfo':
@@ -190,7 +192,9 @@ class DistributionInfo(pyd.BaseModel):
         # Constant case
         if self.type == 'Constant':
             return __class__.model_construct(
-                type='Constant', low=self.mode, mode=self.mode, high=self.mode)
+                type='Constant', low=self.mode, mode=self.mode, high=self.mode,
+                time_unit=self.time_unit
+            )
         # Other cases
         assert self.mode >= self.low, 'Failed requirement: mode >= low'
         assert self.high >= self.mode, 'Failed requirement: high >= mode'
@@ -575,8 +579,17 @@ class Config(pyd.BaseModel):
     num_reps: pyd.NonNegativeInt = pyd.Field(title='Number of simulation replications')
     """Number of simulation replications to run."""
 
+    created: float
+
+    analysis_id: int | None
+
     @staticmethod
-    def from_excel(path: os.PathLike, sim_hours: float, num_reps: int) -> 'Config':
+    def from_excel(
+        path: os.PathLike,
+        sim_hours: float,
+        num_reps: int,
+        analysis_id: int | None = None
+    ) -> 'Config':
         """Load a config from an Excel file."""
         wbook = xl.load_workbook(path, data_only=True)
         arrival_schedule_cancer_df = xlh.get_table(
@@ -639,10 +652,13 @@ class Config(pyd.BaseModel):
             batch_sizes=batch_sizes,
             global_vars=global_vars,
             sim_hours=sim_hours,
-            num_reps=num_reps
+            num_reps=num_reps,
+            created=datetime.utcnow().timestamp(),
+            analysis_id=analysis_id
         )
 
 
 if __name__ == '__main__':
     config = Config.from_excel('config.xlsx', 6*7*24, 10)
-    print(config.model_dump_json())
+    for k, v in iter(config.task_durations_info):
+        print(k, v.model_dump_json())

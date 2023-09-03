@@ -27,7 +27,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',]
 
-# autodoc_typehints_format = 'fully-qualified'
+autodoc_typehints_format = 'fully-qualified'
 autoapi_add_toctree_entry = False
 autoapi_member_order = 'bysource'
 
