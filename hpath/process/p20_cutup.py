@@ -35,8 +35,8 @@ def register(env: 'Model') -> None:
         'cutup_bms_to_processing',
         env=env,
         runner=env.resources.bms,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='processing_start'
     )
 
@@ -55,8 +55,8 @@ def register(env: 'Model') -> None:
         'cutup_pool_to_processing',
         env=env,
         runner=env.resources.cut_up_assistant,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='processing_start'
     )
 
@@ -75,8 +75,8 @@ def register(env: 'Model') -> None:
         'cutup_large_to_processing',
         env=env,
         runner=env.resources.cut_up_assistant,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='processing_start'
     )
 

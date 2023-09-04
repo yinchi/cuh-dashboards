@@ -66,8 +66,8 @@ def register(env: 'Model') -> None:
         'staining_to_labelling',
         env=env,
         runner=env.resources.staining_staff,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='labelling'
     )
 

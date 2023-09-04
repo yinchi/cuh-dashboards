@@ -208,7 +208,7 @@ class Report:
     lab_progress: Progress
     tat_by_stage: ChartData
     resource_allocation: dict[str, ChartData]  # ChartData for each resource
-    wip_by_stage: dict[str, ChartData]  # ChartData for each stage
+    wip_by_stage: MultiChartData
     utilization_by_resource: ChartData
     q_length_by_resource: ChartData
     hourly_utilization_by_resource: MultiChartData

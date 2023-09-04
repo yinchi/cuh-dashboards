@@ -30,8 +30,8 @@ def register(env: 'Model') -> None:
         'reception_to_cutup',
         env=env,
         runner=env.resources.booking_in_staff,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='cutup_start'
     )
 

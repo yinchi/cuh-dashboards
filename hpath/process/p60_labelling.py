@@ -25,8 +25,8 @@ def register(env: "Model") -> None:
         'labelling_to_scanning',
         env=env,
         runner=env.resources.microtomy_staff,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='scanning_start'
     )
 

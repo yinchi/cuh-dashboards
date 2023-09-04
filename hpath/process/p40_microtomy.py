@@ -27,8 +27,8 @@ def register(env: 'Model') -> None:
         'microtomy_to_staining',
         env=env,
         runner=env.resources.microtomy_staff,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='staining_start'
     )
 

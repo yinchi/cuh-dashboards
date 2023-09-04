@@ -117,8 +117,8 @@ def register(env: 'Model') -> None:
         'processing_to_microtomy',
         env=env,
         runner=env.resources.processing_room_staff,
-        out_duration=env.minutes(5),
-        return_duration=env.minutes(5),
+        out_duration=env.minutes(2),
+        return_duration=env.minutes(2),
         out_process='microtomy'
     )
 
