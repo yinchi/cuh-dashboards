@@ -1,0 +1,35 @@
+services:
+  docs:
+    image: httpd:alpine
+    volumes:
+      - ./docs:/docs
+    command: httpd -d /docs/build/html -f /docs/httpd.conf -D FOREGROUND
+    ports:
+      - 8000:8000
+    tty: true
+  redis:
+    image: redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+  redis-worker:
+    image: backend
+    build:
+      dockerfile: backend.Dockerfile
+    volumes:
+      - .:/app/
+    command: python -m hpath.restful.redis
+    depends_on:
+      - redis
+  server:
+    image: backend
+    volumes:
+      - .:/app/
+    command: python -m hpath.restful.server
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
+      - redis-worker

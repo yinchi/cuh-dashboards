@@ -590,14 +590,15 @@ class Config(pyd.BaseModel):
     analysis_id: int | None
 
     @staticmethod
-    def from_excel(
-        path: os.PathLike,
+    def from_workbook(
+        # path: os.PathLike,
+        wbook: xl.Workbook,
         sim_hours: float,
         num_reps: int,
         analysis_id: int | None = None
     ) -> 'Config':
-        """Load a config from an Excel file."""
-        wbook = xl.load_workbook(path, data_only=True)
+        """Load a config from an Excel workbook."""
+        # wbook = xl.load_workbook(path, data_only=True)
         arrival_schedule_cancer_df = xlh.get_table(
             wbook, sheet_name='Arrival Schedules', name='ArrivalScheduleCancer'
         ).set_index('Hour')
@@ -665,6 +666,6 @@ class Config(pyd.BaseModel):
 
 
 if __name__ == '__main__':
-    config = Config.from_excel('config.xlsx', 6*7*24, 10)
-    for k, v in iter(config.task_durations_info):
-        print(k, v.model_dump_json())
+    wbook = xl.load_workbook('config.xlsx', data_only=True)
+    config = Config.from_workbook(wbook, 6*7*24, 10)
+    print(config.model_dump_json())

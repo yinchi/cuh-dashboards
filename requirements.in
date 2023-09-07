@@ -14,3 +14,7 @@ greenlet
 sphinx<7.2.5  # See https://github.com/sphinx-doc/sphinx/issues/11662
 sphinx_rtd_theme
 sphobjinv
+
+flask
+flask-cors
+rq

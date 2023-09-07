@@ -1,0 +1,12 @@
+dacite
+pydantic
+
+pandas
+openpyxl
+
+salabim
+greenlet
+
+flask
+flask-cors
+rq

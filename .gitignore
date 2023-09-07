@@ -1,5 +1,5 @@
 .venv
-test.db
+*.db
 ~$*.xlsx
 
 __pycache__

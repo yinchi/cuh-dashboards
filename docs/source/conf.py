@@ -54,7 +54,8 @@ intersphinx_mapping = {
     'openpyxl': ('https://openpyxl.readthedocs.io/en/stable/', None),
     'salabim': ('https://www.salabim.org/manual/', None),
     'sphinx': ("https://www.sphinx-doc.org/en/master/", None),
-    'pydantic': ("https://docs.pydantic.dev/latest/", None)
+    'pydantic': ("https://docs.pydantic.dev/latest/", None),
+    'flask': ("https://flask.palletsprojects.com/en/latest/", None)
 }
 
 # -- Options for HTML output -------------------------------------------------
