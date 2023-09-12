@@ -5,9 +5,8 @@ To actually run a simulation, the configuration settings (as a :py:class:`hpath.
 object) are converted to a :py:class:`hpath.model.Model` object, which contain the actual Python
 objects used for :py:class:`~salabim.Resource` tracking, etc.
 """
-from datetime import datetime
-import os
 import typing as ty
+from datetime import datetime
 
 import openpyxl as xl
 import pandas as pd
@@ -384,7 +383,7 @@ class BatchSizes(pyd.BaseModel):
     specimens, blocks, or slides in a machine or delivery batch.  Batches in the model
     are homogeneous, i.e. all items in a batch are of the same type.
 
-    The field titles in this class MUST match the rows of the Excel input file 
+    The field titles in this class MUST match the rows of the Excel input file
     ("Batch Sizes" tab)."""
 
     deliver_reception_to_cut_up: pyd.PositiveInt =\

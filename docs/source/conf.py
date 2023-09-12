@@ -22,10 +22,9 @@ author = 'Yin-Chi Chan'
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.githubpages',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.todo',
-              'sphinx.ext.mathjax',
               'sphinx.ext.viewcode',
-              'sphinx.ext.napoleon',]
+              'sphinx.ext.napoleon',
+              'sphinxcontrib.kroki']
 
 autodoc_typehints_format = 'fully-qualified'
 autoapi_add_toctree_entry = False

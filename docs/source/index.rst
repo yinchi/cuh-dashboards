@@ -11,15 +11,18 @@ Cambridge University Hospitals NHS Foundation Trust.
    :maxdepth: 1
    :caption: Documentation
 
+   design
+   excel
+   process_logic
+
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 3
    :caption: Python Documentation
 
    apidoc/hpath
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

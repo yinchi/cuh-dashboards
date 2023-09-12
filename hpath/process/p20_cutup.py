@@ -5,7 +5,6 @@
 
 from typing import TYPE_CHECKING
 
-from ..distributions import PERT
 from ..specimens import Block, Priority, Specimen
 from .__core import Batch, BatchingProcess, DeliveryProcess, Process
 
