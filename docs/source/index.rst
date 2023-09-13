@@ -14,6 +14,7 @@ Cambridge University Hospitals NHS Foundation Trust.
    design
    excel
    process_logic
+   REST API <apidoc/hpath.restful.server>
 
 .. toctree::
    :maxdepth: 3

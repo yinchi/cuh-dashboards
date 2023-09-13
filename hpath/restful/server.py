@@ -1,4 +1,32 @@
-"""The simulation server."""
+"""The simulation server.
+
+REST API
+--------
+
++---------------------------------------+-----------------+------------------------------------------------------+
+| **Endpoint**                          | **HTTP Method** | **Python function signature**                        |
++=======================================+=================+======================================================+
+| ``/``                                 | GET             | :py:func:`~hpath.restful.server.hello_world()`       |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/scenarios/``                       | POST            | :py:func:`~hpath.restful.server.new_scenario_rest`   |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/scenarios/``                       | GET             | :py:func:`~hpath.restful.server.list_scenarios_rest` |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/scenarios/<scenario_id>/status/``  | GET             | :py:func:`~hpath.restful.server.status_rest`         |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/scenarios/<scenario_id>/results/`` | GET             | :py:func:`~hpath.restful.server.results_rest`        |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/multi/``                           | POST            | :py:func:`~hpath.restful.server.new_multi_rest`      |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/multi/``                           | GET             | :py:func:`~hpath.restful.server.list_multis_rest`    |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/multi/<analysis_id>/status/``      | GET             | :py:func:`~hpath.restful.server.status_multi_rest`   |
++---------------------------------------+-----------------+------------------------------------------------------+
+| ``/multi/<analysis_id>/results/``     | GET             | :py:func:`~hpath.restful.server.results_multi_rest`  |
++---------------------------------------+-----------------+------------------------------------------------------+
+
+
+"""
 
 import json
 import sqlite3 as sql
@@ -29,20 +57,52 @@ CREATE TABLE scenarios(
     num_reps INTEGER NOT NULL,
     done_reps INTEGER NOT NULL,
     results TEXT
+FOREIGN KEY (analysis_id)
+    REFERENCES multis (analysis_id)
 )"""
 
-SQL_INSERT_SCENARIOS = """\
+SQL_CREATE_MULTIS = """\
+CREATE TABLE multis (
+    analysis_id INTEGER PRIMARY KEY AUTOINCREMENT
+)
+"""
+
+SQL_INSERT_SCENARIO = """\
 INSERT INTO scenarios (analysis_id, created, num_reps, done_reps)
 VALUES (?,?,?,?)"""
 
 SQL_SELECT_SCENARIO = """\
 SELECT scenario_id, analysis_id, CAST(done_reps AS REAL)/num_reps AS progress, created, completed
 FROM scenarios
-WHERE scenario_id = ?"""
+WHERE scenario_id = ?"""  # with or without analysis_id (can be None)
 
 SQL_LIST_SCENARIOS = """\
 SELECT scenario_id, analysis_id, CAST(done_reps AS REAL)/num_reps AS progress, created, completed
 FROM scenarios"""
+
+SQL_SELECT_MULTI = """\
+SELECT
+    analysis_id,
+    GROUP_CONCAT(scenario_id) as scenario_ids,
+    MIN(created) as created,
+    CASE WHEN COUNT(completed) = COUNT(*) THEN MAX(completed) END as completed,
+    SUM(done_reps) / SUM(num_reps) AS progress
+FROM scenarios
+WHERE analysis_id = ?
+GROUP BY analysis_id
+"""
+
+SQL_LIST_MULTIS = """\
+SELECT
+    analysis_id,
+    GROUP_CONCAT(scenario_id) as scenario_ids,
+    MIN(created) as created,
+    CASE WHEN COUNT(completed) = COUNT(*) THEN MAX(completed) END as completed,
+    SUM(done_reps) / SUM(num_reps) AS progress
+FROM scenarios
+WHERE analysis_id IS NOT NULL
+GROUP BY analysis_id
+"""
 
 
 @app.errorhandler(HTTPException)
@@ -74,7 +134,7 @@ def new_scenario(config: Config) -> dict[str, Any]:
     conn = sql.connect('backend.db')
     cur = conn.cursor()
     cur.execute(
-        SQL_INSERT_SCENARIOS,
+        SQL_INSERT_SCENARIO,
         (config.analysis_id, config.created, config.num_reps, 0)
     )
     conn.commit()
@@ -140,18 +200,18 @@ def status(scenario_id: int) -> dict[str, Any]:
 
     if res is None:
         return None
-    else:
-        _, analysis_id, progress, created, completed = res  # unpack tuple
-        data = {
-            'scenario_id': scenario_id,
-            'progress': progress,
-            'created': created,
-        }
-        if completed is not None:
-            data['completed'] = completed
-        if analysis_id is not None:
-            data['analysis_id'] = analysis_id
-        return data
+
+    _, analysis_id, progress, created, completed = res  # unpack tuple
+    data = {
+        'scenario_id': scenario_id,
+        'progress': progress,
+        'created': created,
+    }
+    if completed is not None:
+        data['completed'] = completed
+    if analysis_id is not None:
+        data['analysis_id'] = analysis_id
+    return data
 
 
 @app.route('/scenarios/<scenario_id>/status/')
@@ -173,14 +233,14 @@ def status_rest(scenario_id) -> Response:
 
 
 @app.route('/scenarios/')
-def list_scenarios() -> Response:
+def list_scenarios_rest() -> Response:
     """Return a list of scenarios on the server."""
     conn = sql.connect('backend.db')
     df = pd.read_sql(SQL_LIST_SCENARIOS, conn, index_col='scenario_id')
     return flask.jsonify(df.to_dict('index'))
 
 
-def results(scenario_id: int) -> dict[str, Any]:
+def results_scenario(scenario_id: int) -> dict[str, Any]:
     """Return the results of a scenario task."""
     conn = sql.connect('backend.db')
     cur = conn.cursor()
@@ -188,12 +248,12 @@ def results(scenario_id: int) -> dict[str, Any]:
     res = cur.fetchone()
     if res is None or res[0] is None:  # res == None or (None, )
         return None
-    else:  # res == (results, )
-        return res[0]
+
+    return res[0]
 
 
 @app.route('/scenarios/<scenario_id>/results/')
-def results_rest(scenario_id: int) -> Response:
+def results_scenario_rest(scenario_id: int) -> Response:
     """Process GET request for reading a scenario simulation result."""
     not_found_text = f"Cannot find results for scenario with ID: '{scenario_id}'."
 
@@ -204,11 +264,131 @@ def results_rest(scenario_id: int) -> Response:
         flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
 
     # Fetch the scenario results
-    res = results(s_id)
+    res = results_scenario(s_id)
     if res is None:
         flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
 
     return app.response_class(res, HTTPStatus.OK, mimetype='application/json')
+
+
+@app.route('/multi/', methods=['POST'])
+def new_multi_rest() -> Response:
+    """Process POST request for creating a new multi-scenario analysis.
+
+    The scenario configuration is contained in the request's ``files`` and ``form`` data.
+    ``files`` shall be a dict mapping strings to file objects.
+    """
+    if len(request.files) == 0:
+        flask.abort(HTTPStatus.BAD_REQUEST, 'No files submitted for simulation analysis.')
+
+    if 'num_reps' not in request.form:
+        flask.abort(HTTPStatus.BAD_REQUEST, 'Missing "num_reps" in request.form.')
+    num_reps = int(request.form['num_reps'])  # Number of simulation replications
+
+    if 'sim_hours' not in request.form:
+        flask.abort(HTTPStatus.BAD_REQUEST, 'Missing "sim_hours" in request.form.')
+    sim_hours = float(request.form['sim_hours'])  # Simulation duration in hours
+
+    # Parse all configs first
+    configs: list[Config] = []
+    for idx, file in enumerate(request.files.values()):
+        try:
+            config_bytes = file.stream
+            wbook = load_workbook(config_bytes, data_only=True)
+            configs.append(Config.from_workbook(wbook, sim_hours, num_reps))
+        except Exception as exc:
+            flask.abort(
+                HTTPStatus.BAD_REQUEST,
+                f"Error <{type(exc).__name__}> parsing file #{idx+1} ('{file.name}'): "
+                f"{str(exc)}"
+            )
+
+    # If all configs valid, create analysis
+    conn = sql.connect('backend.db')
+    cur = conn.cursor()
+    cur.execute("""INSERT INTO multis DEFAULT VALUES""")
+    conn.commit()
+    analysis_id = cur.lastrowid
+
+    # Add the configs to the analysis and enqueue their simulation runs
+    for config in configs:
+        config.analysis_id = analysis_id
+        new_scenario(config)
+
+    return flask.jsonify(status_multi(analysis_id))
+
+
+def status_multi(analysis_id: int) -> dict[str, Any]:
+    """Obtain the status of a multi-scenario analysis."""
+    conn = sql.connect('backend.db')
+    cur = conn.cursor()
+    cur.execute(SQL_SELECT_MULTI, (analysis_id, ))
+    res = cur.fetchone()
+    _, scenario_ids, created, completed, progress = res  # unpack
+    scenario_ids = [int(x) for x in scenario_ids.split(',')]
+    ret = {
+        'analysis_id': analysis_id,
+        'scenario_ids': scenario_ids,
+        'created': created,
+        'progress': progress
+    }
+    if completed is not None:
+        ret['completed'] = completed
+    return ret
+
+
+@app.route('/multi/<analysis_id>/status/')
+def status_multi_rest(analysis_id) -> Response:
+    """Process a GET request for querying multi-scenario analysis status."""
+    not_found_text = f"Cannot find analysis with ID: '{analysis_id}'."
+
+    # Ensure scenario_id is integer-compatible
+    try:
+        a_id = int(analysis_id)
+    except ValueError:
+        flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
+
+    # Fetch the scenario status
+    res = status_multi(a_id)
+    if res is None:
+        flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
+    return flask.jsonify(res)
+
+
+@app.route('/multi/')
+def list_multis_rest() -> Response:
+    """Return a list of multi-scenario analyses on the server."""
+    conn = sql.connect('backend.db')
+    df = pd.read_sql(SQL_LIST_MULTIS, conn, index_col='analysis_id')
+    return flask.jsonify(df.to_dict('index'))
+
+
+@app.route('/multi/<analysis_id>/results/')
+def results_multi_rest(analysis_id: int) -> Response:
+    """Produce a JSON object for a multi-scenario analysis result."""
+    not_found_text = f"Cannot find analysis with ID: '{analysis_id}'."
+    incomplete_text = f"Analysis with ID: '{analysis_id}' not yet complete."
+
+    # Ensure scenario_id is integer-compatible
+    try:
+        a_id = int(analysis_id)
+    except ValueError:
+        flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
+
+    # Fetch the scenario status
+    res = status_multi(a_id)
+    if res is None:
+        flask.abort(HTTPStatus.NOT_FOUND, description=not_found_text)
+    if res.get('completed') is None:
+        flask.abort(HTTPStatus.NOT_FOUND, description=incomplete_text)
+
+    # Fetch each individual result
+    scenario_ids = res['scenario_ids']
+    results: dict[int, Any] = {}
+    for scenario_id in scenario_ids:
+        results[scenario_id] = results_scenario(scenario_id)
+
+    return flask.jsonify(results_summary(results))
 
 
 def main() -> None:
@@ -218,9 +398,13 @@ def main() -> None:
     conn = sql.connect('backend.db')
     cur = conn.cursor()
 
-    # Create the scenarios table if not exists
+    # Check the list of tables in the database
     res = cur.execute("SELECT name FROM sqlite_master")
     sql_res = res.fetchall()
+    # Create the multis table if not exists
+    if not any('multis' in x for x in sql_res):
+        cur.execute(SQL_CREATE_MULTIS)
+    # Create the scenarios table if not exists
     if not any('scenarios' in x for x in sql_res):
         cur.execute(SQL_CREATE_SCENARIOS)
 
