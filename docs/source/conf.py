@@ -12,8 +12,8 @@ sys.path.insert(0, '../../hpath/')
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'CUH Histopathology Simulation Server'
-copyright = '2023, Yin-Chi Chan'
+project = 'CUH NHS Trust: Dashboard Server'
+copyright = '2023, Institute for Manufacturing, University of Cambridge'
 author = 'Yin-Chi Chan'
 
 # -- General configuration ---------------------------------------------------

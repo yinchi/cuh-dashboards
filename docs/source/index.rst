@@ -1,29 +1,78 @@
-Addenbrooke's Hospital Histopathology Department Simulation Server
-==================================================================
+Cambridge University Hospitals NHS Trust: Dashboards Server
+===========================================================
 
-This documentation website describes the simulation server for modelling
-the histopathology department at Addenbrooke's Hospital, part of the
-Cambridge University Hospitals NHS Foundation Trust.
+This project implements digital tools for Cambridge University Hospitals NHS Trust.
+Two applications have been developed so far: a sensor dashboard and a simulation dashboard
+modelling the Histopathology department at Addenbrooke's Hospital, Cambridge, UK.
 
-**Author**: Yin-Chi Chan, Institute for Manufacturing, Univ. of Cambridge
+**Authors**:
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Documentation
+- **Yin-Chi Chan**, Institute for Manufacturing, Univ. of Cambridge (simulation server)
+- **Lakee Sivaraya**, Univeristy of Cambridge (frontend)
 
-   design
-   excel
-   process_logic
-   REST API <apidoc/hpath.restful.server>
+Documentation
+=============
 
-.. toctree::
-   :maxdepth: 3
-   :caption: Python Documentation
+- Quickstart: sensor dashboard (**TODO**)
+- :doc:`quickstart_sim` (**TODO**)
 
-   apidoc/hpath
+For developers:
+---------------
+
+- :doc:`design`
+- :doc:`install` (required only if you intend to run the server yourself)
+
+1. Frontend
+^^^^^^^^^^^
+
+- `Documentation (external) <https://lakeesiv.github.io/digital-twin>`_
+
+
+2. Simulation server
+^^^^^^^^^^^^^^^^^^^^
+
+- :doc:`excel`
+- :doc:`process_logic`
+- :doc:`REST API <apidoc/hpath.restful.server>`
+- :doc:`Python documentation <apidoc/hpath>`
+
+3. Sensor server
+^^^^^^^^^^^^^^^^
+
+*To be added*
 
 Indices and tables
-------------------
+^^^^^^^^^^^^^^^^^^
 
 * :ref:`genindex`
 * :ref:`modindex`
+
+..
+   Hidden TOCs (for sidebar)
+
+.. toctree::
+   :caption: Quickstart 🏎️
+   :hidden:
+
+   quickstart_sim
+
+.. toctree::
+   :caption: For developers 👩‍💻
+   :hidden:
+
+   design
+   install
+
+.. toctree::
+   :caption: Frontend 🌐
+   :hidden:
+
+   Documentation (external) <https://lakeesiv.github.io/digital-twin>
+
+.. toctree::
+   :caption: Simulation Server
+   :hidden:
+
+   excel
+   process_logic
+   Python documentation <apidoc/hpath>
