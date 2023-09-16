@@ -665,6 +665,5 @@ class Config(pyd.BaseModel):
 
 
 if __name__ == '__main__':
-    wbook = xl.load_workbook('config.xlsx', data_only=True)
-    config = Config.from_workbook(wbook, 6*7*24, 10)
+    config = Config.from_workbook(xl.load_workbook('config.xlsx', data_only=True), 6*7*24, 10)
     print(config.model_dump_json())

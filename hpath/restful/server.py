@@ -3,29 +3,35 @@
 REST API
 --------
 
+..
+  #pylint: disable=line-too-long
+
 +---------------------------------------+-----------------+------------------------------------------------------+
 | **Endpoint**                          | **HTTP Method** | **Python function signature**                        |
 +=======================================+=================+======================================================+
 | ``/``                                 | GET             | :py:func:`~hpath.restful.server.hello_world()`       |
++                                       +-----------------+------------------------------------------------------+
+|                                       | DELETE          | :py:func:`~hpath.restful.server.reset()`             |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/scenarios/``                       | POST            | :py:func:`~hpath.restful.server.new_scenario_rest`   |
-+---------------------------------------+-----------------+------------------------------------------------------+
-| ``/scenarios/``                       | GET             | :py:func:`~hpath.restful.server.list_scenarios_rest` |
+|                                       +-----------------+------------------------------------------------------+
+|                                       | GET             | :py:func:`~hpath.restful.server.list_scenarios_rest` |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/scenarios/<scenario_id>/status/``  | GET             | :py:func:`~hpath.restful.server.status_rest`         |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/scenarios/<scenario_id>/results/`` | GET             | :py:func:`~hpath.restful.server.results_rest`        |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/multi/``                           | POST            | :py:func:`~hpath.restful.server.new_multi_rest`      |
-+---------------------------------------+-----------------+------------------------------------------------------+
-| ``/multi/``                           | GET             | :py:func:`~hpath.restful.server.list_multis_rest`    |
+|                                       +-----------------+------------------------------------------------------+
+|                                       | GET             | :py:func:`~hpath.restful.server.list_multis_rest`    |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/multi/<analysis_id>/status/``      | GET             | :py:func:`~hpath.restful.server.status_multi_rest`   |
 +---------------------------------------+-----------------+------------------------------------------------------+
 | ``/multi/<analysis_id>/results/``     | GET             | :py:func:`~hpath.restful.server.results_multi_rest`  |
 +---------------------------------------+-----------------+------------------------------------------------------+
 
-
+..
+  #pylint: enable=line-too-long
 """
 
 import json
@@ -43,26 +49,27 @@ from werkzeug.exceptions import HTTPException
 from ..config import Config
 from ..simulate import simulate
 from .redis import REDIS_QUEUE
+from ..kpis import multi_mean_tats, multi_mean_util, multi_util_hourlies
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 SQL_CREATE_SCENARIOS = """\
-CREATE TABLE scenarios(
+CREATE TABLE IF NOT EXISTS scenarios (
     scenario_id INTEGER PRIMARY KEY AUTOINCREMENT,
     analysis_id INTEGER,
     created REAL NOT NULL,
     completed REAL,
     num_reps INTEGER NOT NULL,
     done_reps INTEGER NOT NULL,
-    results TEXT
+    results TEXT,
 FOREIGN KEY (analysis_id)
     REFERENCES multis (analysis_id)
 )"""
 
 SQL_CREATE_MULTIS = """\
-CREATE TABLE multis (
+CREATE TABLE IF NOT EXISTS multis (
     analysis_id INTEGER PRIMARY KEY AUTOINCREMENT
 )
 """
@@ -72,13 +79,17 @@ INSERT INTO scenarios (analysis_id, created, num_reps, done_reps)
 VALUES (?,?,?,?)"""
 
 SQL_SELECT_SCENARIO = """\
-SELECT scenario_id, analysis_id, CAST(done_reps AS REAL)/num_reps AS progress, created, completed
+SELECT scenario_id, analysis_id, num_reps, CAST(done_reps AS REAL)/num_reps AS progress,
+    created, completed
 FROM scenarios
 WHERE scenario_id = ?"""  # with or without analysis_id (can be None)
 
 SQL_LIST_SCENARIOS = """\
-SELECT scenario_id, analysis_id, CAST(done_reps AS REAL)/num_reps AS progress, created, completed
+SELECT scenario_id, analysis_id, num_reps, CAST(done_reps AS REAL)/num_reps AS progress,
+    created, completed
 FROM scenarios"""
+
+SQL_SCENARIO_RESULTS = """SELECT results FROM scenarios WHERE scenario_id = ?"""
 
 SQL_SELECT_MULTI = """\
 SELECT
@@ -86,7 +97,7 @@ SELECT
     GROUP_CONCAT(scenario_id) as scenario_ids,
     MIN(created) as created,
     CASE WHEN COUNT(completed) = COUNT(*) THEN MAX(completed) END as completed,
-    SUM(done_reps) / SUM(num_reps) AS progress
+    CAST(SUM(done_reps) AS REAL) / SUM(num_reps) AS progress
 FROM scenarios
 WHERE analysis_id = ?
 GROUP BY analysis_id
@@ -98,7 +109,7 @@ SELECT
     GROUP_CONCAT(scenario_id) as scenario_ids,
     MIN(created) as created,
     CASE WHEN COUNT(completed) = COUNT(*) THEN MAX(completed) END as completed,
-    SUM(done_reps) / SUM(num_reps) AS progress
+    CAST(SUM(done_reps) AS REAL) / SUM(num_reps) AS progress
 FROM scenarios
 WHERE analysis_id IS NOT NULL
 GROUP BY analysis_id
@@ -126,6 +137,19 @@ def hello_world() -> Response:
     if request.get_data(as_text=True) == 'PING':
         return Response('PONG')
     return Response("<h1>Hello World!</h1>", status=HTTPStatus.OK)
+
+
+@app.route('/', methods=['DELETE'])
+def reset() -> Response:
+    """Reset the database."""
+    conn = sql.connect('backend.db')
+    cur = conn.cursor()
+    cur.execute("DROP TABLE multis")
+    cur.execute("DROP TABLE scenarios")
+    cur.execute(SQL_CREATE_MULTIS)
+    cur.execute(SQL_CREATE_SCENARIOS)
+    conn.commit()
+    return Response(None, status=HTTPStatus.OK)
 
 
 def new_scenario(config: Config) -> dict[str, Any]:
@@ -201,9 +225,10 @@ def status(scenario_id: int) -> dict[str, Any]:
     if res is None:
         return None
 
-    _, analysis_id, progress, created, completed = res  # unpack tuple
+    _, analysis_id, num_reps, progress, created, completed = res  # unpack tuple
     data = {
         'scenario_id': scenario_id,
+        'num_reps': num_reps,
         'progress': progress,
         'created': created,
     }
@@ -237,18 +262,18 @@ def list_scenarios_rest() -> Response:
     """Return a list of scenarios on the server."""
     conn = sql.connect('backend.db')
     df = pd.read_sql(SQL_LIST_SCENARIOS, conn, index_col='scenario_id')
-    return flask.jsonify(df.to_dict('index'))
+    ret = df.to_dict('index')
+    return flask.jsonify(ret)
 
 
-def results_scenario(scenario_id: int) -> dict[str, Any]:
+def results_scenario(scenario_id: int) -> str:
     """Return the results of a scenario task."""
     conn = sql.connect('backend.db')
     cur = conn.cursor()
-    cur.execute("""SELECT results FROM scenarios WHERE scenario_id = ?""", (scenario_id, ))
+    cur.execute(SQL_SCENARIO_RESULTS, (scenario_id, ))
     res = cur.fetchone()
     if res is None or res[0] is None:  # res == None or (None, )
         return None
-
     return res[0]
 
 
@@ -360,7 +385,10 @@ def list_multis_rest() -> Response:
     """Return a list of multi-scenario analyses on the server."""
     conn = sql.connect('backend.db')
     df = pd.read_sql(SQL_LIST_MULTIS, conn, index_col='analysis_id')
-    return flask.jsonify(df.to_dict('index'))
+    ret = df.to_dict('index')
+    for key in ret.keys():
+        ret[key]['scenario_ids'] = [int(x) for x in ret[key]['scenario_ids'].split(',')]
+    return flask.jsonify(ret)
 
 
 @app.route('/multi/<analysis_id>/results/')
@@ -383,12 +411,19 @@ def results_multi_rest(analysis_id: int) -> Response:
         flask.abort(HTTPStatus.NOT_FOUND, description=incomplete_text)
 
     # Fetch each individual result
-    scenario_ids = res['scenario_ids']
-    results: dict[int, Any] = {}
-    for scenario_id in scenario_ids:
-        results[scenario_id] = results_scenario(scenario_id)
-
-    return flask.jsonify(results_summary(results))
+    all_results = {
+        scenario_id: json.loads(results_scenario(scenario_id))
+        for scenario_id in res['scenario_ids']
+    }
+    ret = ({
+        'created': res['created'],
+        'completed': res['completed'],
+        'scenario_ids': res['scenario_ids'],
+        'mean_tat': multi_mean_tats(all_results),
+        'mean_utilisation': multi_mean_util(all_results),
+        'utilisation_hourlies': multi_util_hourlies(all_results)
+    })
+    return flask.jsonify(ret)
 
 
 def main() -> None:
@@ -398,17 +433,11 @@ def main() -> None:
     conn = sql.connect('backend.db')
     cur = conn.cursor()
 
-    # Check the list of tables in the database
-    res = cur.execute("SELECT name FROM sqlite_master")
-    sql_res = res.fetchall()
-    # Create the multis table if not exists
-    if not any('multis' in x for x in sql_res):
-        cur.execute(SQL_CREATE_MULTIS)
-    # Create the scenarios table if not exists
-    if not any('scenarios' in x for x in sql_res):
-        cur.execute(SQL_CREATE_SCENARIOS)
+    cur.execute(SQL_CREATE_MULTIS)
+    cur.execute(SQL_CREATE_SCENARIOS)
+    conn.commit()
 
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 
 if __name__ == '__main__':

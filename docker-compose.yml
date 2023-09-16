@@ -5,7 +5,7 @@ services:
       - ./docs:/docs
     command: httpd -d /docs/build/html -f /docs/httpd.conf -D FOREGROUND
     ports:
-      - 8000:8000
+      - 8888:8888
     tty: true
   redis:
     image: redis:alpine
@@ -23,7 +23,7 @@ services:
     command: python -m hpath.restful.redis
     depends_on:
       - redis
-  server:
+  backend:
     image: backend
     volumes:
       - .:/app/
@@ -33,3 +33,9 @@ services:
     depends_on:
       - redis
       - redis-worker
+  frontend:
+    image: frontend
+    build:
+      dockerfile: frontend-lakee.Dockerfile
+    ports:
+      - 80:3000

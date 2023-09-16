@@ -1,7 +1,5 @@
 """Chart data types for compatibility with https://github.com/lakeesiv/digital-twin"""
 from dataclasses import dataclass, field
-from copy import deepcopy
-
 import pandas as pd
 
 
@@ -19,13 +17,6 @@ class ChartData:
         or :py:class:`~pandas.Series`."""
         series = obj.iloc[:, 0] if isinstance(obj, pd.DataFrame) else obj
         return __class__(x=series.index.tolist(), y=series.values.tolist())
-
-    def fake_min_max(self) -> 'ChartData':
-        """**Dev**: to create max/min values for faking multiple simulation replications"""
-        ret = deepcopy(self)
-        ret.ymin = [val * 0.9 for val in ret.y]
-        ret.ymax = [val * 1.1 for val in ret.y]
-        return ret
 
 
 @dataclass
@@ -52,10 +43,3 @@ class MultiChartData:
             df.T.values.tolist(),
             labels=df.columns.tolist()
         )
-
-    def fake_min_max(self) -> 'MultiChartData':
-        """**Dev**: to create max/min values for faking multiple simulation replications"""
-        ret = deepcopy(self)
-        ret.ymin = [[val * 0.9 for val in vals] for vals in ret.y]
-        ret.ymax = [[val * 1.1 for val in vals] for vals in ret.y]
-        return ret
