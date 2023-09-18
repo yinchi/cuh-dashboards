@@ -22,7 +22,6 @@ author = 'Yin-Chi Chan'
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.githubpages',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.viewcode',
               'sphinx.ext.napoleon',
               'sphinxcontrib.kroki']
 
@@ -64,4 +63,11 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_theme_options = {
     'navigation_depth': 99,
+}
+html_context = {
+  'display_github': True,
+  'github_user': 'yinchi',
+  'github_repo': 'cuh-dashboards',
+  'github_version': 'main',
+  'conf_py_path': "/documentation/source/"
 }
