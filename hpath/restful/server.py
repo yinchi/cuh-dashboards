@@ -35,6 +35,7 @@ REST API
 """
 
 import json
+from math import isnan
 import sqlite3 as sql
 from http import HTTPStatus
 from typing import Any
@@ -261,8 +262,15 @@ def status_rest(scenario_id) -> Response:
 def list_scenarios_rest() -> Response:
     """Return a list of scenarios on the server."""
     conn = sql.connect('backend.db')
-    df = pd.read_sql(SQL_LIST_SCENARIOS, conn, index_col='scenario_id')
-    ret = df.to_dict('index')
+    df = pd.read_sql(SQL_LIST_SCENARIOS, conn)
+    ret = df.to_dict('records')
+
+    # clean up missing values
+    for scenario_status in ret:
+        if scenario_status['analysis_id'] is None or isnan(scenario_status['analysis_id']):
+            del scenario_status['analysis_id']
+        if scenario_status['completed'] is None or isnan(scenario_status['completed']):
+            del scenario_status['completed']
     return flask.jsonify(ret)
 
 
@@ -384,10 +392,13 @@ def status_multi_rest(analysis_id) -> Response:
 def list_multis_rest() -> Response:
     """Return a list of multi-scenario analyses on the server."""
     conn = sql.connect('backend.db')
-    df = pd.read_sql(SQL_LIST_MULTIS, conn, index_col='analysis_id')
-    ret = df.to_dict('index')
-    for key in ret.keys():
-        ret[key]['scenario_ids'] = [int(x) for x in ret[key]['scenario_ids'].split(',')]
+    df = pd.read_sql(SQL_LIST_MULTIS, conn)
+    ret = df.to_dict('records')
+    for analysis_status in ret:
+        analysis_status['scenario_ids'] =\
+            [int(x) for x in analysis_status['scenario_ids'].split(',')]
+        if analysis_status['completed'] is None or isnan(analysis_status['completed']):
+            del analysis_status['completed']
     return flask.jsonify(ret)
 
 
