@@ -6,12 +6,14 @@ See:
 import redis
 from rq import Queue, Worker
 
+from ..conf import REDIS_HOST, REDIS_PORT
+
 
 REDIS_CONN = redis.Redis(
-    host='redis',
-    port=6379  # default
+    host=REDIS_HOST,
+    port=REDIS_PORT  # default
 )
-"""Provides an connection to the redis server at ``redis://redis:6379``."""
+"""Provides an connection to the redis server at ``redis://<REDIS_HOST>:<REDIS_PORT>``."""
 
 REDIS_QUEUE = Queue(connection=REDIS_CONN, default_timeout=3600)
 """Set up the default RQ queue for the redis server."""

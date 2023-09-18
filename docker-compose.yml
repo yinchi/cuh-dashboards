@@ -1,9 +1,9 @@
 services:
   docs:
-    image: httpd:alpine
-    volumes:
-      - ./docs:/docs
-    command: httpd -d /docs/build/html -f /docs/httpd.conf -D FOREGROUND
+    image: docs
+    build:
+      context: .
+      dockerfile: dockerfiles/docs.dockerfile
     ports:
       - 8888:8888
     tty: true
@@ -17,16 +17,17 @@ services:
   redis-worker:
     image: backend
     build:
-      dockerfile: backend.Dockerfile
+      context: .
+      dockerfile: dockerfiles/backend.dockerfile
     volumes:
-      - .:/app/
+      - ./db:/db:rw
     command: python -m hpath.restful.redis
     depends_on:
       - redis
   backend:
     image: backend
     volumes:
-      - .:/app/
+      - ./db:/db:rw
     command: python -m hpath.restful.server
     ports:
       - 5000:5000
@@ -36,6 +37,7 @@ services:
   frontend:
     image: frontend
     build:
-      dockerfile: frontend-lakee.Dockerfile
+      context: .
+      dockerfile: dockerfiles/frontend-lakee.dockerfile
     ports:
       - 80:3000

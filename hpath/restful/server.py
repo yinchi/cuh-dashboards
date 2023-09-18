@@ -35,9 +35,9 @@ REST API
 """
 
 import json
-from math import isnan
 import sqlite3 as sql
 from http import HTTPStatus
+from math import isnan
 from typing import Any
 
 import flask
@@ -47,14 +47,14 @@ from flask_cors import CORS
 from openpyxl import load_workbook
 from werkzeug.exceptions import HTTPException
 
+from ..conf import DB_PATH, BACKEND_PORT
 from ..config import Config
+from ..kpis import multi_mean_tats, multi_mean_util, multi_util_hourlies
 from ..simulate import simulate
 from .redis import REDIS_QUEUE
-from ..kpis import multi_mean_tats, multi_mean_util, multi_util_hourlies
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 
 SQL_CREATE_SCENARIOS = """\
 CREATE TABLE IF NOT EXISTS scenarios (
@@ -143,7 +143,7 @@ def hello_world() -> Response:
 @app.route('/', methods=['DELETE'])
 def reset() -> Response:
     """Reset the database."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("DROP TABLE multis")
     cur.execute("DROP TABLE scenarios")
@@ -156,7 +156,7 @@ def reset() -> Response:
 def new_scenario(config: Config) -> dict[str, Any]:
     """Set up a new simulation task from an :py:class:`Config` and submit it to the RQ server.
     This :py:class:`Config` is created from an Excel file in :py:meth:`new_scenario_rest`."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute(
         SQL_INSERT_SCENARIO,
@@ -218,7 +218,7 @@ def new_scenario_rest() -> Response:
 
 def status(scenario_id: int) -> dict[str, Any]:
     """Return the status of a scenario task."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute(SQL_SELECT_SCENARIO, (scenario_id, ))
     res = cur.fetchone()
@@ -261,7 +261,7 @@ def status_rest(scenario_id) -> Response:
 @app.route('/scenarios/')
 def list_scenarios_rest() -> Response:
     """Return a list of scenarios on the server."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     df = pd.read_sql(SQL_LIST_SCENARIOS, conn)
     ret = df.to_dict('records')
 
@@ -276,7 +276,7 @@ def list_scenarios_rest() -> Response:
 
 def results_scenario(scenario_id: int) -> str:
     """Return the results of a scenario task."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute(SQL_SCENARIO_RESULTS, (scenario_id, ))
     res = cur.fetchone()
@@ -337,7 +337,7 @@ def new_multi_rest() -> Response:
             )
 
     # If all configs valid, create analysis
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute("""INSERT INTO multis DEFAULT VALUES""")
     conn.commit()
@@ -353,7 +353,7 @@ def new_multi_rest() -> Response:
 
 def status_multi(analysis_id: int) -> dict[str, Any]:
     """Obtain the status of a multi-scenario analysis."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute(SQL_SELECT_MULTI, (analysis_id, ))
     res = cur.fetchone()
@@ -391,7 +391,7 @@ def status_multi_rest(analysis_id) -> Response:
 @app.route('/multi/')
 def list_multis_rest() -> Response:
     """Return a list of multi-scenario analyses on the server."""
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     df = pd.read_sql(SQL_LIST_MULTIS, conn)
     ret = df.to_dict('records')
     for analysis_status in ret:
@@ -441,14 +441,14 @@ def main() -> None:
     """Start up the Flask server."""
 
     # Get a SQLite cursor
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
 
     cur.execute(SQL_CREATE_MULTIS)
     cur.execute(SQL_CREATE_SCENARIOS)
     conn.commit()
 
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=BACKEND_PORT, debug=True)
 
 
 if __name__ == '__main__':

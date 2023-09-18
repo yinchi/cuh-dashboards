@@ -4,6 +4,7 @@ import json
 import sqlite3 as sql
 from datetime import datetime
 
+from .conf import DB_PATH
 from .kpis import Report
 from .model import Config, Model
 from .util import serialiser
@@ -40,7 +41,7 @@ def simulate(config: Config, scenario_id: int) -> None:
     result_str = json.dumps(Report.from_model(model), default=serialiser)
     completed = datetime.utcnow().timestamp()
 
-    conn = sql.connect('backend.db')
+    conn = sql.connect(DB_PATH)
     cur = conn.cursor()
     cur.execute(SQL_UPDATE_RESULT, (completed, result_str, scenario_id))
     conn.commit()

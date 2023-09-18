@@ -4,5 +4,7 @@ RUN apt update && apt upgrade -y
 COPY docker-requirements.txt /requirements.txt
 RUN pip install --no-cache-dir -r /requirements.txt
 
+COPY /hpath /app/hpath
+
 WORKDIR /app
-CMD python -m histopath.restful.server
+CMD python -m hpath.restful.server
