@@ -35,7 +35,7 @@ Clone the repository by running:
 
 .. code-block:: sh
 
-   git clone https://github.com/yinchi/hpath.git
+   git clone https://github.com/yinchi/cuh-dashboards.git
    cd hpath
 
 **Note**: the frontend source code resides on a separate Git repository that is cloned from when
