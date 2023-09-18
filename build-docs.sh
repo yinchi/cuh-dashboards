@@ -5,12 +5,16 @@
 
 set -e
 pushd `git rev-parse --show-toplevel`
-pushd docs
 
+ls
+
+pushd documentation
 make clean
 rm -rf ./source/apidoc
 sphinx-apidoc -feM -o ./source/apidoc ../hpath
 make html
-
 popd
+
+rsync -avz --delete ./documentation/build/html/ ./docs
+
 popd

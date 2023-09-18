@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.process package &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.process.p10_reception module" href="hpath.process.p10_reception.html" />
+    <link rel="prev" title="hpath package" href="hpath.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">hpath.process package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.ArrivalGenerator"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ArrivalGenerator.iterator"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.iterator</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ArrivalGenerator.cls_args"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.cls_args</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ArrivalGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ArrivalGenerator.process"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ArrivalGenerator.setup"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.BatchingProcess"><code class="docutils literal notranslate"><span class="pre">BatchingProcess</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.batch_size"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.batch_size</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.in_queue"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.in_queue</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.out_type"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.out_type</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.out_process"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.out_process</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.env"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.env</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.__init__"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.process"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.BatchingProcess.setup"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.CollationProcess"><code class="docutils literal notranslate"><span class="pre">CollationProcess</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.counter_name"><code class="docutils literal notranslate"><span class="pre">CollationProcess.counter_name</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.in_queue"><code class="docutils literal notranslate"><span class="pre">CollationProcess.in_queue</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.out_process"><code class="docutils literal notranslate"><span class="pre">CollationProcess.out_process</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.env"><code class="docutils literal notranslate"><span class="pre">CollationProcess.env</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.__init__"><code class="docutils literal notranslate"><span class="pre">CollationProcess.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.process"><code class="docutils literal notranslate"><span class="pre">CollationProcess.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.CollationProcess.setup"><code class="docutils literal notranslate"><span class="pre">CollationProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.DeliveryProcess"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.runner"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.runner</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.out_duration"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.out_duration</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.return_duration"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.return_duration</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.out_process"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.out_process</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.env"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.env</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.__init__"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.process"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.DeliveryProcess.setup"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.Process"><code class="docutils literal notranslate"><span class="pre">Process</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.in_queue"><code class="docutils literal notranslate"><span class="pre">Process.in_queue</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.in_type"><code class="docutils literal notranslate"><span class="pre">Process.in_type</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.fn"><code class="docutils literal notranslate"><span class="pre">Process.fn</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.env"><code class="docutils literal notranslate"><span class="pre">Process.env</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.__init__"><code class="docutils literal notranslate"><span class="pre">Process.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.process"><code class="docutils literal notranslate"><span class="pre">Process.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.Process.setup"><code class="docutils literal notranslate"><span class="pre">Process.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.process.ResourceScheduler"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.resource"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.resource</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.schedule"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.schedule</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.env"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.env</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.__init__"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.__init__()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.process"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.process()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.process.ResourceScheduler.setup"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p10_reception.html">hpath.process.p10_reception module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p20_cutup.html">hpath.process.p20_cutup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p30_processing.html">hpath.process.p30_processing module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p40_microtomy.html">hpath.process.p40_microtomy module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p50_staining.html">hpath.process.p50_staining module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p60_labelling.html">hpath.process.p60_labelling module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p70_scanning.html">hpath.process.p70_scanning module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p80_qc.html">hpath.process.p80_qc module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p90_reporting.html">hpath.process.p90_reporting module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.restful.html">hpath.restful package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+      <li class="breadcrumb-item active">hpath.process package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.process.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.process">
+<span id="hpath-process-package"></span><h1>hpath.process package<a class="headerlink" href="#module-hpath.process" title="Link to this heading"></a></h1>
+<p>Definitions for Histopathology processes.</p>
+<p>Processes are implemented as salabim <a class="reference external" href="https://www.salabim.org/manual/Component.html" title="(in salabim)"><span>Component</span></a> instances
+with a <code class="docutils literal notranslate"><span class="pre">process()</span></code> member.  This function is automatically triggered
+upon instantiation of the process.</p>
+<p>Each process takes entities from an input queue (implemented as an <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Store" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">salabim.Store</span></code></a>),
+performs work on these entities, and places the transformed entities onto an output queue.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="#hpath.process.Process" title="hpath.process.Process"><code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></a> class provides a link to a member function
+of some entity type in the model.  This function is triggered for
+each entity received from the input queue.  In fact, the constructor for
+the <a class="reference internal" href="#hpath.process.Process" title="hpath.process.Process"><code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></a> class takes a function as its <code class="docutils literal notranslate"><span class="pre">fn</span></code> parameter and
+<strong>makes</strong> it a member function of the specified <a class="reference external" href="https://www.salabim.org/manual/Component.html" title="(in salabim)"><span>Component</span></a> subtype.</p></li>
+<li><p>The <a class="reference internal" href="#hpath.process.BatchingProcess" title="hpath.process.BatchingProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchingProcess</span></code></a> class takes multiple entities from the input queue
+and produces a single entity of the specified output type.</p></li>
+<li><p>The <a class="reference internal" href="#hpath.process.CollationProcess" title="hpath.process.CollationProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">CollationProcess</span></code></a> class searches for entities with the same parent
+and pushes the parent entity to the output queue when all sibling entities are
+found.</p></li>
+<li><p>The <a class="reference internal" href="#hpath.process.DeliveryProcess" title="hpath.process.DeliveryProcess"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeliveryProcess</span></code></a> class represents deliveries of entities or batches.
+Batches are automatically unpacked when arriving at the output queue.</p></li>
+</ul>
+</div></blockquote>
+<p>This module also defines the <a class="reference internal" href="#hpath.process.ArrivalGenerator" title="hpath.process.ArrivalGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArrivalGenerator</span></code></a> and <a class="reference internal" href="#hpath.process.ResourceScheduler" title="hpath.process.ResourceScheduler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResourceScheduler</span></code></a> classes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">ArrivalGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">ArrivalSchedule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#ArrivalGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ArrivalGenerator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.specimens.Component</span></code></a></p>
+<p><code class="xref py py-class docutils literal notranslate"><span class="pre">Specimen</span></code> arrival generator process.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator.iterator">
+<span class="sig-name descname"><span class="pre">iterator</span></span><a class="headerlink" href="#hpath.process.ArrivalGenerator.iterator" title="Link to this definition"></a></dt>
+<dd><p>Iterator yielding the arrival rate for each hourly period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>itertools.cycle</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator.cls_args">
+<span class="sig-name descname"><span class="pre">cls_args</span></span><a class="headerlink" href="#hpath.process.ArrivalGenerator.cls_args" title="Link to this definition"></a></dt>
+<dd><p>Arguments passed to the <code class="xref py py-class docutils literal notranslate"><span class="pre">Specimen</span></code> constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">ArrivalSchedule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ArrivalGenerator.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ArrivalGenerator.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>schedule</strong> (<a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><em>ArrivalSchedule</em></a>) – The arrival schedule as a dataclass instance.</p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – The simulation model this arrival generator is attached to.</p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments. Arguments not consumed by the
+<a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a> constructor become <code class="docutils literal notranslate"><span class="pre">self.cls_args</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ArrivalGenerator.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ArrivalGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>The generator process. Creates a sub-generator for
+each hour with the specified rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ArrivalGenerator.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ArrivalGenerator.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ArrivalGenerator.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>ArrivalGenerator</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">BatchingProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch" title="hpath.specimens.Batch"><span class="pre">hpath.specimens.Batch</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#BatchingProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.BatchingProcess" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.specimens.Component</span></code></a></p>
+<p>Takes <code class="docutils literal notranslate"><span class="pre">batch_size</span></code> entites from <code class="docutils literal notranslate"><span class="pre">in_queue</span></code> and inserts a single
+instance of <code class="docutils literal notranslate"><span class="pre">out_type</span></code> to <code class="docutils literal notranslate"><span class="pre">env.processes[out_process].in_queue</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.batch_size">
+<span class="sig-name descname"><span class="pre">batch_size</span></span><a class="headerlink" href="#hpath.process.BatchingProcess.batch_size" title="Link to this definition"></a></dt>
+<dd><p>The batch size or its distribution.  Can take <cite>salabim</cite> distributions or any
+other type with <code class="docutils literal notranslate"><span class="pre">__call__</span></code> implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>[[], <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.in_queue">
+<span class="sig-name descname"><span class="pre">in_queue</span></span><a class="headerlink" href="#hpath.process.BatchingProcess.in_queue" title="Link to this definition"></a></dt>
+<dd><p>The in-queue of the process from which entities are taken.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Store" title="(in salabim)">salabim.Store</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.out_type">
+<span class="sig-name descname"><span class="pre">out_type</span></span><a class="headerlink" href="#hpath.process.BatchingProcess.out_type" title="Link to this definition"></a></dt>
+<dd><p>The output type of the batching process.
+Must contain an attribute <code class="docutils literal notranslate"><span class="pre">items</span></code> (a list).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><em>Type</em></a>[<a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch" title="hpath.specimens.Batch">Batch</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.out_process">
+<span class="sig-name descname"><span class="pre">out_process</span></span><a class="headerlink" href="#hpath.process.BatchingProcess.out_process" title="Link to this definition"></a></dt>
+<dd><p>The name of the process receiving the batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.env">
+<span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#hpath.process.BatchingProcess.env" title="Link to this definition"></a></dt>
+<dd><p>The simulation model this arrival generator is attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch" title="hpath.specimens.Batch"><span class="pre">hpath.specimens.Batch</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#BatchingProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.BatchingProcess.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – </p></li>
+<li><p><strong>out_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><em>Type</em></a><em>[</em><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch" title="hpath.specimens.Batch"><em>Batch</em></a><em>]</em>) – </p></li>
+<li><p><strong>out_process</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#BatchingProcess.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.BatchingProcess.process" title="Link to this definition"></a></dt>
+<dd><p>The batching loop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.BatchingProcess.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch" title="hpath.specimens.Batch"><span class="pre">hpath.specimens.Batch</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#BatchingProcess.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.BatchingProcess.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>BatchingProcess</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">CollationProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#CollationProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.CollationProcess" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.specimens.Component</span></code></a></p>
+<p>Takes entities from <code class="docutils literal notranslate"><span class="pre">in_queue</span></code> and places them into a pool.
+Once all entities with the same parent are found (based on comparing
+with a counter), the parent is inserted into
+<code class="docutils literal notranslate"><span class="pre">env.processes[out_process].in_queue</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.counter_name">
+<span class="sig-name descname"><span class="pre">counter_name</span></span><a class="headerlink" href="#hpath.process.CollationProcess.counter_name" title="Link to this definition"></a></dt>
+<dd><p>The name of the counter in the parent entity defining
+the number of child entities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.in_queue">
+<span class="sig-name descname"><span class="pre">in_queue</span></span><a class="headerlink" href="#hpath.process.CollationProcess.in_queue" title="Link to this definition"></a></dt>
+<dd><p>The in-queue of the process from which entities are taken.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Store" title="(in salabim)">salabim.Store</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.out_process">
+<span class="sig-name descname"><span class="pre">out_process</span></span><a class="headerlink" href="#hpath.process.CollationProcess.out_process" title="Link to this definition"></a></dt>
+<dd><p>The name of the process receiving the reconstituted parent entity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.env">
+<span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#hpath.process.CollationProcess.env" title="Link to this definition"></a></dt>
+<dd><p>The simulation model this arrival generator is attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#CollationProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.CollationProcess.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>counter_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>out_process</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#CollationProcess.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.CollationProcess.process" title="Link to this definition"></a></dt>
+<dd><p>The collation loop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.CollationProcess.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counter_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#CollationProcess.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.CollationProcess.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>CollationProcess</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">DeliveryProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#DeliveryProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.DeliveryProcess" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.specimens.Component</span></code></a></p>
+<p>Takes entities/batches from the <cite>in_queue</cite> and places them
+in <cite>env.processes[out_process].in_queue</cite>, after some delay.
+A resource is required to move the entity/batch and requires
+time to travel between the locations associated with the two
+processes.  Batches are unbatched upon arrival.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.runner">
+<span class="sig-name descname"><span class="pre">runner</span></span><a class="headerlink" href="#hpath.process.DeliveryProcess.runner" title="Link to this definition"></a></dt>
+<dd><p>The resource (e.g. staff) responsible for the delivery.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Resource" title="(in salabim)">salabim.Resource</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.out_duration">
+<span class="sig-name descname"><span class="pre">out_duration</span></span><a class="headerlink" href="#hpath.process.DeliveryProcess.out_duration" title="Link to this definition"></a></dt>
+<dd><p>The time required for the runner to collect and drop off the delivery.
+Acceptable types are those accepted by <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component.hold" title="(in salabim)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">salabim.Component.hold()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>[[], <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.return_duration">
+<span class="sig-name descname"><span class="pre">return_duration</span></span><a class="headerlink" href="#hpath.process.DeliveryProcess.return_duration" title="Link to this definition"></a></dt>
+<dd><p>The time required for the runner to return to its home location after delivery.
+Acceptable types are those accepted by <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component.hold" title="(in salabim)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">salabim.Component.hold()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a> | <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>[[], <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.out_process">
+<span class="sig-name descname"><span class="pre">out_process</span></span><a class="headerlink" href="#hpath.process.DeliveryProcess.out_process" title="Link to this definition"></a></dt>
+<dd><p>The name of the process receiving the delivery.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.env">
+<span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#hpath.process.DeliveryProcess.env" title="Link to this definition"></a></dt>
+<dd><p>The simulation model this arrival generator is attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#DeliveryProcess.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.DeliveryProcess.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>runner</strong> (<em>sim.Resource</em>) – </p></li>
+<li><p><strong>out_duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> | </em><em>Callable</em><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>]</em>) – </p></li>
+<li><p><strong>return_duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> | </em><em>Callable</em><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>]</em>) – </p></li>
+<li><p><strong>out_process</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#DeliveryProcess.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.DeliveryProcess.process" title="Link to this definition"></a></dt>
+<dd><p>The delivery loop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.DeliveryProcess.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">runner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">salabim.salabim.Distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">salabim.salabim.Distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#DeliveryProcess.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.DeliveryProcess.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>DeliveryProcess</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.Process">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#Process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.Process" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">salabim.salabim.Component</span></code></p>
+<p>A looped processed that takes one entity from its in-queue at a time
+and activates it.</p>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">Process(name='do_this',</span> <span class="pre">Specimen,</span> <span class="pre">do_this)</span></code> creates
+<code class="docutils literal notranslate"><span class="pre">Specimen.do_this</span> <span class="pre">=</span> <span class="pre">do_this</span></code> and calls it for every arriving
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Specimen</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.Process.in_queue">
+<span class="sig-name descname"><span class="pre">in_queue</span></span><a class="headerlink" href="#hpath.process.Process.in_queue" title="Link to this definition"></a></dt>
+<dd><p>The in-queue of the process from which entities are taken.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Store" title="(in salabim)">salabim.Store</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.Process.in_type">
+<span class="sig-name descname"><span class="pre">in_type</span></span><a class="headerlink" href="#hpath.process.Process.in_type" title="Link to this definition"></a></dt>
+<dd><p>The type of the entities to be processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><em>Type</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.Process.fn">
+<span class="sig-name descname"><span class="pre">fn</span></span><a class="headerlink" href="#hpath.process.Process.fn" title="Link to this definition"></a></dt>
+<dd><p>The function to be activated by each new arrival to the process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.Process.env">
+<span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#hpath.process.Process.env" title="Link to this definition"></a></dt>
+<dd><p>The simulation model this arrival generator is attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.Process.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Environment</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#Process.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.Process.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>in_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><em>Type</em></a>) – </p></li>
+<li><p><strong>fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><em>Callable</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.Process.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#Process.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.Process.process" title="Link to this definition"></a></dt>
+<dd><p>The process loop.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.Process.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Type" title="(in Python v3.11)"><span class="pre">Type</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><span class="pre">hpath.specimens.Component</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.11)"><span class="pre">Callable</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#Process.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.Process.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>Process</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.process.</span></span><span class="sig-name descname"><span class="pre">ResourceScheduler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">ResourceSchedule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/process/__core.html#ResourceScheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ResourceScheduler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component" title="hpath.specimens.Component"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.specimens.Component</span></code></a></p>
+<p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Resource" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> scheduler process.  The resource level is set every
+half-hour. The resource level is set to 0 if the day entry in the
+<cite>ResourceSchedule</cite> is 0.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.resource">
+<span class="sig-name descname"><span class="pre">resource</span></span><a class="headerlink" href="#hpath.process.ResourceScheduler.resource" title="Link to this definition"></a></dt>
+<dd><p>The resource to control the allocation of.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Resource" title="(in salabim)">salabim.Resource</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.schedule">
+<span class="sig-name descname"><span class="pre">schedule</span></span><a class="headerlink" href="#hpath.process.ResourceScheduler.schedule" title="Link to this definition"></a></dt>
+<dd><p>The resource schedule in dataclass form.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule">ResourceSchedule</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.env">
+<span class="sig-name descname"><span class="pre">env</span></span><a class="headerlink" href="#hpath.process.ResourceScheduler.env" title="Link to this definition"></a></dt>
+<dd><p>The simulation model this arrival generator is attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model">Model</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">ResourceSchedule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ResourceScheduler.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ResourceScheduler.__init__" title="Link to this definition"></a></dt>
+<dd><p>Constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Positional arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+<li><p><strong>resource</strong> (<a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Resource" title="(in salabim)"><em>salabim.Resource</em></a>) – </p></li>
+<li><p><strong>schedule</strong> (<a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><em>ResourceSchedule</em></a>) – </p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><em>Model</em></a>) – </p></li>
+<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><em>Any</em></a><em>]</em>) – Additional keyword arguments passed to the <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Component" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">super()</span></code></a>
+constructor.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ResourceScheduler.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ResourceScheduler.process" title="Link to this definition"></a></dt>
+<dd><p>Change the resource capacity based on the schedule.
+Capacities are given in 30-min intervals.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.process.ResourceScheduler.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">ResourceSchedule</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/__core.html#ResourceScheduler.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.ResourceScheduler.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up the <cite>ResourceScheduler</cite>. Salabim encourages use of a <code class="docutils literal notranslate"><span class="pre">setup()</span></code> method
+rather than overriding <code class="docutils literal notranslate"><span class="pre">__init__()</span></code>. The method is called automatically
+immediately after initialisation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p10_reception.html">hpath.process.p10_reception module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.arrive_reception"><code class="docutils literal notranslate"><span class="pre">arrive_reception()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.booking_in"><code class="docutils literal notranslate"><span class="pre">booking_in()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p20_cutup.html">hpath.process.p20_cutup module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_bms"><code class="docutils literal notranslate"><span class="pre">cutup_bms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_large"><code class="docutils literal notranslate"><span class="pre">cutup_large()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_pool"><code class="docutils literal notranslate"><span class="pre">cutup_pool()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_start"><code class="docutils literal notranslate"><span class="pre">cutup_start()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p30_processing.html">hpath.process.p30_processing module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_bone_station"><code class="docutils literal notranslate"><span class="pre">decalc_bone_station()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_oven"><code class="docutils literal notranslate"><span class="pre">decalc_oven()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.embed_and_trim"><code class="docutils literal notranslate"><span class="pre">embed_and_trim()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.post_processing"><code class="docutils literal notranslate"><span class="pre">post_processing()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_assign_queue"><code class="docutils literal notranslate"><span class="pre">processing_assign_queue()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_larges"><code class="docutils literal notranslate"><span class="pre">processing_larges()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_megas"><code class="docutils literal notranslate"><span class="pre">processing_megas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_smalls"><code class="docutils literal notranslate"><span class="pre">processing_smalls()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_start"><code class="docutils literal notranslate"><span class="pre">processing_start()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_urgents"><code class="docutils literal notranslate"><span class="pre">processing_urgents()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p40_microtomy.html">hpath.process.p40_microtomy module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p40_microtomy.html#hpath.process.p40_microtomy.microtomy"><code class="docutils literal notranslate"><span class="pre">microtomy()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p40_microtomy.html#hpath.process.p40_microtomy.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p50_staining.html">hpath.process.p50_staining module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.post_staining"><code class="docutils literal notranslate"><span class="pre">post_staining()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_megas"><code class="docutils literal notranslate"><span class="pre">staining_megas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_regular"><code class="docutils literal notranslate"><span class="pre">staining_regular()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_start"><code class="docutils literal notranslate"><span class="pre">staining_start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p60_labelling.html">hpath.process.p60_labelling module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p60_labelling.html#hpath.process.p60_labelling.labelling"><code class="docutils literal notranslate"><span class="pre">labelling()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p60_labelling.html#hpath.process.p60_labelling.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p70_scanning.html">hpath.process.p70_scanning module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.post_scanning"><code class="docutils literal notranslate"><span class="pre">post_scanning()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_megas"><code class="docutils literal notranslate"><span class="pre">scanning_megas()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_regular"><code class="docutils literal notranslate"><span class="pre">scanning_regular()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_start"><code class="docutils literal notranslate"><span class="pre">scanning_start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p80_qc.html">hpath.process.p80_qc module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p80_qc.html#hpath.process.p80_qc.qc"><code class="docutils literal notranslate"><span class="pre">qc()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p80_qc.html#hpath.process.p80_qc.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.p90_reporting.html">hpath.process.p90_reporting module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.assign_histopath"><code class="docutils literal notranslate"><span class="pre">assign_histopath()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.html" class="btn btn-neutral float-left" title="hpath package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.process.p10_reception.html" class="btn btn-neutral float-right" title="hpath.process.p10_reception module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

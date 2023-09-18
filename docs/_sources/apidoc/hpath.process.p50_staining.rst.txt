@@ -1,0 +1,7 @@
+hpath.process.p50\_staining module
+==================================
+
+.. automodule:: hpath.process.p50_staining
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.process.p40_microtomy module &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.process.p50_staining module" href="hpath.process.p50_staining.html" />
+    <link rel="prev" title="hpath.process.p30_processing module" href="hpath.process.p30_processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="hpath.process.html">hpath.process package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess"><code class="docutils literal notranslate"><span class="pre">BatchingProcess</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess"><code class="docutils literal notranslate"><span class="pre">CollationProcess</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.Process"><code class="docutils literal notranslate"><span class="pre">Process</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler</span></code></a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="hpath.process.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p10_reception.html">hpath.process.p10_reception module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p20_cutup.html">hpath.process.p20_cutup module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p30_processing.html">hpath.process.p30_processing module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">hpath.process.p40_microtomy module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.process.p40_microtomy.microtomy"><code class="docutils literal notranslate"><span class="pre">microtomy()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.process.p40_microtomy.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p50_staining.html">hpath.process.p50_staining module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p60_labelling.html">hpath.process.p60_labelling module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p70_scanning.html">hpath.process.p70_scanning module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p80_qc.html">hpath.process.p80_qc module</a></li>
+<li class="toctree-l5"><a class="reference internal" href="hpath.process.p90_reporting.html">hpath.process.p90_reporting module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.restful.html">hpath.restful package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+          <li class="breadcrumb-item"><a href="hpath.process.html">hpath.process package</a></li>
+      <li class="breadcrumb-item active">hpath.process.p40_microtomy module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.process.p40_microtomy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.process.p40_microtomy">
+<span id="hpath-process-p40-microtomy-module"></span><h1>hpath.process.p40_microtomy module<a class="headerlink" href="#module-hpath.process.p40_microtomy" title="Link to this heading"></a></h1>
+<p>Microtomy processes.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.process.p40_microtomy.microtomy">
+<span class="sig-prename descclassname"><span class="pre">hpath.process.p40_microtomy.</span></span><span class="sig-name descname"><span class="pre">microtomy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Specimen" title="hpath.specimens.Specimen"><span class="pre">hpath.specimens.Specimen</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/p40_microtomy.html#microtomy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.p40_microtomy.microtomy" title="Link to this definition"></a></dt>
+<dd><p>Generate all slides for a specimen.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.process.p40_microtomy.register">
+<span class="sig-prename descclassname"><span class="pre">hpath.process.p40_microtomy.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/process/p40_microtomy.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.process.p40_microtomy.register" title="Link to this definition"></a></dt>
+<dd><p>Register processes to the simulation environment.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.process.p30_processing.html" class="btn btn-neutral float-left" title="hpath.process.p30_processing module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.process.p50_staining.html" class="btn btn-neutral float-right" title="hpath.process.p50_staining module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

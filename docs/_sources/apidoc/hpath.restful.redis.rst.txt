@@ -1,0 +1,7 @@
+hpath.restful.redis module
+==========================
+
+.. automodule:: hpath.restful.redis
+   :members:
+   :undoc-members:
+   :show-inheritance:

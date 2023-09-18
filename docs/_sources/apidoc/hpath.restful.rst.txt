@@ -1,0 +1,16 @@
+hpath.restful package
+=====================
+
+.. automodule:: hpath.restful
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   hpath.restful.redis
+   hpath.restful.server

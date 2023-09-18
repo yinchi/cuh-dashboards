@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installing and launching the server locally &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Excel Configuration File" href="excel.html" />
+    <link rel="prev" title="Program Architecture" href="design.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="design.html">Program Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing and launching the server locally</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-wsl2-and-ubuntu-for-windows-machines">1. Install WSL2 and Ubuntu (for Windows machines)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-docker-desktop">2. Install Docker Desktop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clone-the-repository">3. Clone the repository</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-up-the-development-environment">4. Set up the development environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-the-documentation">5. Build the documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-the-frontend-settings">6. Configure the frontend settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-and-launch-the-server-using-docker-compose">7. Build and launch the server using Docker Compose</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="process_logic.html">Process Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc/hpath.html">Python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installing and launching the server locally</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/install.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installing-and-launching-the-server-locally">
+<h1>Installing and launching the server locally<a class="headerlink" href="#installing-and-launching-the-server-locally" title="Link to this heading"></a></h1>
+<p>The following instructions will install and launch the Dashboards server and all related services.
+Steps 1-4 and 6 only need to be run once, Step 5 only if the source code has changed, and Step 7
+every time the server is launched.</p>
+<section id="install-wsl2-and-ubuntu-for-windows-machines">
+<h2>1. Install WSL2 and Ubuntu (for Windows machines)<a class="headerlink" href="#install-wsl2-and-ubuntu-for-windows-machines" title="Link to this heading"></a></h2>
+<p>Start a Windows terminal as Administrator by searching for “Terminal” in the command line
+and right-clicking to expose the menu:</p>
+<a class="reference internal image-reference" href="_images/terminal.png"><img alt="_images/terminal.png" src="_images/terminal.png" style="width: 500px;" /></a>
+<p>If Terminal is not installed, it can be downloaded from the Microsoft Store at:
+<a class="reference external" href="https://www.microsoft.com/store/productid/9N0DX20HK701">https://www.microsoft.com/store/productid/9N0DX20HK701</a>.</p>
+<p>In the new terminal, enter <code class="docutils literal notranslate"><span class="pre">wsl</span> <span class="pre">--install</span></code> and follow the prompts.  For detailed instructions,
+see <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/install">https://learn.microsoft.com/en-us/windows/wsl/install</a>.</p>
+</section>
+<section id="install-docker-desktop">
+<h2>2. Install Docker Desktop<a class="headerlink" href="#install-docker-desktop" title="Link to this heading"></a></h2>
+<p>Follow the instructions at: <a class="reference external" href="https://docs.docker.com/desktop/install/windows-install/">https://docs.docker.com/desktop/install/windows-install/</a>.
+Be sure that the WSL2 backend is enabled.</p>
+<p>Note: read <a class="reference external" href="https://docs.docker.com/desktop/faqs/general/#do-i-need-to-pay-to-use-docker-desktop">Do I need to pay to use Docker Desktop?</a>.</p>
+</section>
+<section id="clone-the-repository">
+<h2>3. Clone the repository<a class="headerlink" href="#clone-the-repository" title="Link to this heading"></a></h2>
+<p>Clone the repository by running:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/yinchi/hpath.git
+<span class="nb">cd</span><span class="w"> </span>hpath
+</pre></div>
+</div>
+<p><strong>Note</strong>: the frontend source code resides on a separate Git repository that is cloned from when
+building the corresponding Docker container in Step 6.</p>
+</section>
+<section id="set-up-the-development-environment">
+<h2>4. Set up the development environment<a class="headerlink" href="#set-up-the-development-environment" title="Link to this heading"></a></h2>
+<p>Continuing from above, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.11
+python3.11<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>--upgrade-deps<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>pip-tools
+pip-compile
+pip-sync
+</pre></div>
+</div>
+<p>This will set up a virtual environment, install <code class="docutils literal notranslate"><span class="pre">pip-tools</span></code> for Python package management,
+and install all packages lists in <code class="docutils literal notranslate"><span class="pre">requirements.in</span></code> and their dependencies.</p>
+</section>
+<section id="build-the-documentation">
+<h2>5. Build the documentation<a class="headerlink" href="#build-the-documentation" title="Link to this heading"></a></h2>
+<p>Continuing from above, run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>chmod<span class="w"> </span>+x<span class="w"> </span>build-docs.sh
+./build-docs.sh
+</pre></div>
+</div>
+</section>
+<section id="configure-the-frontend-settings">
+<h2>6. Configure the frontend settings<a class="headerlink" href="#configure-the-frontend-settings" title="Link to this heading"></a></h2>
+<p>By default, the frontend website is set up to communicate with the backend on <code class="docutils literal notranslate"><span class="pre">localhost</span></code>.
+Edit <code class="docutils literal notranslate"><span class="pre">site.config.ts</span></code> to change this if hosting the website on a network.</p>
+<a class="reference internal image-reference" href="_images/frontend_config.png"><img alt="_images/frontend_config.png" src="_images/frontend_config.png" style="width: 800px;" /></a>
+</section>
+<section id="build-and-launch-the-server-using-docker-compose">
+<h2>7. Build and launch the server using Docker Compose<a class="headerlink" href="#build-and-launch-the-server-using-docker-compose" title="Link to this heading"></a></h2>
+<p>In a WSL terminal, <code class="docutils literal notranslate"><span class="pre">cd</span></code> to the <code class="docutils literal notranslate"><span class="pre">hpath</span></code> directory (the root of the cloned repository), then run:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>compose<span class="w"> </span>build
+docker<span class="w"> </span>compose<span class="w"> </span>up
+</pre></div>
+</div>
+<p>This will launch the main server on <code class="docutils literal notranslate"><span class="pre">http://localhost:80</span></code> and the documentation server on
+<code class="docutils literal notranslate"><span class="pre">http://localhost:8000</span></code>.  The simulation backend server can also be accessed via
+<code class="docutils literal notranslate"><span class="pre">http://localhost:5000</span></code>.</p>
+<p>The server can be stopped by typing <strong>CTRL+C</strong> in the terminal above, or using the Docker Desktop
+graphical interface. The terminated services can be removed using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">down</span></code>, and
+re-launched using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="design.html" class="btn btn-neutral float-left" title="Program Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="excel.html" class="btn btn-neutral float-right" title="The Excel Configuration File" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

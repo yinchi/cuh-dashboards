@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.config module &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.distributions module" href="hpath.distributions.html" />
+    <link rel="prev" title="hpath.conf module" href="hpath.conf.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html">hpath.chart_datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.conf.html">hpath.conf module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">hpath.config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.ArrivalSchedule"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ArrivalSchedule.from_pd"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule.from_pd()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ArrivalSchedule.rates"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule.rates</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.ArrivalSchedules"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ArrivalSchedules.cancer"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules.cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ArrivalSchedules.noncancer"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules.noncancer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.BatchSizes"><code class="docutils literal notranslate"><span class="pre">BatchSizes</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.bone_station"><code class="docutils literal notranslate"><span class="pre">BatchSizes.bone_station</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_cut_up_to_processing"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_cut_up_to_processing</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_labelling_to_scanning"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_labelling_to_scanning</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_microtomy_to_staining"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_microtomy_to_staining</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_processing_to_microtomy"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_processing_to_microtomy</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_reception_to_cut_up"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_reception_to_cut_up</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_scanning_to_qc"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_scanning_to_qc</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.deliver_staining_to_labelling"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_staining_to_labelling</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.digital_scanning_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.digital_scanning_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.digital_scanning_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.digital_scanning_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.processing_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.processing_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.processing_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.processing_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.staining_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.staining_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.BatchSizes.staining_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.staining_regular</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.from_workbook"><code class="docutils literal notranslate"><span class="pre">Config.from_workbook()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.analysis_id"><code class="docutils literal notranslate"><span class="pre">Config.analysis_id</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.arrival_schedules"><code class="docutils literal notranslate"><span class="pre">Config.arrival_schedules</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.batch_sizes"><code class="docutils literal notranslate"><span class="pre">Config.batch_sizes</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.created"><code class="docutils literal notranslate"><span class="pre">Config.created</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.global_vars"><code class="docutils literal notranslate"><span class="pre">Config.global_vars</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.num_reps"><code class="docutils literal notranslate"><span class="pre">Config.num_reps</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.resources_info"><code class="docutils literal notranslate"><span class="pre">Config.resources_info</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.sim_hours"><code class="docutils literal notranslate"><span class="pre">Config.sim_hours</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Config.task_durations_info"><code class="docutils literal notranslate"><span class="pre">Config.task_durations_info</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.DistributionInfo"><code class="docutils literal notranslate"><span class="pre">DistributionInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.DistributionInfo.high"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.high</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.DistributionInfo.low"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.low</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.DistributionInfo.mode"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.mode</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.DistributionInfo.time_unit"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.time_unit</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.DistributionInfo.type"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.Globals"><code class="docutils literal notranslate"><span class="pre">Globals</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_blocks_large_surgical"><code class="docutils literal notranslate"><span class="pre">Globals.num_blocks_large_surgical</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_blocks_mega"><code class="docutils literal notranslate"><span class="pre">Globals.num_blocks_mega</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_slides_larges"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_larges</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_slides_levels"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_levels</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_slides_megas"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.num_slides_serials"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_serials</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_bms_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_bms_cutup</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_bms_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_bms_cutup_urgent</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_decalc_bone"><code class="docutils literal notranslate"><span class="pre">Globals.prob_decalc_bone</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_decalc_oven"><code class="docutils literal notranslate"><span class="pre">Globals.prob_decalc_oven</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_internal"><code class="docutils literal notranslate"><span class="pre">Globals.prob_internal</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_invest_easy"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_easy</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_invest_external"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_external</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_invest_hard"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_hard</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_large_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_large_cutup</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_large_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_large_cutup_urgent</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_mega_blocks"><code class="docutils literal notranslate"><span class="pre">Globals.prob_mega_blocks</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_microtomy_levels"><code class="docutils literal notranslate"><span class="pre">Globals.prob_microtomy_levels</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_pool_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_pool_cutup</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_pool_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_pool_cutup_urgent</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_prebook"><code class="docutils literal notranslate"><span class="pre">Globals.prob_prebook</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_priority_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_priority_cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_priority_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_priority_non_cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_routine_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_routine_cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_routine_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_routine_non_cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_urgent_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_urgent_cancer</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.Globals.prob_urgent_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_urgent_non_cancer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.IntDistributionInfo"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.IntDistributionInfo.high"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.high</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.IntDistributionInfo.low"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.low</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.IntDistributionInfo.mode"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.mode</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.IntDistributionInfo.type"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.ResourceInfo"><code class="docutils literal notranslate"><span class="pre">ResourceInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceInfo.name"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.name</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceInfo.schedule"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.schedule</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceInfo.type"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.ResourceSchedule"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceSchedule.from_pd"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.from_pd()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceSchedule.allocation"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.allocation</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourceSchedule.day_flags"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.day_flags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.ResourcesInfo"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.from_pd"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.from_pd()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.bms"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.bms</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.bone_station"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.bone_station</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.booking_in_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.booking_in_staff</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.coverslip_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.coverslip_machine</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.cut_up_assistant"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.cut_up_assistant</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.histopathologist"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.histopathologist</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.microtomy_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.microtomy_staff</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.processing_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.processing_machine</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.processing_room_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.processing_room_staff</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.qc_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.qc_staff</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_machine_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.scanning_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_staff</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.staining_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.staining_machine</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.ResourcesInfo.staining_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.staining_staff</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.config.TaskDurationsInfo"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.assign_histopathologist"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.assign_histopathologist</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.block_and_quality_check"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.block_and_quality_check</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.block_trimming"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.block_trimming</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.booking_in_external"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_external</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.booking_in_internal"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_internal</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_external"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_external</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_easy"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_internal_easy</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_hard"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_internal_hard</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.coverslip_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.coverslip_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.coverslip_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.coverslip_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.cut_up_bms"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_bms</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.cut_up_large_specimens"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_large_specimens</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.cut_up_pool"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_pool</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.decalc"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.decalc</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.embedding"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.embedding</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.embedding_cooldown"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.embedding_cooldown</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.labelling"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.labelling</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_bone_station</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_into_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_into_decalc_oven</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_processing_machine</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_staining_machine_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.load_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_staining_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.microtomy_larges"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_larges</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.microtomy_levels"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_levels</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.microtomy_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.microtomy_serials"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_serials</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.pre_booking_in_investigation"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.pre_booking_in_investigation</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.processing_large_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_large_surgicals</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.processing_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.processing_small_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_small_surgicals</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.processing_urgent"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_urgent</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.receive_and_sort"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.receive_and_sort</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.scanning_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.scanning_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.scanning_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.scanning_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.staining_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.staining_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.staining_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.staining_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_bone_station</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_from_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_from_decalc_oven</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_processing_machine</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_staining_machine_megas</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.unload_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_staining_machine_regular</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.config.TaskDurationsInfo.write_report"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.write_report</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html">hpath.distributions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.excel.html">hpath.excel module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html">hpath.kpis module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html">hpath.model module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.simulate.html">hpath.simulate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html">hpath.specimens module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.util.html">hpath.util module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+      <li class="breadcrumb-item active">hpath.config module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.config.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.config">
+<span id="hpath-config-module"></span><h1>hpath.config module<a class="headerlink" href="#module-hpath.config" title="Link to this heading"></a></h1>
+<p>Module defining the configuration settings for the histopathology simulation model.</p>
+<p>The configuration settings are defined using Pydantic, and are fully convertable to JSON.
+To actually run a simulation, the configuration settings (as a <a class="reference internal" href="#hpath.config.Config" title="hpath.config.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.config.Config</span></code></a>
+object) are converted to a <a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">hpath.model.Model</span></code></a> object, which contain the actual Python
+objects used for <a class="reference external" href="https://www.salabim.org/manual/Reference.html#salabim.Resource" title="(in salabim)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></a> tracking, etc.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">ArrivalSchedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#ArrivalSchedule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ArrivalSchedule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>An arrival schedule for specimens.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedule.from_pd">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_pd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">hpath.config.ArrivalSchedule</span></a></span></span><a class="reference internal" href="../_modules/hpath/config.html#ArrivalSchedule.from_pd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ArrivalSchedule.from_pd" title="Link to this definition"></a></dt>
+<dd><p>Construct an arrival schedule from a dataframe with the 24 hours the day as rows
+and the seven days of the week as columns (starting on Monday).  Each value is the
+arrival rate for one hour of the week.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><em>pandas.DataFrame</em></a>) – The dataframe containing the arrival schedule information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedule.rates">
+<span class="sig-name descname"><span class="pre">rates</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.ArrivalSchedule.rates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedules">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">ArrivalSchedules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">hpath.config.ArrivalSchedule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">noncancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">hpath.config.ArrivalSchedule</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#ArrivalSchedules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ArrivalSchedules" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Dataclass for tracking the specimen arrival schedules of a model.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedules.cancer">
+<span class="sig-name descname"><span class="pre">cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">hpath.config.ArrivalSchedule</span></a></em><a class="headerlink" href="#hpath.config.ArrivalSchedules.cancer" title="Link to this definition"></a></dt>
+<dd><p>Arrival schedule for cancer pathway specimens.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ArrivalSchedules.noncancer">
+<span class="sig-name descname"><span class="pre">noncancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ArrivalSchedule" title="hpath.config.ArrivalSchedule"><span class="pre">hpath.config.ArrivalSchedule</span></a></em><a class="headerlink" href="#hpath.config.ArrivalSchedules.noncancer" title="Link to this definition"></a></dt>
+<dd><p>Arrival schedule for non-cancer pathway specimens.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">BatchSizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_reception_to_cut_up</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_cut_up_to_processing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_processing_to_microtomy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_microtomy_to_staining</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_staining_to_labelling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_labelling_to_scanning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliver_scanning_to_qc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bone_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">digital_scanning_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">digital_scanning_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#BatchSizes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.BatchSizes" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Information for tracking batch sizes in a model.  This is the number of
+specimens, blocks, or slides in a machine or delivery batch.  Batches in the model
+are homogeneous, i.e. all items in a batch are of the same type.</p>
+<p>The field titles in this class MUST match the rows of the Excel input file
+(“Batch Sizes” tab).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.bone_station">
+<span class="sig-name descname"><span class="pre">bone_station</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.bone_station" title="Link to this definition"></a></dt>
+<dd><p>Bone station (machine) batch size (blocks).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_cut_up_to_processing">
+<span class="sig-name descname"><span class="pre">deliver_cut_up_to_processing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_cut_up_to_processing" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, cut-up to processing (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_labelling_to_scanning">
+<span class="sig-name descname"><span class="pre">deliver_labelling_to_scanning</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_labelling_to_scanning" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, labelling to scanning (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_microtomy_to_staining">
+<span class="sig-name descname"><span class="pre">deliver_microtomy_to_staining</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_microtomy_to_staining" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, microtomy to staining (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_processing_to_microtomy">
+<span class="sig-name descname"><span class="pre">deliver_processing_to_microtomy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_processing_to_microtomy" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, processing to microtomy (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_reception_to_cut_up">
+<span class="sig-name descname"><span class="pre">deliver_reception_to_cut_up</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_reception_to_cut_up" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, reception to cut-up (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_scanning_to_qc">
+<span class="sig-name descname"><span class="pre">deliver_scanning_to_qc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_scanning_to_qc" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, scanning to QC (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.deliver_staining_to_labelling">
+<span class="sig-name descname"><span class="pre">deliver_staining_to_labelling</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.deliver_staining_to_labelling" title="Link to this definition"></a></dt>
+<dd><p>Delivery batch size, staining to labelling (specimens).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.digital_scanning_megas">
+<span class="sig-name descname"><span class="pre">digital_scanning_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.digital_scanning_megas" title="Link to this definition"></a></dt>
+<dd><p>Scanning machine batch size, mega slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.digital_scanning_regular">
+<span class="sig-name descname"><span class="pre">digital_scanning_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.digital_scanning_regular" title="Link to this definition"></a></dt>
+<dd><p>Scanning machine batch size, regular slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.processing_megas">
+<span class="sig-name descname"><span class="pre">processing_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.processing_megas" title="Link to this definition"></a></dt>
+<dd><p>Processing machine batch size, mega blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.processing_regular">
+<span class="sig-name descname"><span class="pre">processing_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.processing_regular" title="Link to this definition"></a></dt>
+<dd><p>Processing machine batch size, regular blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.staining_megas">
+<span class="sig-name descname"><span class="pre">staining_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.staining_megas" title="Link to this definition"></a></dt>
+<dd><p>Staining machine batch size, mega slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.BatchSizes.staining_regular">
+<span class="sig-name descname"><span class="pre">staining_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.BatchSizes.staining_regular" title="Link to this definition"></a></dt>
+<dd><p>Staining machine batch size, regular slides.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arrival_schedules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ArrivalSchedules" title="hpath.config.ArrivalSchedules"><span class="pre">hpath.config.ArrivalSchedules</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourcesInfo" title="hpath.config.ResourcesInfo"><span class="pre">hpath.config.ResourcesInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_durations_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.TaskDurationsInfo" title="hpath.config.TaskDurationsInfo"><span class="pre">hpath.config.TaskDurationsInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.BatchSizes" title="hpath.config.BatchSizes"><span class="pre">hpath.config.BatchSizes</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.Globals" title="hpath.config.Globals"><span class="pre">hpath.config.Globals</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_hours</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_reps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">created</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.Config" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Configuration settings for the histopathlogy department model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.config.Config.from_workbook">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_workbook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wbook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://openpyxl.readthedocs.io/en/stable/api/openpyxl.workbook.workbook.html#openpyxl.workbook.workbook.Workbook" title="(in openpyxl v3.1)"><span class="pre">openpyxl.workbook.workbook.Workbook</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sim_hours</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_reps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">analysis_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hpath.config.Config" title="hpath.config.Config"><span class="pre">hpath.config.Config</span></a></span></span><a class="reference internal" href="../_modules/hpath/config.html#Config.from_workbook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.Config.from_workbook" title="Link to this definition"></a></dt>
+<dd><p>Load a config from an Excel workbook.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.analysis_id">
+<span class="sig-name descname"><span class="pre">analysis_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><a class="headerlink" href="#hpath.config.Config.analysis_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.arrival_schedules">
+<span class="sig-name descname"><span class="pre">arrival_schedules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ArrivalSchedules" title="hpath.config.ArrivalSchedules"><span class="pre">hpath.config.ArrivalSchedules</span></a></em><a class="headerlink" href="#hpath.config.Config.arrival_schedules" title="Link to this definition"></a></dt>
+<dd><p>Arrival schedules for cancer and non-cancer specimens.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.batch_sizes">
+<span class="sig-name descname"><span class="pre">batch_sizes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.BatchSizes" title="hpath.config.BatchSizes"><span class="pre">hpath.config.BatchSizes</span></a></em><a class="headerlink" href="#hpath.config.Config.batch_sizes" title="Link to this definition"></a></dt>
+<dd><p>Batch sizes for various machine and delivery tasks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.created">
+<span class="sig-name descname"><span class="pre">created</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Config.created" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.global_vars">
+<span class="sig-name descname"><span class="pre">global_vars</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.Globals" title="hpath.config.Globals"><span class="pre">hpath.config.Globals</span></a></em><a class="headerlink" href="#hpath.config.Config.global_vars" title="Link to this definition"></a></dt>
+<dd><p>Miscellaneous model-wide parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.num_reps">
+<span class="sig-name descname"><span class="pre">num_reps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.Config.num_reps" title="Link to this definition"></a></dt>
+<dd><p>Number of simulation replications to run.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.resources_info">
+<span class="sig-name descname"><span class="pre">resources_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourcesInfo" title="hpath.config.ResourcesInfo"><span class="pre">hpath.config.ResourcesInfo</span></a></em><a class="headerlink" href="#hpath.config.Config.resources_info" title="Link to this definition"></a></dt>
+<dd><p>Allocation schedules for each resource.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.sim_hours">
+<span class="sig-name descname"><span class="pre">sim_hours</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Config.sim_hours" title="Link to this definition"></a></dt>
+<dd><p>The simulation length in hours.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Config.task_durations_info">
+<span class="sig-name descname"><span class="pre">task_durations_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.TaskDurationsInfo" title="hpath.config.TaskDurationsInfo"><span class="pre">hpath.config.TaskDurationsInfo</span></a></em><a class="headerlink" href="#hpath.config.Config.task_durations_info" title="Link to this definition"></a></dt>
+<dd><p>Task duration distribution parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">DistributionInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.11)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Constant'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Triangular'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'PERT'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.11)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'s'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'h'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#DistributionInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.DistributionInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Information describing a three-point random distributions for task durations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo.high">
+<span class="sig-name descname"><span class="pre">high</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.DistributionInfo.high" title="Link to this definition"></a></dt>
+<dd><p>The maximum of the distribution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo.low">
+<span class="sig-name descname"><span class="pre">low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.DistributionInfo.low" title="Link to this definition"></a></dt>
+<dd><p>The minimum value of the distribution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.DistributionInfo.mode" title="Link to this definition"></a></dt>
+<dd><p>The most likely value of the distribution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo.time_unit">
+<span class="sig-name descname"><span class="pre">time_unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'s'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'m'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'h'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.DistributionInfo.time_unit" title="Link to this definition"></a></dt>
+<dd><p>The time unit of the distribution, i.e. seconds, minutes, or hours.  Represented by the
+first letter; the validator will accept any string starting with ‘s’, ‘m’, or ‘h’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.DistributionInfo.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Constant'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'Triangular'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'PERT'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.DistributionInfo.type" title="Link to this definition"></a></dt>
+<dd><p>The type of the distribution, one of ‘Constant’, ‘Triangular’, or ‘PERT’.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.Globals">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">Globals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_urgent_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_urgent_non_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_priority_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_priority_non_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_routine_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_routine_non_cancer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_prebook</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_invest_easy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_invest_hard</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_invest_external</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_bms_cutup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_bms_cutup_urgent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_large_cutup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_large_cutup_urgent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_pool_cutup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_pool_cutup_urgent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_mega_blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_decalc_bone</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_decalc_oven</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">prob_microtomy_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_blocks_large_surgical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_blocks_mega</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_slides_larges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_slides_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_slides_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_slides_serials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#Globals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.Globals" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Stores the global variables of a model.</p>
+<p>Field titles should match the corresponding named range in the Excel input file
+and therefore should not contain any spaces or symbols.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_blocks_large_surgical">
+<span class="sig-name descname"><span class="pre">num_blocks_large_surgical</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_blocks_large_surgical" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of large surgical blocks produced in a cut-up that produces
+such blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_blocks_mega">
+<span class="sig-name descname"><span class="pre">num_blocks_mega</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_blocks_mega" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of mega blocks produced in a cut-up that produces such blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_slides_larges">
+<span class="sig-name descname"><span class="pre">num_slides_larges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_slides_larges" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of slides produced for a large surgical microtomy task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_slides_levels">
+<span class="sig-name descname"><span class="pre">num_slides_levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_slides_levels" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of slides produced for a levels microtomy task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_slides_megas">
+<span class="sig-name descname"><span class="pre">num_slides_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_slides_megas" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of slides produced for a megas microtomy task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.num_slides_serials">
+<span class="sig-name descname"><span class="pre">num_slides_serials</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.IntDistributionInfo" title="hpath.config.IntDistributionInfo"><span class="pre">hpath.config.IntDistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.Globals.num_slides_serials" title="Link to this definition"></a></dt>
+<dd><p>Parameters for the number of slides produced for a serials microtomy task.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_bms_cutup">
+<span class="sig-name descname"><span class="pre">prob_bms_cutup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_bms_cutup" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-urgent specimen goes to BMS cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_bms_cutup_urgent">
+<span class="sig-name descname"><span class="pre">prob_bms_cutup_urgent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_bms_cutup_urgent" title="Link to this definition"></a></dt>
+<dd><p>Probability that an urgent specimen goes to BMS cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_decalc_bone">
+<span class="sig-name descname"><span class="pre">prob_decalc_bone</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_decalc_bone" title="Link to this definition"></a></dt>
+<dd><p>Probability that an specimen requires decalcification at a bone station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_decalc_oven">
+<span class="sig-name descname"><span class="pre">prob_decalc_oven</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_decalc_oven" title="Link to this definition"></a></dt>
+<dd><p>Probability that an specimen requires decalcification in a decalc oven.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_internal">
+<span class="sig-name descname"><span class="pre">prob_internal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_internal" title="Link to this definition"></a></dt>
+<dd><p>Probability that a specimen comes from an internal source, i.e. one that uses the
+EPIC system.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_invest_easy">
+<span class="sig-name descname"><span class="pre">prob_invest_easy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_invest_easy" title="Link to this definition"></a></dt>
+<dd><p>Probability that an internal specimen requires booking-in investigation, and
+the investigation is classified as “easy”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_invest_external">
+<span class="sig-name descname"><span class="pre">prob_invest_external</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_invest_external" title="Link to this definition"></a></dt>
+<dd><p>Probability that an external specimen requires booking-in investigation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_invest_hard">
+<span class="sig-name descname"><span class="pre">prob_invest_hard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_invest_hard" title="Link to this definition"></a></dt>
+<dd><p>Probability that an internal specimen requires booking-in investigation, and
+the investigation is classified as “hard”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_large_cutup">
+<span class="sig-name descname"><span class="pre">prob_large_cutup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_large_cutup" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-urgent specimen goes to large specimens cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_large_cutup_urgent">
+<span class="sig-name descname"><span class="pre">prob_large_cutup_urgent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_large_cutup_urgent" title="Link to this definition"></a></dt>
+<dd><p>Probability that an urgent specimen goes to large specimens cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_mega_blocks">
+<span class="sig-name descname"><span class="pre">prob_mega_blocks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_mega_blocks" title="Link to this definition"></a></dt>
+<dd><p>Probability that a large specimen cut-up produces mega blocks. With the remaining
+probability, large surgical blocks are produced instead.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_microtomy_levels">
+<span class="sig-name descname"><span class="pre">prob_microtomy_levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_microtomy_levels" title="Link to this definition"></a></dt>
+<dd><p>Probability that a small surgical block produces a “levels” microtomy task.
+With remaining probability, a “serials” microtomy task is produced.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_pool_cutup">
+<span class="sig-name descname"><span class="pre">prob_pool_cutup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_pool_cutup" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-urgent specimen goes to Pool cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_pool_cutup_urgent">
+<span class="sig-name descname"><span class="pre">prob_pool_cutup_urgent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_pool_cutup_urgent" title="Link to this definition"></a></dt>
+<dd><p>Probability that an urgent specimen goes to Pool cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_prebook">
+<span class="sig-name descname"><span class="pre">prob_prebook</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_prebook" title="Link to this definition"></a></dt>
+<dd><p>Probability that a specimen requires pre-booking-in investigation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_priority_cancer">
+<span class="sig-name descname"><span class="pre">prob_priority_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_priority_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a cancer-pathway specimen has Priority priority.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_priority_non_cancer">
+<span class="sig-name descname"><span class="pre">prob_priority_non_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_priority_non_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-cancer-pathway specimen has Priority priority.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_routine_cancer">
+<span class="sig-name descname"><span class="pre">prob_routine_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_routine_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a cancer-pathway specimen has Routine/Cancer priority.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_routine_non_cancer">
+<span class="sig-name descname"><span class="pre">prob_routine_non_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_routine_non_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-cancer-pathway specimen has Routine priority.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_urgent_cancer">
+<span class="sig-name descname"><span class="pre">prob_urgent_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_urgent_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a cancer-pathway specimen has Urgent priority.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.Globals.prob_urgent_non_cancer">
+<span class="sig-name descname"><span class="pre">prob_urgent_non_cancer</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.config.Globals.prob_urgent_non_cancer" title="Link to this definition"></a></dt>
+<dd><p>Probability that a non-cancer-pathway specimen has Urgent priority.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.IntDistributionInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">IntDistributionInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.11)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Constant'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'IntTriangular'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'IntPERT'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#IntDistributionInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.IntDistributionInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Information describing a discretised three-point random distribution.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.IntDistributionInfo.high">
+<span class="sig-name descname"><span class="pre">high</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.IntDistributionInfo.high" title="Link to this definition"></a></dt>
+<dd><p>Maximum value of the distribution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.IntDistributionInfo.low">
+<span class="sig-name descname"><span class="pre">low</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.IntDistributionInfo.low" title="Link to this definition"></a></dt>
+<dd><p>Minimum value of the distribution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.IntDistributionInfo.mode">
+<span class="sig-name descname"><span class="pre">mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></em><a class="headerlink" href="#hpath.config.IntDistributionInfo.mode" title="Link to this definition"></a></dt>
+<dd><p>Most likely value of the distribution, before discretisation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.IntDistributionInfo.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'Constant'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'IntTriangular'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'IntPERT'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.IntDistributionInfo.type" title="Link to this definition"></a></dt>
+<dd><p>Type of the distribution.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.ResourceInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">ResourceInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.11)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'staff'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'machine'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schedule</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">hpath.config.ResourceSchedule</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#ResourceInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ResourceInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Contains information about a resource.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourceInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></em><a class="headerlink" href="#hpath.config.ResourceInfo.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the resource, e.g. “Scanning machine”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourceInfo.schedule">
+<span class="sig-name descname"><span class="pre">schedule</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">hpath.config.ResourceSchedule</span></a></em><a class="headerlink" href="#hpath.config.ResourceInfo.schedule" title="Link to this definition"></a></dt>
+<dd><p>A schedule defining the number of allocated resource units over the course of a week.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourceInfo.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'staff'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'machine'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.ResourceInfo.type" title="Link to this definition"></a></dt>
+<dd><p>Whether the resource is a staff or machine resource.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.ResourceSchedule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">ResourceSchedule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day_flags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allocation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#ResourceSchedule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ResourceSchedule" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>A resource allocation schedule.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.config.ResourceSchedule.from_pd">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_pd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hpath.config.ResourceSchedule" title="hpath.config.ResourceSchedule"><span class="pre">hpath.config.ResourceSchedule</span></a></span></span><a class="reference internal" href="../_modules/hpath/config.html#ResourceSchedule.from_pd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ResourceSchedule.from_pd" title="Link to this definition"></a></dt>
+<dd><p>Construct a resource schedule from a DataFrame row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><em>pandas.DataFrame</em></a>) – The dataframe containing the resource allocation information.</p></li>
+<li><p><strong>row_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the resource, matching a row index in the inputted dataframe.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourceSchedule.allocation">
+<span class="sig-name descname"><span class="pre">allocation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.ResourceSchedule.allocation" title="Link to this definition"></a></dt>
+<dd><p>Number of resource units allocated for the day (in 30-min intervals),
+if the corresponding day flag is set to 1. The list length is expected to be 48.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourceSchedule.day_flags">
+<span class="sig-name descname"><span class="pre">day_flags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.config.ResourceSchedule.day_flags" title="Link to this definition"></a></dt>
+<dd><p>True/1 if resource is scheduled for the day (MON to SUN), False/0 otherwise.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">ResourcesInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_up_assistant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_room_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">microtomy_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scanning_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">qc_staff</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">histopathologist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bone_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_machine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_machine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">coverslip_machine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scanning_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scanning_machine_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#ResourcesInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ResourcesInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Dataclass for tracking the staff resources of a model.</p>
+<p>The fields in this dataclass <strong>MUST</strong> match the rows of the configuration
+Excel template (“Resources” tab), with all letters to lowercase, spaces to
+underscores, and other characters removed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.from_pd">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_pd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hpath.config.ResourcesInfo" title="hpath.config.ResourcesInfo"><span class="pre">hpath.config.ResourcesInfo</span></a></span></span><a class="reference internal" href="../_modules/hpath/config.html#ResourcesInfo.from_pd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.ResourcesInfo.from_pd" title="Link to this definition"></a></dt>
+<dd><p>Construct a <code class="docutils literal notranslate"><span class="pre">ResourcesInfo</span></code> object from a pandas dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><em>pandas.DataFrame</em></a>) – The dataframe containing the resource allocation information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.bms">
+<span class="sig-name descname"><span class="pre">bms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.bms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.bone_station">
+<span class="sig-name descname"><span class="pre">bone_station</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.bone_station" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.booking_in_staff">
+<span class="sig-name descname"><span class="pre">booking_in_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.booking_in_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.coverslip_machine">
+<span class="sig-name descname"><span class="pre">coverslip_machine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.coverslip_machine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.cut_up_assistant">
+<span class="sig-name descname"><span class="pre">cut_up_assistant</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.cut_up_assistant" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.histopathologist">
+<span class="sig-name descname"><span class="pre">histopathologist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.histopathologist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.microtomy_staff">
+<span class="sig-name descname"><span class="pre">microtomy_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.microtomy_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.processing_machine">
+<span class="sig-name descname"><span class="pre">processing_machine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.processing_machine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.processing_room_staff">
+<span class="sig-name descname"><span class="pre">processing_room_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.processing_room_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.qc_staff">
+<span class="sig-name descname"><span class="pre">qc_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.qc_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.scanning_machine_megas">
+<span class="sig-name descname"><span class="pre">scanning_machine_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.scanning_machine_megas" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.scanning_machine_regular">
+<span class="sig-name descname"><span class="pre">scanning_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.scanning_machine_regular" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.scanning_staff">
+<span class="sig-name descname"><span class="pre">scanning_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.scanning_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.staining_machine">
+<span class="sig-name descname"><span class="pre">staining_machine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.staining_machine" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.ResourcesInfo.staining_staff">
+<span class="sig-name descname"><span class="pre">staining_staff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.ResourceInfo" title="hpath.config.ResourceInfo"><span class="pre">hpath.config.ResourceInfo</span></a></em><a class="headerlink" href="#hpath.config.ResourcesInfo.staining_staff" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.config.</span></span><span class="sig-name descname"><span class="pre">TaskDurationsInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">receive_and_sort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_booking_in_investigation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_internal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_external</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_investigation_internal_easy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_investigation_internal_hard</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_in_investigation_external</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_up_bms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_up_pool</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cut_up_large_specimens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_bone_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">decalc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_bone_station</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_into_decalc_oven</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_from_decalc_oven</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_processing_machine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_processing_machine</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_urgent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_small_surgicals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_large_surgicals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">processing_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">embedding_cooldown</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_trimming</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">microtomy_serials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">microtomy_levels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">microtomy_larges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">microtomy_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_staining_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_staining_machine_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">staining_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_staining_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_staining_machine_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_coverslip_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">coverslip_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">coverslip_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_coverslip_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelling</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_scanning_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_scanning_machine_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scanning_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">scanning_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_scanning_machine_regular</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">unload_scanning_machine_megas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_and_quality_check</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">assign_histopathologist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">write_report</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/config.html#TaskDurationsInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.config.TaskDurationsInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Information for tracking task durations in a model.</p>
+<p>The field titles in this class <strong>MUST</strong> match the rows of the Excel input file
+(“Task Durations” tab).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.assign_histopathologist">
+<span class="sig-name descname"><span class="pre">assign_histopathologist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.assign_histopathologist" title="Link to this definition"></a></dt>
+<dd><p>Time to assign a histopathologist to a specimen.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.block_and_quality_check">
+<span class="sig-name descname"><span class="pre">block_and_quality_check</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.block_and_quality_check" title="Link to this definition"></a></dt>
+<dd><p>Time to perform the block and quality checks for a specimen.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.block_trimming">
+<span class="sig-name descname"><span class="pre">block_trimming</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.block_trimming" title="Link to this definition"></a></dt>
+<dd><p>Time to trim excess wax from the edges of a block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.booking_in_external">
+<span class="sig-name descname"><span class="pre">booking_in_external</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.booking_in_external" title="Link to this definition"></a></dt>
+<dd><p>Time to book in the specimen if the specimen was received externally, i.e. a new entry
+must be created on EPIC.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.booking_in_internal">
+<span class="sig-name descname"><span class="pre">booking_in_internal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.booking_in_internal" title="Link to this definition"></a></dt>
+<dd><p>Time to book in the specimen if the specimen was received internally, i.e. it already
+exists on the EPIC sytem.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.booking_in_investigation_external">
+<span class="sig-name descname"><span class="pre">booking_in_investigation_external</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_external" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a booking-in investigation for an external specimen.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.booking_in_investigation_internal_easy">
+<span class="sig-name descname"><span class="pre">booking_in_investigation_internal_easy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_easy" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a booking-in investigation for an internal specimen, if the investigation
+is classified as “easy”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.booking_in_investigation_internal_hard">
+<span class="sig-name descname"><span class="pre">booking_in_investigation_internal_hard</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_hard" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a booking-in investigation for an internal specimen, if the investigation
+is classified as “hard”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.coverslip_megas">
+<span class="sig-name descname"><span class="pre">coverslip_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.coverslip_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to affix a coverslip to a mega slide (manual task).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.coverslip_regular">
+<span class="sig-name descname"><span class="pre">coverslip_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.coverslip_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to affix coverslips to a batch of regular slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.cut_up_bms">
+<span class="sig-name descname"><span class="pre">cut_up_bms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.cut_up_bms" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a BMS cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.cut_up_large_specimens">
+<span class="sig-name descname"><span class="pre">cut_up_large_specimens</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.cut_up_large_specimens" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a large specimens cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.cut_up_pool">
+<span class="sig-name descname"><span class="pre">cut_up_pool</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.cut_up_pool" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a pool cut-up.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.decalc">
+<span class="sig-name descname"><span class="pre">decalc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.decalc" title="Link to this definition"></a></dt>
+<dd><p>Time to decalcify a bony specimen.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.embedding">
+<span class="sig-name descname"><span class="pre">embedding</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.embedding" title="Link to this definition"></a></dt>
+<dd><p>Time to embed a block in paraffin wax (staffed).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.embedding_cooldown">
+<span class="sig-name descname"><span class="pre">embedding_cooldown</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.embedding_cooldown" title="Link to this definition"></a></dt>
+<dd><p>Time for a wax block to cool (unstaffed).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.labelling">
+<span class="sig-name descname"><span class="pre">labelling</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.labelling" title="Link to this definition"></a></dt>
+<dd><p>Time to label a slide.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_bone_station">
+<span class="sig-name descname"><span class="pre">load_bone_station</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_bone_station" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of blocks into a bone station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_coverslip_machine_regular">
+<span class="sig-name descname"><span class="pre">load_coverslip_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_coverslip_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of regular slides into a coverslip machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_into_decalc_oven">
+<span class="sig-name descname"><span class="pre">load_into_decalc_oven</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_into_decalc_oven" title="Link to this definition"></a></dt>
+<dd><p>Time to load a single block into a bone station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_processing_machine">
+<span class="sig-name descname"><span class="pre">load_processing_machine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_processing_machine" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of blocks into a processing machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_scanning_machine_megas">
+<span class="sig-name descname"><span class="pre">load_scanning_machine_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_scanning_machine_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of mega slides into a scanning machine. There are dedicated scanning
+machines for mega slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_scanning_machine_regular">
+<span class="sig-name descname"><span class="pre">load_scanning_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_scanning_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of regular slides into a scanning machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_staining_machine_megas">
+<span class="sig-name descname"><span class="pre">load_staining_machine_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_staining_machine_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of mega slides into a staining machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.load_staining_machine_regular">
+<span class="sig-name descname"><span class="pre">load_staining_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.load_staining_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to load a batch of regular-sized slides into a staining machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.microtomy_larges">
+<span class="sig-name descname"><span class="pre">microtomy_larges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.microtomy_larges" title="Link to this definition"></a></dt>
+<dd><p>“Time to produce large-section slides from a block. These are regular-sized slides,
+but with larger tissue sections.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.microtomy_levels">
+<span class="sig-name descname"><span class="pre">microtomy_levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.microtomy_levels" title="Link to this definition"></a></dt>
+<dd><p>Time to produce level slides from a block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.microtomy_megas">
+<span class="sig-name descname"><span class="pre">microtomy_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.microtomy_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to produce mega slides from a mega block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.microtomy_serials">
+<span class="sig-name descname"><span class="pre">microtomy_serials</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.microtomy_serials" title="Link to this definition"></a></dt>
+<dd><p>Time to produce serial slides from a block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.pre_booking_in_investigation">
+<span class="sig-name descname"><span class="pre">pre_booking_in_investigation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.pre_booking_in_investigation" title="Link to this definition"></a></dt>
+<dd><p>Time to conduct a pre-booking-in investigation, if required.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.processing_large_surgicals">
+<span class="sig-name descname"><span class="pre">processing_large_surgicals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.processing_large_surgicals" title="Link to this definition"></a></dt>
+<dd><p>Programme length for the processing of large surgical blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.processing_megas">
+<span class="sig-name descname"><span class="pre">processing_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.processing_megas" title="Link to this definition"></a></dt>
+<dd><p>Programme length for the processing of mega blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.processing_small_surgicals">
+<span class="sig-name descname"><span class="pre">processing_small_surgicals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.processing_small_surgicals" title="Link to this definition"></a></dt>
+<dd><p>Programme length for the processing of small surgical blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.processing_urgent">
+<span class="sig-name descname"><span class="pre">processing_urgent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.processing_urgent" title="Link to this definition"></a></dt>
+<dd><p>Programme length for the processing of urgent blocks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.receive_and_sort">
+<span class="sig-name descname"><span class="pre">receive_and_sort</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.receive_and_sort" title="Link to this definition"></a></dt>
+<dd><p>Time for reception to receive a new specimen and assign a priority value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.scanning_megas">
+<span class="sig-name descname"><span class="pre">scanning_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.scanning_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to scan a batch of mega slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.scanning_regular">
+<span class="sig-name descname"><span class="pre">scanning_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.scanning_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to scan a batch of regular slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.staining_megas">
+<span class="sig-name descname"><span class="pre">staining_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.staining_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to stain a batch of mega slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.staining_regular">
+<span class="sig-name descname"><span class="pre">staining_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.staining_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to stain a batch of regular slides.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_bone_station">
+<span class="sig-name descname"><span class="pre">unload_bone_station</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_bone_station" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of blocks into a bone station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_coverslip_machine_regular">
+<span class="sig-name descname"><span class="pre">unload_coverslip_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_coverslip_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of regular slides into a coverslip machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_from_decalc_oven">
+<span class="sig-name descname"><span class="pre">unload_from_decalc_oven</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_from_decalc_oven" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a single block into a bone station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_processing_machine">
+<span class="sig-name descname"><span class="pre">unload_processing_machine</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_processing_machine" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of blocks from a processing machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_scanning_machine_megas">
+<span class="sig-name descname"><span class="pre">unload_scanning_machine_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_scanning_machine_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of mega slides from a scanning machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_scanning_machine_regular">
+<span class="sig-name descname"><span class="pre">unload_scanning_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_scanning_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of regular slides from a scanning machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_staining_machine_megas">
+<span class="sig-name descname"><span class="pre">unload_staining_machine_megas</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_staining_machine_megas" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of mega slides from a staining machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.unload_staining_machine_regular">
+<span class="sig-name descname"><span class="pre">unload_staining_machine_regular</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.unload_staining_machine_regular" title="Link to this definition"></a></dt>
+<dd><p>Time to unload a batch of regular slides from a staining machine.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.config.TaskDurationsInfo.write_report">
+<span class="sig-name descname"><span class="pre">write_report</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.config.DistributionInfo" title="hpath.config.DistributionInfo"><span class="pre">hpath.config.DistributionInfo</span></a></em><a class="headerlink" href="#hpath.config.TaskDurationsInfo.write_report" title="Link to this definition"></a></dt>
+<dd><p>Time to write the histopathological report for a specimen.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.conf.html" class="btn btn-neutral float-left" title="hpath.conf module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.distributions.html" class="btn btn-neutral float-right" title="hpath.distributions module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+hpath.distributions module
+==========================
+
+.. automodule:: hpath.distributions
+   :members:
+   :undoc-members:
+   :show-inheritance:

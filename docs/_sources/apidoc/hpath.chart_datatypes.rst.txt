@@ -1,0 +1,7 @@
+hpath.chart\_datatypes module
+=============================
+
+.. automodule:: hpath.chart_datatypes
+   :members:
+   :undoc-members:
+   :show-inheritance:

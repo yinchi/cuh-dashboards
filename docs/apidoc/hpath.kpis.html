@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.kpis module &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.model module" href="hpath.model.html" />
+    <link rel="prev" title="hpath.excel module" href="hpath.excel.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html">hpath.chart_datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.conf.html">hpath.conf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html">hpath.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html">hpath.distributions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.excel.html">hpath.excel module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">hpath.kpis module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.LabProgress"><code class="docutils literal notranslate"><span class="pre">LabProgress</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.LabProgress.3"><code class="docutils literal notranslate"><span class="pre">LabProgress.3</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.Progress"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Progress.10"><code class="docutils literal notranslate"><span class="pre">Progress.10</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Progress.12"><code class="docutils literal notranslate"><span class="pre">Progress.12</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Progress.21"><code class="docutils literal notranslate"><span class="pre">Progress.21</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Progress.7"><code class="docutils literal notranslate"><span class="pre">Progress.7</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.from_model"><code class="docutils literal notranslate"><span class="pre">Report.from_model()</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.hourly_utilization_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.hourly_utilization_by_resource</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_progress"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_progress_max"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress_max</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_progress_min"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress_min</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_tat"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_tat_max"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat_max</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.lab_tat_min"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat_min</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.overall_tat"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.overall_tat_max"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat_max</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.overall_tat_min"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat_min</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.progress"><code class="docutils literal notranslate"><span class="pre">Report.progress</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.progress_max"><code class="docutils literal notranslate"><span class="pre">Report.progress_max</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.progress_min"><code class="docutils literal notranslate"><span class="pre">Report.progress_min</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.q_length_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.q_length_by_resource</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.resource_allocation"><code class="docutils literal notranslate"><span class="pre">Report.resource_allocation</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.tat_by_stage"><code class="docutils literal notranslate"><span class="pre">Report.tat_by_stage</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.utilization_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.utilization_by_resource</span></code></a></li>
+<li class="toctree-l5"><a class="reference internal" href="#hpath.kpis.Report.wip_by_stage"><code class="docutils literal notranslate"><span class="pre">Report.wip_by_stage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.allocation_timeseries"><code class="docutils literal notranslate"><span class="pre">allocation_timeseries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.multi_mean_tats"><code class="docutils literal notranslate"><span class="pre">multi_mean_tats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.multi_mean_util"><code class="docutils literal notranslate"><span class="pre">multi_mean_util()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.multi_util_hourlies"><code class="docutils literal notranslate"><span class="pre">multi_util_hourlies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.overall_lab_tat"><code class="docutils literal notranslate"><span class="pre">overall_lab_tat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.overall_tat"><code class="docutils literal notranslate"><span class="pre">overall_tat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.q_length_hourlies"><code class="docutils literal notranslate"><span class="pre">q_length_hourlies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.q_length_hourly"><code class="docutils literal notranslate"><span class="pre">q_length_hourly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.q_length_means"><code class="docutils literal notranslate"><span class="pre">q_length_means()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.tat_by_stage"><code class="docutils literal notranslate"><span class="pre">tat_by_stage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.tat_dist"><code class="docutils literal notranslate"><span class="pre">tat_dist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.utilisation_hourlies"><code class="docutils literal notranslate"><span class="pre">utilisation_hourlies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.utilisation_hourly"><code class="docutils literal notranslate"><span class="pre">utilisation_hourly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.utilisation_means"><code class="docutils literal notranslate"><span class="pre">utilisation_means()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.wip_hourlies"><code class="docutils literal notranslate"><span class="pre">wip_hourlies()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.wip_hourly"><code class="docutils literal notranslate"><span class="pre">wip_hourly()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.kpis.wip_summary"><code class="docutils literal notranslate"><span class="pre">wip_summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html">hpath.model module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.simulate.html">hpath.simulate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html">hpath.specimens module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.util.html">hpath.util module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+      <li class="breadcrumb-item active">hpath.kpis module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.kpis.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.kpis">
+<span id="hpath-kpis-module"></span><h1>hpath.kpis module<a class="headerlink" href="#module-hpath.kpis" title="Link to this heading"></a></h1>
+<p>Compute KPIs for a model from simulation results.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.kpis.LabProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">LabProgress</span></span><a class="headerlink" href="#hpath.kpis.LabProgress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>Returns the proportion of specimens with lab component completed within three days.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.LabProgress.3">
+<span class="sig-name descname"><span class="pre">3</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.LabProgress.3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.kpis.Progress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">Progress</span></span><a class="headerlink" href="#hpath.kpis.Progress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
+<p>Returns the proportion of specimens completed within 7, 10, 12, and 21 days.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Progress.10">
+<span class="sig-name descname"><span class="pre">10</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Progress.10" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Progress.12">
+<span class="sig-name descname"><span class="pre">12</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Progress.12" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Progress.21">
+<span class="sig-name descname"><span class="pre">21</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Progress.21" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Progress.7">
+<span class="sig-name descname"><span class="pre">7</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Progress.7" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="hpath.kpis.Report">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">Report</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_tat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_tat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tat_by_stage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_allocation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wip_by_stage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData" title="hpath.chart_datatypes.MultiChartData"><span class="pre">hpath.chart_datatypes.MultiChartData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">utilization_by_resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_length_by_resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hourly_utilization_by_resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData" title="hpath.chart_datatypes.MultiChartData"><span class="pre">hpath.chart_datatypes.MultiChartData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_tat_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_tat_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_tat_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_tat_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_progress_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.LabProgress" title="hpath.kpis.LabProgress"><span class="pre">hpath.kpis.LabProgress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lab_progress_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#hpath.kpis.LabProgress" title="hpath.kpis.LabProgress"><span class="pre">hpath.kpis.LabProgress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/kpis.html#Report"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.Report" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Dataclass for reporting a set of KPIs for passing to a frontend visualisation server.
+In the current implementation, this is <a class="reference external" href="https://github.com/lakeesiv/digital-twin">https://github.com/lakeesiv/digital-twin</a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="hpath.kpis.Report.from_model">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#hpath.kpis.Report" title="hpath.kpis.Report"><span class="pre">Report</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#Report.from_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.Report.from_model" title="Link to this definition"></a></dt>
+<dd><p>Produce a single dataclass for passing simulation results to a frontend server.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.hourly_utilization_by_resource">
+<span class="sig-name descname"><span class="pre">hourly_utilization_by_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData" title="hpath.chart_datatypes.MultiChartData"><span class="pre">hpath.chart_datatypes.MultiChartData</span></a></em><a class="headerlink" href="#hpath.kpis.Report.hourly_utilization_by_resource" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_progress">
+<span class="sig-name descname"><span class="pre">lab_progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a></em><a class="headerlink" href="#hpath.kpis.Report.lab_progress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_progress_max">
+<span class="sig-name descname"><span class="pre">lab_progress_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.LabProgress" title="hpath.kpis.LabProgress"><span class="pre">hpath.kpis.LabProgress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.lab_progress_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_progress_min">
+<span class="sig-name descname"><span class="pre">lab_progress_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.LabProgress" title="hpath.kpis.LabProgress"><span class="pre">hpath.kpis.LabProgress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.lab_progress_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_tat">
+<span class="sig-name descname"><span class="pre">lab_tat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Report.lab_tat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_tat_max">
+<span class="sig-name descname"><span class="pre">lab_tat_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.lab_tat_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.lab_tat_min">
+<span class="sig-name descname"><span class="pre">lab_tat_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.lab_tat_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.overall_tat">
+<span class="sig-name descname"><span class="pre">overall_tat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></em><a class="headerlink" href="#hpath.kpis.Report.overall_tat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.overall_tat_max">
+<span class="sig-name descname"><span class="pre">overall_tat_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.overall_tat_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.overall_tat_min">
+<span class="sig-name descname"><span class="pre">overall_tat_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.overall_tat_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a></em><a class="headerlink" href="#hpath.kpis.Report.progress" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.progress_max">
+<span class="sig-name descname"><span class="pre">progress_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.progress_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.progress_min">
+<span class="sig-name descname"><span class="pre">progress_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#hpath.kpis.Progress" title="hpath.kpis.Progress"><span class="pre">hpath.kpis.Progress</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#hpath.kpis.Report.progress_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.q_length_by_resource">
+<span class="sig-name descname"><span class="pre">q_length_by_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></em><a class="headerlink" href="#hpath.kpis.Report.q_length_by_resource" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.resource_allocation">
+<span class="sig-name descname"><span class="pre">resource_allocation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#hpath.kpis.Report.resource_allocation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.tat_by_stage">
+<span class="sig-name descname"><span class="pre">tat_by_stage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></em><a class="headerlink" href="#hpath.kpis.Report.tat_by_stage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.utilization_by_resource">
+<span class="sig-name descname"><span class="pre">utilization_by_resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></em><a class="headerlink" href="#hpath.kpis.Report.utilization_by_resource" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="hpath.kpis.Report.wip_by_stage">
+<span class="sig-name descname"><span class="pre">wip_by_stage</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData" title="hpath.chart_datatypes.MultiChartData"><span class="pre">hpath.chart_datatypes.MultiChartData</span></a></em><a class="headerlink" href="#hpath.kpis.Report.wip_by_stage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.allocation_timeseries">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">allocation_timeseries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/kpis.html#allocation_timeseries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.allocation_timeseries" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the allocation level of a resource.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.multi_mean_tats">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">multi_mean_tats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#multi_mean_tats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.multi_mean_tats" title="Link to this definition"></a></dt>
+<dd><p>Chart data for bar chart of overall mean TATs by scenario.</p>
+<p>TODO: Change to grouped bar chart with both overall and lab TAT?
+Does the front-end support this?</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.multi_mean_util">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">multi_mean_util</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData" title="hpath.chart_datatypes.ChartData"><span class="pre">hpath.chart_datatypes.ChartData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#multi_mean_util"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.multi_mean_util" title="Link to this definition"></a></dt>
+<dd><p>Get mean resource utilisation values from a multi-scenario analysis result list.
+Each resource in the model maps to one barchart, with scenarios as x axis</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.multi_util_hourlies">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">multi_util_hourlies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData" title="hpath.chart_datatypes.MultiChartData"><span class="pre">hpath.chart_datatypes.MultiChartData</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#multi_util_hourlies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.multi_util_hourlies" title="Link to this definition"></a></dt>
+<dd><p>Get mean resource utilisation values from a multi-scenario analysis result list.
+Each resource in the model maps to one barchart, with scenarios as line labels.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.overall_lab_tat">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">overall_lab_tat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#overall_lab_tat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.overall_lab_tat" title="Link to this definition"></a></dt>
+<dd><p>Overall mean turnaround time.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.overall_tat">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">overall_tat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#overall_tat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.overall_tat" title="Link to this definition"></a></dt>
+<dd><p>Overall mean turnaround time.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.q_length_hourlies">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">q_length_hourlies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#q_length_hourlies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.q_length_hourlies" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean queue length of each resource.
+Queue members can be specimen, block, slide, or batch tasks including delivery.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.q_length_hourly">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">q_length_hourly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#q_length_hourly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.q_length_hourly" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean queue length for a resource.
+Queue members can be specimen, block, slide, or batch tasks including delivery.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.q_length_means">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">q_length_means</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#q_length_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.q_length_means" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the mean queue length of each resource.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.tat_by_stage">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">tat_by_stage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#tat_by_stage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.tat_by_stage" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe with the histopath stages as rows, and
+the mean turnaround time of each stage as its “mean (hours)” column.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.tat_dist">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">tat_dist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">day_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.11)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#tat_dist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.tat_dist" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the proportion of specimens
+completed in <code class="docutils literal notranslate"><span class="pre">n</span></code> days, for <code class="docutils literal notranslate"><span class="pre">n</span></code> in <code class="docutils literal notranslate"><span class="pre">day_list</span></code>. Both
+overall and lab turnaround time are shown.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.utilisation_hourlies">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">utilisation_hourlies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#utilisation_hourlies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.utilisation_hourlies" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean utilisation of each resource.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.utilisation_hourly">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">utilisation_hourly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Resource</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#utilisation_hourly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.utilisation_hourly" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean utilisation of a resource.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.utilisation_means">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">utilisation_means</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#utilisation_means"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.utilisation_means" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the mean utilisation of each resource.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.wip_hourlies">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">wip_hourlies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#wip_hourlies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.wip_hourlies" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean WIP
+for each stage in the histopathology process.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.wip_hourly">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">wip_hourly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">salabim.salabim.Monitor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#wip_hourly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.wip_hourly" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe showing the hourly mean WIP
+of a histopath stage.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.kpis.wip_summary">
+<span class="sig-prename descclassname"><span class="pre">hpath.kpis.</span></span><span class="sig-name descname"><span class="pre">wip_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mdl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.model.html#hpath.model.Model" title="hpath.model.Model"><span class="pre">Model</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="http://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0)"><span class="pre">pandas.core.frame.DataFrame</span></a></span></span><a class="reference internal" href="../_modules/hpath/kpis.html#wip_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.kpis.wip_summary" title="Link to this definition"></a></dt>
+<dd><p>Return a dataframe with the histopath stages as rows, and
+the mean WIP of each stage as its “mean” column.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.excel.html" class="btn btn-neutral float-left" title="hpath.excel module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.model.html" class="btn btn-neutral float-right" title="hpath.model module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

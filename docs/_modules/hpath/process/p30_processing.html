@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.process.p30_processing &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../apidoc/hpath.html">Python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hpath.process.p30_processing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hpath.process.p30_processing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tissue processing processes.</span>
+
+<span class="sd">**TODO**:</span>
+<span class="sd">    - Incorporate signals as gates for processing start times</span>
+<span class="sd">    - Handle weekends as special cases</span>
+<span class="sd">    - Reduced batch size for urgents?</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span> <span class="nn">..specimens</span> <span class="kn">import</span> <span class="n">Block</span><span class="p">,</span> <span class="n">Priority</span><span class="p">,</span> <span class="n">Specimen</span>
+<span class="kn">from</span> <span class="nn">.__core</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Batch</span><span class="p">,</span> <span class="n">BatchingProcess</span><span class="p">,</span> <span class="n">CollationProcess</span><span class="p">,</span> <span class="n">DeliveryProcess</span><span class="p">,</span>
+                     <span class="n">Process</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">Model</span>
+
+
+<div class="viewcode-block" id="register">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.register">[docs]</a>
+<span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="s1">&#39;Model&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register processes to the simulation environment.&quot;&quot;&quot;</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_start&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Specimen</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_start</span>
+    <span class="p">)</span>
+
+    <span class="c1"># DECALC</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.decalc_bone_station&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.decalc_bone_station&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">bone_station</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;decalc_bone_station&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;decalc_bone_station&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;decalc_bone_station&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">decalc_bone_station</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;decalc_oven&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;decalc_oven&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Block</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">decalc_oven</span>
+    <span class="p">)</span>
+
+    <span class="c1"># ASSIGN PROCESSING MACHINE QUEUE</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_assign_queue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_assign_queue&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Block</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_assign_queue</span>
+    <span class="p">)</span>
+
+    <span class="c1"># PROCESSING (URGENTS)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_urgents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.processing_urgents&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">processing_regular</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;processing_urgents&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_urgents&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_urgents&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_urgents</span>
+    <span class="p">)</span>
+
+    <span class="c1"># PROCESSING (SMALLS)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_smalls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.processing_smalls&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">processing_regular</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;processing_smalls&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_smalls&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_smalls&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_smalls</span>
+    <span class="p">)</span>
+
+    <span class="c1"># PROCESSING (LARGES)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_larges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.processing_larges&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">processing_regular</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;processing_larges&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_larges&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_larges&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_larges</span>
+    <span class="p">)</span>
+
+    <span class="c1"># PROCESSING (MEGA BLOCKS)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_megas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.processing_megas&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">processing_megas</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;processing_megas&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_megas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;processing_megas&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">processing_megas</span>
+    <span class="p">)</span>
+
+    <span class="c1"># EMBEDDING AND TRIMMING</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;embed_and_trim&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;embed_and_trim&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Block</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">embed_and_trim</span>
+    <span class="p">)</span>
+
+    <span class="c1"># COLLATION AND STATS(POST-PROCESSING)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;collate.processing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CollationProcess</span><span class="p">(</span>
+        <span class="s1">&#39;collate.processing&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">counter_name</span><span class="o">=</span><span class="s1">&#39;num_blocks&#39;</span><span class="p">,</span> <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;post_processing&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;post_processing&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span>
+        <span class="s1">&#39;post_processing&#39;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span> <span class="n">in_type</span><span class="o">=</span><span class="n">Specimen</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="n">post_processing</span>
+    <span class="p">)</span>
+
+    <span class="c1"># DELIVERY</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_to_microtomy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BatchingProcess</span><span class="p">(</span>
+        <span class="s1">&#39;batcher.processing_to_microtomy&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">batch_sizes</span><span class="o">.</span><span class="n">deliver_processing_to_microtomy</span><span class="p">,</span>
+        <span class="n">out_type</span><span class="o">=</span><span class="n">Batch</span><span class="p">[</span><span class="n">Specimen</span><span class="p">],</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;processing_to_microtomy&#39;</span>
+    <span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_to_microtomy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DeliveryProcess</span><span class="p">(</span>
+        <span class="s1">&#39;processing_to_microtomy&#39;</span><span class="p">,</span>
+        <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+        <span class="n">runner</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span>
+        <span class="n">out_duration</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">minutes</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">return_duration</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">minutes</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+        <span class="n">out_process</span><span class="o">=</span><span class="s1">&#39;microtomy&#39;</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_start">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_start">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_start</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Specimen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Take specimens arriving a processing and send to decalc if necessary.</span>
+<span class="sd">    Else, send to queue assignment.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">wips</span><span class="o">.</span><span class="n">in_processing</span><span class="o">.</span><span class="n">value</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;processing_start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">u01</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">prob_decalc_bone</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;decalc_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bone station&#39;</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.decalc_bone_station&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+    <span class="k">elif</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">prob_decalc_bone</span> <span class="o">+</span> <span class="n">env</span><span class="o">.</span><span class="n">globals</span><span class="o">.</span><span class="n">prob_decalc_oven</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;decalc_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;decalc oven&#39;</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;decalc_oven&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_assign_queue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">out_queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="decalc_bone_station">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_bone_station">[docs]</a>
+<span class="k">def</span> <span class="nf">decalc_bone_station</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decalc a batch of blocks in a bone station.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bone_station</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_bone_station</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">)</span>  <span class="c1"># release staff only</span>
+
+    <span class="c1"># DECALC</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">decalc</span><span class="p">)</span>  <span class="c1"># machine-only task</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># request staff again</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_bone_station</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_assign_queue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="decalc_oven">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_oven">[docs]</a>
+<span class="k">def</span> <span class="nf">decalc_oven</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Block</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decalc a block in an oven.</span>
+
+<span class="sd">    **NOTE**: It is assumed that the decalc oven is not a capacity bottleneck</span>
+<span class="sd">    and is thus not modelled as an limited resource.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_into_decalc_oven</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">)</span>  <span class="c1"># release staff</span>
+
+    <span class="c1"># DECALC</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">decalc</span><span class="p">)</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">bms</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>  <span class="c1"># request staff again</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_from_decalc_oven</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_assign_queue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_assign_queue">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_assign_queue">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_assign_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Block</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Assign incoming blocks to the correct :py:class:`~histopath.process.BatchingProcess`,</span>
+<span class="sd">    according to type.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span> <span class="o">==</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">:</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;batcher.processing_urgents&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;block_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;small surgical&quot;</span><span class="p">:</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;batcher.processing_smalls&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;block_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;large surgical&quot;</span><span class="p">:</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;batcher.processing_larges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_queue</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;batcher.processing_megas&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">out_queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_urgents">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_urgents">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_urgents</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine program for urgent blocks.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_machine</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+
+    <span class="c1"># PROCESSING</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">processing_urgent</span><span class="p">)</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">((</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;embed_and_trim&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_smalls">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_smalls">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_smalls</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine program for small surgical blocks.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+
+    <span class="c1"># PROCESSING</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">processing_small_surgicals</span><span class="p">)</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;embed_and_trim&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_larges">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_larges">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_larges</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine program for large surgical blocks.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+
+    <span class="c1"># PROCESSING</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">processing_large_surgicals</span><span class="p">)</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;embed_and_trim&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="processing_megas">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.processing_megas">[docs]</a>
+<span class="k">def</span> <span class="nf">processing_megas</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Batch</span><span class="p">[</span><span class="n">Block</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine program for mega blocks.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># LOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">load_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+
+    <span class="c1"># PROCESSING</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">processing_megas</span><span class="p">)</span>
+
+    <span class="c1"># UNLOAD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">unload_processing_machine</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>  <span class="c1"># release all</span>
+
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">block</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;embed_and_trim&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">block</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="embed_and_trim">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.embed_and_trim">[docs]</a>
+<span class="k">def</span> <span class="nf">embed_and_trim</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Block</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embed a block in wax and trim the excess.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="c1"># EMBED</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">embedding</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="c1"># COOLDOWN (no resources tracked)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">embedding_cooldown</span><span class="p">)</span>
+
+    <span class="c1"># TRIM</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">processing_room_staff</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">task_durations</span><span class="o">.</span><span class="n">block_trimming</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s2">&quot;collate.processing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="post_processing">
+<a class="viewcode-back" href="../../../apidoc/hpath.process.p30_processing.html#hpath.process.p30_processing.post_processing">[docs]</a>
+<span class="k">def</span> <span class="nf">post_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">Specimen</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Post-processing tasks.&quot;&quot;&quot;</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">Model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">wips</span><span class="o">.</span><span class="n">in_processing</span><span class="o">.</span><span class="n">value</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;processing_end&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prio</span> <span class="o">==</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enter_sorted</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;processing_to_microtomy&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">,</span> <span class="n">Priority</span><span class="o">.</span><span class="n">URGENT</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">processes</span><span class="p">[</span><span class="s1">&#39;batcher.processing_to_microtomy&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">in_queue</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

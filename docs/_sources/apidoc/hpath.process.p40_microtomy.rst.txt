@@ -1,0 +1,7 @@
+hpath.process.p40\_microtomy module
+===================================
+
+.. automodule:: hpath.process.p40_microtomy
+   :members:
+   :undoc-members:
+   :show-inheritance:

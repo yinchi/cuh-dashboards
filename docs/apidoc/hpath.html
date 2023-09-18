@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath package &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.process package" href="hpath.process.html" />
+    <link rel="prev" title="Processing" href="../process/30processing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html">hpath.process package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.restful.html">hpath.restful package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html">hpath.chart_datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.conf.html">hpath.conf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html">hpath.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html">hpath.distributions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.excel.html">hpath.excel module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html">hpath.kpis module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html">hpath.model module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.simulate.html">hpath.simulate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html">hpath.specimens module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.util.html">hpath.util module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">hpath package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath">
+<span id="hpath-package"></span><h1>hpath package<a class="headerlink" href="#module-hpath" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hpath.process.html">hpath.process package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator.iterator"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.iterator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator.cls_args"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.cls_args</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator.__init__"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator.process"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ArrivalGenerator.setup"><code class="docutils literal notranslate"><span class="pre">ArrivalGenerator.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess"><code class="docutils literal notranslate"><span class="pre">BatchingProcess</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.batch_size"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.batch_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.in_queue"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.in_queue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.out_type"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.out_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.out_process"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.out_process</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.env"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.env</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.__init__"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.process"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.BatchingProcess.setup"><code class="docutils literal notranslate"><span class="pre">BatchingProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess"><code class="docutils literal notranslate"><span class="pre">CollationProcess</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.counter_name"><code class="docutils literal notranslate"><span class="pre">CollationProcess.counter_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.in_queue"><code class="docutils literal notranslate"><span class="pre">CollationProcess.in_queue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.out_process"><code class="docutils literal notranslate"><span class="pre">CollationProcess.out_process</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.env"><code class="docutils literal notranslate"><span class="pre">CollationProcess.env</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.__init__"><code class="docutils literal notranslate"><span class="pre">CollationProcess.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.process"><code class="docutils literal notranslate"><span class="pre">CollationProcess.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.CollationProcess.setup"><code class="docutils literal notranslate"><span class="pre">CollationProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.runner"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.runner</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.out_duration"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.out_duration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.return_duration"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.return_duration</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.out_process"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.out_process</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.env"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.env</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.__init__"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.process"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.DeliveryProcess.setup"><code class="docutils literal notranslate"><span class="pre">DeliveryProcess.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.Process"><code class="docutils literal notranslate"><span class="pre">Process</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.in_queue"><code class="docutils literal notranslate"><span class="pre">Process.in_queue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.in_type"><code class="docutils literal notranslate"><span class="pre">Process.in_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.fn"><code class="docutils literal notranslate"><span class="pre">Process.fn</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.env"><code class="docutils literal notranslate"><span class="pre">Process.env</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.__init__"><code class="docutils literal notranslate"><span class="pre">Process.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.process"><code class="docutils literal notranslate"><span class="pre">Process.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.Process.setup"><code class="docutils literal notranslate"><span class="pre">Process.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.resource"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.resource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.schedule"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.schedule</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.env"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.env</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.__init__"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.process"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html#hpath.process.ResourceScheduler.setup"><code class="docutils literal notranslate"><span class="pre">ResourceScheduler.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.process.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p10_reception.html">hpath.process.p10_reception module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.arrive_reception"><code class="docutils literal notranslate"><span class="pre">arrive_reception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.booking_in"><code class="docutils literal notranslate"><span class="pre">booking_in()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p10_reception.html#hpath.process.p10_reception.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p20_cutup.html">hpath.process.p20_cutup module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_bms"><code class="docutils literal notranslate"><span class="pre">cutup_bms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_large"><code class="docutils literal notranslate"><span class="pre">cutup_large()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_pool"><code class="docutils literal notranslate"><span class="pre">cutup_pool()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.cutup_start"><code class="docutils literal notranslate"><span class="pre">cutup_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p20_cutup.html#hpath.process.p20_cutup.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p30_processing.html">hpath.process.p30_processing module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_bone_station"><code class="docutils literal notranslate"><span class="pre">decalc_bone_station()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.decalc_oven"><code class="docutils literal notranslate"><span class="pre">decalc_oven()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.embed_and_trim"><code class="docutils literal notranslate"><span class="pre">embed_and_trim()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.post_processing"><code class="docutils literal notranslate"><span class="pre">post_processing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_assign_queue"><code class="docutils literal notranslate"><span class="pre">processing_assign_queue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_larges"><code class="docutils literal notranslate"><span class="pre">processing_larges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_megas"><code class="docutils literal notranslate"><span class="pre">processing_megas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_smalls"><code class="docutils literal notranslate"><span class="pre">processing_smalls()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_start"><code class="docutils literal notranslate"><span class="pre">processing_start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.processing_urgents"><code class="docutils literal notranslate"><span class="pre">processing_urgents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p30_processing.html#hpath.process.p30_processing.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p40_microtomy.html">hpath.process.p40_microtomy module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p40_microtomy.html#hpath.process.p40_microtomy.microtomy"><code class="docutils literal notranslate"><span class="pre">microtomy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p40_microtomy.html#hpath.process.p40_microtomy.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p50_staining.html">hpath.process.p50_staining module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.post_staining"><code class="docutils literal notranslate"><span class="pre">post_staining()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_megas"><code class="docutils literal notranslate"><span class="pre">staining_megas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_regular"><code class="docutils literal notranslate"><span class="pre">staining_regular()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p50_staining.html#hpath.process.p50_staining.staining_start"><code class="docutils literal notranslate"><span class="pre">staining_start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p60_labelling.html">hpath.process.p60_labelling module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p60_labelling.html#hpath.process.p60_labelling.labelling"><code class="docutils literal notranslate"><span class="pre">labelling()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p60_labelling.html#hpath.process.p60_labelling.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p70_scanning.html">hpath.process.p70_scanning module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.post_scanning"><code class="docutils literal notranslate"><span class="pre">post_scanning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_megas"><code class="docutils literal notranslate"><span class="pre">scanning_megas()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_regular"><code class="docutils literal notranslate"><span class="pre">scanning_regular()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p70_scanning.html#hpath.process.p70_scanning.scanning_start"><code class="docutils literal notranslate"><span class="pre">scanning_start()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p80_qc.html">hpath.process.p80_qc module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p80_qc.html#hpath.process.p80_qc.qc"><code class="docutils literal notranslate"><span class="pre">qc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p80_qc.html#hpath.process.p80_qc.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.p90_reporting.html">hpath.process.p90_reporting module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.assign_histopath"><code class="docutils literal notranslate"><span class="pre">assign_histopath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.process.p90_reporting.html#hpath.process.p90_reporting.report"><code class="docutils literal notranslate"><span class="pre">report()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.restful.html">hpath.restful package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.restful.html#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.restful.redis.html">hpath.restful.redis module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.redis.html#hpath.restful.redis.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.redis.html#hpath.restful.redis.REDIS_CONN"><code class="docutils literal notranslate"><span class="pre">REDIS_CONN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.redis.html#hpath.restful.redis.REDIS_QUEUE"><code class="docutils literal notranslate"><span class="pre">REDIS_QUEUE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.restful.server.html">hpath.restful.server module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#rest-api">REST API</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.handle_exception"><code class="docutils literal notranslate"><span class="pre">handle_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.hello_world"><code class="docutils literal notranslate"><span class="pre">hello_world()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.list_multis_rest"><code class="docutils literal notranslate"><span class="pre">list_multis_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.list_scenarios_rest"><code class="docutils literal notranslate"><span class="pre">list_scenarios_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.new_multi_rest"><code class="docutils literal notranslate"><span class="pre">new_multi_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.new_scenario"><code class="docutils literal notranslate"><span class="pre">new_scenario()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.new_scenario_rest"><code class="docutils literal notranslate"><span class="pre">new_scenario_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.results_multi_rest"><code class="docutils literal notranslate"><span class="pre">results_multi_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.results_scenario"><code class="docutils literal notranslate"><span class="pre">results_scenario()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.results_scenario_rest"><code class="docutils literal notranslate"><span class="pre">results_scenario_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.status"><code class="docutils literal notranslate"><span class="pre">status()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.status_multi"><code class="docutils literal notranslate"><span class="pre">status_multi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.status_multi_rest"><code class="docutils literal notranslate"><span class="pre">status_multi_rest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="hpath.restful.server.html#hpath.restful.server.status_rest"><code class="docutils literal notranslate"><span class="pre">status_rest()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="hpath.chart_datatypes.html">hpath.chart_datatypes module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData"><code class="docutils literal notranslate"><span class="pre">ChartData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData.from_pandas"><code class="docutils literal notranslate"><span class="pre">ChartData.from_pandas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData.x"><code class="docutils literal notranslate"><span class="pre">ChartData.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData.y"><code class="docutils literal notranslate"><span class="pre">ChartData.y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData.ymax"><code class="docutils literal notranslate"><span class="pre">ChartData.ymax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.ChartData.ymin"><code class="docutils literal notranslate"><span class="pre">ChartData.ymin</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData"><code class="docutils literal notranslate"><span class="pre">MultiChartData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.from_pandas"><code class="docutils literal notranslate"><span class="pre">MultiChartData.from_pandas()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.labels"><code class="docutils literal notranslate"><span class="pre">MultiChartData.labels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.x"><code class="docutils literal notranslate"><span class="pre">MultiChartData.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.y"><code class="docutils literal notranslate"><span class="pre">MultiChartData.y</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.ymax"><code class="docutils literal notranslate"><span class="pre">MultiChartData.ymax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html#hpath.chart_datatypes.MultiChartData.ymin"><code class="docutils literal notranslate"><span class="pre">MultiChartData.ymin</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.conf.html">hpath.conf module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.config.html">hpath.config module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule.from_pd"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule.from_pd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedule.rates"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedule.rates</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedules"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedules.cancer"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules.cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ArrivalSchedules.noncancer"><code class="docutils literal notranslate"><span class="pre">ArrivalSchedules.noncancer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes"><code class="docutils literal notranslate"><span class="pre">BatchSizes</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.bone_station"><code class="docutils literal notranslate"><span class="pre">BatchSizes.bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_cut_up_to_processing"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_cut_up_to_processing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_labelling_to_scanning"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_labelling_to_scanning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_microtomy_to_staining"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_microtomy_to_staining</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_processing_to_microtomy"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_processing_to_microtomy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_reception_to_cut_up"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_reception_to_cut_up</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_scanning_to_qc"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_scanning_to_qc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.deliver_staining_to_labelling"><code class="docutils literal notranslate"><span class="pre">BatchSizes.deliver_staining_to_labelling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.digital_scanning_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.digital_scanning_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.digital_scanning_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.digital_scanning_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.processing_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.processing_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.processing_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.processing_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.staining_megas"><code class="docutils literal notranslate"><span class="pre">BatchSizes.staining_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.BatchSizes.staining_regular"><code class="docutils literal notranslate"><span class="pre">BatchSizes.staining_regular</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.from_workbook"><code class="docutils literal notranslate"><span class="pre">Config.from_workbook()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.analysis_id"><code class="docutils literal notranslate"><span class="pre">Config.analysis_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.arrival_schedules"><code class="docutils literal notranslate"><span class="pre">Config.arrival_schedules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.batch_sizes"><code class="docutils literal notranslate"><span class="pre">Config.batch_sizes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.created"><code class="docutils literal notranslate"><span class="pre">Config.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.global_vars"><code class="docutils literal notranslate"><span class="pre">Config.global_vars</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.num_reps"><code class="docutils literal notranslate"><span class="pre">Config.num_reps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.resources_info"><code class="docutils literal notranslate"><span class="pre">Config.resources_info</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.sim_hours"><code class="docutils literal notranslate"><span class="pre">Config.sim_hours</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Config.task_durations_info"><code class="docutils literal notranslate"><span class="pre">Config.task_durations_info</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo"><code class="docutils literal notranslate"><span class="pre">DistributionInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo.high"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.high</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo.low"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.low</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo.mode"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo.time_unit"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.time_unit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.DistributionInfo.type"><code class="docutils literal notranslate"><span class="pre">DistributionInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.Globals"><code class="docutils literal notranslate"><span class="pre">Globals</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_blocks_large_surgical"><code class="docutils literal notranslate"><span class="pre">Globals.num_blocks_large_surgical</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_blocks_mega"><code class="docutils literal notranslate"><span class="pre">Globals.num_blocks_mega</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_slides_larges"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_larges</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_slides_levels"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_levels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_slides_megas"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.num_slides_serials"><code class="docutils literal notranslate"><span class="pre">Globals.num_slides_serials</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_bms_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_bms_cutup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_bms_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_bms_cutup_urgent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_decalc_bone"><code class="docutils literal notranslate"><span class="pre">Globals.prob_decalc_bone</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_decalc_oven"><code class="docutils literal notranslate"><span class="pre">Globals.prob_decalc_oven</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_internal"><code class="docutils literal notranslate"><span class="pre">Globals.prob_internal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_invest_easy"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_easy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_invest_external"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_external</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_invest_hard"><code class="docutils literal notranslate"><span class="pre">Globals.prob_invest_hard</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_large_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_large_cutup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_large_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_large_cutup_urgent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_mega_blocks"><code class="docutils literal notranslate"><span class="pre">Globals.prob_mega_blocks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_microtomy_levels"><code class="docutils literal notranslate"><span class="pre">Globals.prob_microtomy_levels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_pool_cutup"><code class="docutils literal notranslate"><span class="pre">Globals.prob_pool_cutup</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_pool_cutup_urgent"><code class="docutils literal notranslate"><span class="pre">Globals.prob_pool_cutup_urgent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_prebook"><code class="docutils literal notranslate"><span class="pre">Globals.prob_prebook</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_priority_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_priority_cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_priority_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_priority_non_cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_routine_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_routine_cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_routine_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_routine_non_cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_urgent_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_urgent_cancer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.Globals.prob_urgent_non_cancer"><code class="docutils literal notranslate"><span class="pre">Globals.prob_urgent_non_cancer</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.IntDistributionInfo"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.IntDistributionInfo.high"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.high</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.IntDistributionInfo.low"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.low</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.IntDistributionInfo.mode"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.IntDistributionInfo.type"><code class="docutils literal notranslate"><span class="pre">IntDistributionInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceInfo"><code class="docutils literal notranslate"><span class="pre">ResourceInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceInfo.name"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceInfo.schedule"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.schedule</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceInfo.type"><code class="docutils literal notranslate"><span class="pre">ResourceInfo.type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule.from_pd"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.from_pd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule.allocation"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.allocation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourceSchedule.day_flags"><code class="docutils literal notranslate"><span class="pre">ResourceSchedule.day_flags</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.from_pd"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.from_pd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.bms"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.bms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.bone_station"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.booking_in_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.booking_in_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.coverslip_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.coverslip_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.cut_up_assistant"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.cut_up_assistant</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.histopathologist"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.histopathologist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.microtomy_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.microtomy_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.processing_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.processing_room_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.processing_room_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.qc_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.qc_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.scanning_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.scanning_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.staining_machine"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.staining_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.ResourcesInfo.staining_staff"><code class="docutils literal notranslate"><span class="pre">ResourcesInfo.staining_staff</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.assign_histopathologist"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.assign_histopathologist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.block_and_quality_check"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.block_and_quality_check</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.block_trimming"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.block_trimming</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.booking_in_external"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_external</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.booking_in_internal"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_internal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.booking_in_investigation_external"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_external</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_easy"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_internal_easy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.booking_in_investigation_internal_hard"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.booking_in_investigation_internal_hard</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.coverslip_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.coverslip_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.coverslip_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.coverslip_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.cut_up_bms"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_bms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.cut_up_large_specimens"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_large_specimens</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.cut_up_pool"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.cut_up_pool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.decalc"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.decalc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.embedding"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.embedding</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.embedding_cooldown"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.embedding_cooldown</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.labelling"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.labelling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_into_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_into_decalc_oven</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_staining_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.load_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.load_staining_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.microtomy_larges"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_larges</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.microtomy_levels"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_levels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.microtomy_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.microtomy_serials"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.microtomy_serials</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.pre_booking_in_investigation"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.pre_booking_in_investigation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.processing_large_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_large_surgicals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.processing_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.processing_small_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_small_surgicals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.processing_urgent"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.processing_urgent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.receive_and_sort"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.receive_and_sort</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.scanning_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.scanning_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.scanning_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.scanning_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.staining_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.staining_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.staining_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.staining_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_from_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_from_decalc_oven</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_staining_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.unload_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.unload_staining_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html#hpath.config.TaskDurationsInfo.write_report"><code class="docutils literal notranslate"><span class="pre">TaskDurationsInfo.write_report</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.distributions.html">hpath.distributions module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Constant"><code class="docutils literal notranslate"><span class="pre">Constant</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Constant._value"><code class="docutils literal notranslate"><span class="pre">Constant._value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT"><code class="docutils literal notranslate"><span class="pre">IntPERT</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT.sample"><code class="docutils literal notranslate"><span class="pre">IntPERT.sample()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT.high"><code class="docutils literal notranslate"><span class="pre">IntPERT.high</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT.low"><code class="docutils literal notranslate"><span class="pre">IntPERT.low</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT.mode"><code class="docutils literal notranslate"><span class="pre">IntPERT.mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.IntPERT.pert"><code class="docutils literal notranslate"><span class="pre">IntPERT.pert</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.PERT"><code class="docutils literal notranslate"><span class="pre">PERT</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.PERT._low"><code class="docutils literal notranslate"><span class="pre">PERT._low</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.PERT._mode"><code class="docutils literal notranslate"><span class="pre">PERT._mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.PERT._high"><code class="docutils literal notranslate"><span class="pre">PERT._high</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Tri"><code class="docutils literal notranslate"><span class="pre">Tri</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Tri._low"><code class="docutils literal notranslate"><span class="pre">Tri._low</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Tri._mode"><code class="docutils literal notranslate"><span class="pre">Tri._mode</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html#hpath.distributions.Tri._high"><code class="docutils literal notranslate"><span class="pre">Tri._high</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.excel.html">hpath.excel module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.excel.html#hpath.excel.get_name"><code class="docutils literal notranslate"><span class="pre">get_name()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.excel.html#hpath.excel.get_named_matrix"><code class="docutils literal notranslate"><span class="pre">get_named_matrix()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.excel.html#hpath.excel.get_table"><code class="docutils literal notranslate"><span class="pre">get_table()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.kpis.html">hpath.kpis module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.LabProgress"><code class="docutils literal notranslate"><span class="pre">LabProgress</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.LabProgress.3"><code class="docutils literal notranslate"><span class="pre">LabProgress.3</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Progress"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Progress.10"><code class="docutils literal notranslate"><span class="pre">Progress.10</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Progress.12"><code class="docutils literal notranslate"><span class="pre">Progress.12</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Progress.21"><code class="docutils literal notranslate"><span class="pre">Progress.21</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Progress.7"><code class="docutils literal notranslate"><span class="pre">Progress.7</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report"><code class="docutils literal notranslate"><span class="pre">Report</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.from_model"><code class="docutils literal notranslate"><span class="pre">Report.from_model()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.hourly_utilization_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.hourly_utilization_by_resource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_progress"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_progress_max"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_progress_min"><code class="docutils literal notranslate"><span class="pre">Report.lab_progress_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_tat"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_tat_max"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.lab_tat_min"><code class="docutils literal notranslate"><span class="pre">Report.lab_tat_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.overall_tat"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.overall_tat_max"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.overall_tat_min"><code class="docutils literal notranslate"><span class="pre">Report.overall_tat_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.progress"><code class="docutils literal notranslate"><span class="pre">Report.progress</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.progress_max"><code class="docutils literal notranslate"><span class="pre">Report.progress_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.progress_min"><code class="docutils literal notranslate"><span class="pre">Report.progress_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.q_length_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.q_length_by_resource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.resource_allocation"><code class="docutils literal notranslate"><span class="pre">Report.resource_allocation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.tat_by_stage"><code class="docutils literal notranslate"><span class="pre">Report.tat_by_stage</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.utilization_by_resource"><code class="docutils literal notranslate"><span class="pre">Report.utilization_by_resource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.Report.wip_by_stage"><code class="docutils literal notranslate"><span class="pre">Report.wip_by_stage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.allocation_timeseries"><code class="docutils literal notranslate"><span class="pre">allocation_timeseries()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.multi_mean_tats"><code class="docutils literal notranslate"><span class="pre">multi_mean_tats()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.multi_mean_util"><code class="docutils literal notranslate"><span class="pre">multi_mean_util()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.multi_util_hourlies"><code class="docutils literal notranslate"><span class="pre">multi_util_hourlies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.overall_lab_tat"><code class="docutils literal notranslate"><span class="pre">overall_lab_tat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.overall_tat"><code class="docutils literal notranslate"><span class="pre">overall_tat()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.q_length_hourlies"><code class="docutils literal notranslate"><span class="pre">q_length_hourlies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.q_length_hourly"><code class="docutils literal notranslate"><span class="pre">q_length_hourly()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.q_length_means"><code class="docutils literal notranslate"><span class="pre">q_length_means()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.tat_by_stage"><code class="docutils literal notranslate"><span class="pre">tat_by_stage()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.tat_dist"><code class="docutils literal notranslate"><span class="pre">tat_dist()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.utilisation_hourlies"><code class="docutils literal notranslate"><span class="pre">utilisation_hourlies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.utilisation_hourly"><code class="docutils literal notranslate"><span class="pre">utilisation_hourly()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.utilisation_means"><code class="docutils literal notranslate"><span class="pre">utilisation_means()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.wip_hourlies"><code class="docutils literal notranslate"><span class="pre">wip_hourlies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.wip_hourly"><code class="docutils literal notranslate"><span class="pre">wip_hourly()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.kpis.html#hpath.kpis.wip_summary"><code class="docutils literal notranslate"><span class="pre">wip_summary()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.model.html">hpath.model module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.model.html#hpath.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.num_reps"><code class="docutils literal notranslate"><span class="pre">Model.num_reps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.sim_length"><code class="docutils literal notranslate"><span class="pre">Model.sim_length</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.created"><code class="docutils literal notranslate"><span class="pre">Model.created</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.analysis_id"><code class="docutils literal notranslate"><span class="pre">Model.analysis_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.resources"><code class="docutils literal notranslate"><span class="pre">Model.resources</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.task_durations"><code class="docutils literal notranslate"><span class="pre">Model.task_durations</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.batch_sizes"><code class="docutils literal notranslate"><span class="pre">Model.batch_sizes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.globals"><code class="docutils literal notranslate"><span class="pre">Model.globals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.completed_specimens"><code class="docutils literal notranslate"><span class="pre">Model.completed_specimens</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.wips"><code class="docutils literal notranslate"><span class="pre">Model.wips</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.processes"><code class="docutils literal notranslate"><span class="pre">Model.processes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.__init__"><code class="docutils literal notranslate"><span class="pre">Model.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.run"><code class="docutils literal notranslate"><span class="pre">Model.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Model.setup"><code class="docutils literal notranslate"><span class="pre">Model.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.model.html#hpath.model.Resources"><code class="docutils literal notranslate"><span class="pre">Resources</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.bms"><code class="docutils literal notranslate"><span class="pre">Resources.bms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.bone_station"><code class="docutils literal notranslate"><span class="pre">Resources.bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.booking_in_staff"><code class="docutils literal notranslate"><span class="pre">Resources.booking_in_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.coverslip_machine"><code class="docutils literal notranslate"><span class="pre">Resources.coverslip_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.cut_up_assistant"><code class="docutils literal notranslate"><span class="pre">Resources.cut_up_assistant</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.histopathologist"><code class="docutils literal notranslate"><span class="pre">Resources.histopathologist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.microtomy_staff"><code class="docutils literal notranslate"><span class="pre">Resources.microtomy_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.processing_machine"><code class="docutils literal notranslate"><span class="pre">Resources.processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.processing_room_staff"><code class="docutils literal notranslate"><span class="pre">Resources.processing_room_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.qc_staff"><code class="docutils literal notranslate"><span class="pre">Resources.qc_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">Resources.scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">Resources.scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.scanning_staff"><code class="docutils literal notranslate"><span class="pre">Resources.scanning_staff</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.staining_machine"><code class="docutils literal notranslate"><span class="pre">Resources.staining_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Resources.staining_staff"><code class="docutils literal notranslate"><span class="pre">Resources.staining_staff</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations"><code class="docutils literal notranslate"><span class="pre">TaskDurations</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.assign_histopathologist"><code class="docutils literal notranslate"><span class="pre">TaskDurations.assign_histopathologist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.block_and_quality_check"><code class="docutils literal notranslate"><span class="pre">TaskDurations.block_and_quality_check</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.block_trimming"><code class="docutils literal notranslate"><span class="pre">TaskDurations.block_trimming</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.booking_in_external"><code class="docutils literal notranslate"><span class="pre">TaskDurations.booking_in_external</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.booking_in_internal"><code class="docutils literal notranslate"><span class="pre">TaskDurations.booking_in_internal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.booking_in_investigation_external"><code class="docutils literal notranslate"><span class="pre">TaskDurations.booking_in_investigation_external</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.booking_in_investigation_internal_easy"><code class="docutils literal notranslate"><span class="pre">TaskDurations.booking_in_investigation_internal_easy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.booking_in_investigation_internal_hard"><code class="docutils literal notranslate"><span class="pre">TaskDurations.booking_in_investigation_internal_hard</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.coverslip_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.coverslip_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.coverslip_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.coverslip_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.cut_up_bms"><code class="docutils literal notranslate"><span class="pre">TaskDurations.cut_up_bms</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.cut_up_large_specimens"><code class="docutils literal notranslate"><span class="pre">TaskDurations.cut_up_large_specimens</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.cut_up_pool"><code class="docutils literal notranslate"><span class="pre">TaskDurations.cut_up_pool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.decalc"><code class="docutils literal notranslate"><span class="pre">TaskDurations.decalc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.embedding"><code class="docutils literal notranslate"><span class="pre">TaskDurations.embedding</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.embedding_cooldown"><code class="docutils literal notranslate"><span class="pre">TaskDurations.embedding_cooldown</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.labelling"><code class="docutils literal notranslate"><span class="pre">TaskDurations.labelling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_into_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_into_decalc_oven</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_staining_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.load_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.load_staining_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.microtomy_larges"><code class="docutils literal notranslate"><span class="pre">TaskDurations.microtomy_larges</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.microtomy_levels"><code class="docutils literal notranslate"><span class="pre">TaskDurations.microtomy_levels</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.microtomy_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.microtomy_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.microtomy_serials"><code class="docutils literal notranslate"><span class="pre">TaskDurations.microtomy_serials</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.pre_booking_in_investigation"><code class="docutils literal notranslate"><span class="pre">TaskDurations.pre_booking_in_investigation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.processing_large_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurations.processing_large_surgicals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.processing_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.processing_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.processing_small_surgicals"><code class="docutils literal notranslate"><span class="pre">TaskDurations.processing_small_surgicals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.processing_urgent"><code class="docutils literal notranslate"><span class="pre">TaskDurations.processing_urgent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.receive_and_sort"><code class="docutils literal notranslate"><span class="pre">TaskDurations.receive_and_sort</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.scanning_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.scanning_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.scanning_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.scanning_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.staining_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.staining_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.staining_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.staining_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_bone_station"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_bone_station</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_coverslip_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_coverslip_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_from_decalc_oven"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_from_decalc_oven</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_processing_machine"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_processing_machine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_scanning_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_scanning_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_scanning_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_scanning_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_staining_machine_megas"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_staining_machine_megas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.unload_staining_machine_regular"><code class="docutils literal notranslate"><span class="pre">TaskDurations.unload_staining_machine_regular</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.TaskDurations.write_report"><code class="docutils literal notranslate"><span class="pre">TaskDurations.write_report</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.model.html#hpath.model.Wips"><code class="docutils literal notranslate"><span class="pre">Wips</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_cut_up"><code class="docutils literal notranslate"><span class="pre">Wips.in_cut_up</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_labelling"><code class="docutils literal notranslate"><span class="pre">Wips.in_labelling</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_microtomy"><code class="docutils literal notranslate"><span class="pre">Wips.in_microtomy</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_processing"><code class="docutils literal notranslate"><span class="pre">Wips.in_processing</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_qc"><code class="docutils literal notranslate"><span class="pre">Wips.in_qc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_reception"><code class="docutils literal notranslate"><span class="pre">Wips.in_reception</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_reporting"><code class="docutils literal notranslate"><span class="pre">Wips.in_reporting</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_scanning"><code class="docutils literal notranslate"><span class="pre">Wips.in_scanning</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.in_staining"><code class="docutils literal notranslate"><span class="pre">Wips.in_staining</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html#hpath.model.Wips.total"><code class="docutils literal notranslate"><span class="pre">Wips.total</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.simulate.html">hpath.simulate module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.simulate.html#hpath.simulate.simulate"><code class="docutils literal notranslate"><span class="pre">simulate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.specimens.html">hpath.specimens module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch"><code class="docutils literal notranslate"><span class="pre">Batch</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Batch.setup"><code class="docutils literal notranslate"><span class="pre">Batch.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Block"><code class="docutils literal notranslate"><span class="pre">Block</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Block.setup"><code class="docutils literal notranslate"><span class="pre">Block.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component"><code class="docutils literal notranslate"><span class="pre">Component</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component.data"><code class="docutils literal notranslate"><span class="pre">Component.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component.parent"><code class="docutils literal notranslate"><span class="pre">Component.parent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Component.prio"><code class="docutils literal notranslate"><span class="pre">Component.prio</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Priority"><code class="docutils literal notranslate"><span class="pre">Priority</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Priority.CANCER"><code class="docutils literal notranslate"><span class="pre">Priority.CANCER</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Priority.PRIORITY"><code class="docutils literal notranslate"><span class="pre">Priority.PRIORITY</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Priority.ROUTINE"><code class="docutils literal notranslate"><span class="pre">Priority.ROUTINE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Priority.URGENT"><code class="docutils literal notranslate"><span class="pre">Priority.URGENT</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Slide"><code class="docutils literal notranslate"><span class="pre">Slide</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Slide.setup"><code class="docutils literal notranslate"><span class="pre">Slide.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Specimen"><code class="docutils literal notranslate"><span class="pre">Specimen</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Specimen.process"><code class="docutils literal notranslate"><span class="pre">Specimen.process()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html#hpath.specimens.Specimen.setup"><code class="docutils literal notranslate"><span class="pre">Specimen.setup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpath.util.html">hpath.util module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.dc_dict"><code class="docutils literal notranslate"><span class="pre">dc_dict()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.dc_items"><code class="docutils literal notranslate"><span class="pre">dc_items()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.dc_names"><code class="docutils literal notranslate"><span class="pre">dc_names()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.dc_values"><code class="docutils literal notranslate"><span class="pre">dc_values()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.is_dataclass_instance"><code class="docutils literal notranslate"><span class="pre">is_dataclass_instance()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.serialiser"><code class="docutils literal notranslate"><span class="pre">serialiser()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.ARR_RATE_INTERVAL_HOURS"><code class="docutils literal notranslate"><span class="pre">ARR_RATE_INTERVAL_HOURS</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.util.html#hpath.util.RESOURCE_ALLOCATION_INTERVAL_HOURS"><code class="docutils literal notranslate"><span class="pre">RESOURCE_ALLOCATION_INTERVAL_HOURS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../process/30processing.html" class="btn btn-neutral float-left" title="Processing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.process.html" class="btn btn-neutral float-right" title="hpath.process package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

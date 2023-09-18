@@ -1,0 +1,33 @@
+hpath package
+=============
+
+.. automodule:: hpath
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   hpath.process
+   hpath.restful
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   hpath.chart_datatypes
+   hpath.conf
+   hpath.config
+   hpath.distributions
+   hpath.excel
+   hpath.kpis
+   hpath.model
+   hpath.simulate
+   hpath.specimens
+   hpath.util

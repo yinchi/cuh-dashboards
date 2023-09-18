@@ -1,0 +1,7 @@
+hpath.excel module
+==================
+
+.. automodule:: hpath.excel
+   :members:
+   :undoc-members:
+   :show-inheritance:

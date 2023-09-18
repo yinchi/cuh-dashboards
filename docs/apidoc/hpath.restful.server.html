@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.restful.server module &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="hpath.chart_datatypes module" href="hpath.chart_datatypes.html" />
+    <link rel="prev" title="hpath.restful.redis module" href="hpath.restful.redis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="hpath.process.html">hpath.process package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="hpath.restful.html">hpath.restful package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="hpath.restful.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="hpath.restful.redis.html">hpath.restful.redis module</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">hpath.restful.server module</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#rest-api">REST API</a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.handle_exception"><code class="docutils literal notranslate"><span class="pre">handle_exception()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.hello_world"><code class="docutils literal notranslate"><span class="pre">hello_world()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.list_multis_rest"><code class="docutils literal notranslate"><span class="pre">list_multis_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.list_scenarios_rest"><code class="docutils literal notranslate"><span class="pre">list_scenarios_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.new_multi_rest"><code class="docutils literal notranslate"><span class="pre">new_multi_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.new_scenario"><code class="docutils literal notranslate"><span class="pre">new_scenario()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.new_scenario_rest"><code class="docutils literal notranslate"><span class="pre">new_scenario_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.results_multi_rest"><code class="docutils literal notranslate"><span class="pre">results_multi_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.results_scenario"><code class="docutils literal notranslate"><span class="pre">results_scenario()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.results_scenario_rest"><code class="docutils literal notranslate"><span class="pre">results_scenario_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.status"><code class="docutils literal notranslate"><span class="pre">status()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.status_multi"><code class="docutils literal notranslate"><span class="pre">status_multi()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.status_multi_rest"><code class="docutils literal notranslate"><span class="pre">status_multi_rest()</span></code></a></li>
+<li class="toctree-l6"><a class="reference internal" href="#hpath.restful.server.status_rest"><code class="docutils literal notranslate"><span class="pre">status_rest()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#submodules">Submodules</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+          <li class="breadcrumb-item"><a href="hpath.restful.html">hpath.restful package</a></li>
+      <li class="breadcrumb-item active">hpath.restful.server module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.restful.server.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.restful.server">
+<span id="hpath-restful-server-module"></span><h1>hpath.restful.server module<a class="headerlink" href="#module-hpath.restful.server" title="Link to this heading"></a></h1>
+<p>The simulation server.</p>
+<section id="rest-api">
+<h2>REST API<a class="headerlink" href="#rest-api" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Endpoint</strong></p></th>
+<th class="head"><p><strong>HTTP Method</strong></p></th>
+<th class="head"><p><strong>Python function signature</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.hello_world" title="hpath.restful.server.hello_world"><code class="xref py py-func docutils literal notranslate"><span class="pre">hello_world()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>DELETE</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.reset" title="hpath.restful.server.reset"><code class="xref py py-func docutils literal notranslate"><span class="pre">reset()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">/scenarios/</span></code></p></td>
+<td><p>POST</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.new_scenario_rest" title="hpath.restful.server.new_scenario_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">new_scenario_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.list_scenarios_rest" title="hpath.restful.server.list_scenarios_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_scenarios_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/scenarios/&lt;scenario_id&gt;/status/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.status_rest" title="hpath.restful.server.status_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">status_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/scenarios/&lt;scenario_id&gt;/results/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p><code class="xref py py-func docutils literal notranslate"><span class="pre">results_rest()</span></code></p></td>
+</tr>
+<tr class="row-even"><td rowspan="2"><p><code class="docutils literal notranslate"><span class="pre">/multi/</span></code></p></td>
+<td><p>POST</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.new_multi_rest" title="hpath.restful.server.new_multi_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">new_multi_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.list_multis_rest" title="hpath.restful.server.list_multis_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_multis_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">/multi/&lt;analysis_id&gt;/status/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.status_multi_rest" title="hpath.restful.server.status_multi_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">status_multi_rest()</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">/multi/&lt;analysis_id&gt;/results/</span></code></p></td>
+<td><p>GET</p></td>
+<td><p><a class="reference internal" href="#hpath.restful.server.results_multi_rest" title="hpath.restful.server.results_multi_rest"><code class="xref py py-func docutils literal notranslate"><span class="pre">results_multi_rest()</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.handle_exception">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">handle_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">werkzeug.exceptions.HTTPException</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/hpath/restful/server.html#handle_exception"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.handle_exception" title="Link to this definition"></a></dt>
+<dd><p>Return JSON instead of HTML (the default) for HTTP errors.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.hello_world">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">hello_world</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#hello_world"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.hello_world" title="Link to this definition"></a></dt>
+<dd><p>Return a simple HTML message, unless the request body is ‘PING’ (returns ‘PONG’ instead.)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.list_multis_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">list_multis_rest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#list_multis_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.list_multis_rest" title="Link to this definition"></a></dt>
+<dd><p>Return a list of multi-scenario analyses on the server.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.list_scenarios_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">list_scenarios_rest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#list_scenarios_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.list_scenarios_rest" title="Link to this definition"></a></dt>
+<dd><p>Return a list of scenarios on the server.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.main">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.main" title="Link to this definition"></a></dt>
+<dd><p>Start up the Flask server.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.new_multi_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">new_multi_rest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#new_multi_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.new_multi_rest" title="Link to this definition"></a></dt>
+<dd><p>Process POST request for creating a new multi-scenario analysis.</p>
+<p>The scenario configuration is contained in the request’s <code class="docutils literal notranslate"><span class="pre">files</span></code> and <code class="docutils literal notranslate"><span class="pre">form</span></code> data.
+<code class="docutils literal notranslate"><span class="pre">files</span></code> shall be a dict mapping strings to file objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.new_scenario">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">new_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hpath.config.html#hpath.config.Config" title="hpath.config.Config"><span class="pre">hpath.config.Config</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#new_scenario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.new_scenario" title="Link to this definition"></a></dt>
+<dd><p>Set up a new simulation task from an <code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> and submit it to the RQ server.
+This <code class="xref py py-class docutils literal notranslate"><span class="pre">Config</span></code> is created from an Excel file in <a class="reference internal" href="#hpath.restful.server.new_scenario_rest" title="hpath.restful.server.new_scenario_rest"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_scenario_rest()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.new_scenario_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">new_scenario_rest</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#new_scenario_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.new_scenario_rest" title="Link to this definition"></a></dt>
+<dd><p>Process POST request for creating a new scenario.  The scenario configuration is contained
+in the request’s <code class="docutils literal notranslate"><span class="pre">files</span></code> and <code class="docutils literal notranslate"><span class="pre">form</span></code> data.</p>
+<p>Invalid configuration files will lead to an <code class="docutils literal notranslate"><span class="pre">HTTP</span> <span class="pre">400</span> <span class="pre">Bad</span> <span class="pre">Request</span></code> error.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.reset">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.reset" title="Link to this definition"></a></dt>
+<dd><p>Reset the database.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.results_multi_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">results_multi_rest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#results_multi_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.results_multi_rest" title="Link to this definition"></a></dt>
+<dd><p>Produce a JSON object for a multi-scenario analysis result.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.results_scenario">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">results_scenario</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#results_scenario"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.results_scenario" title="Link to this definition"></a></dt>
+<dd><p>Return the results of a scenario task.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.results_scenario_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">results_scenario_rest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#results_scenario_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.results_scenario_rest" title="Link to this definition"></a></dt>
+<dd><p>Process GET request for reading a scenario simulation result.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.status">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.status" title="Link to this definition"></a></dt>
+<dd><p>Return the status of a scenario task.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.status_multi">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">status_multi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#status_multi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.status_multi" title="Link to this definition"></a></dt>
+<dd><p>Obtain the status of a multi-scenario analysis.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.status_multi_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">status_multi_rest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analysis_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#status_multi_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.status_multi_rest" title="Link to this definition"></a></dt>
+<dd><p>Process a GET request for querying multi-scenario analysis status.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.restful.server.status_rest">
+<span class="sig-prename descclassname"><span class="pre">hpath.restful.server.</span></span><span class="sig-name descname"><span class="pre">status_rest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenario_id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://flask.palletsprojects.com/en/latest/api/#flask.Response" title="(in Flask v3.0.x)"><span class="pre">flask.wrappers.Response</span></a></span></span><a class="reference internal" href="../_modules/hpath/restful/server.html#status_rest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.restful.server.status_rest" title="Link to this definition"></a></dt>
+<dd><p>Process GET request for querying scenario task status.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.restful.redis.html" class="btn btn-neutral float-left" title="hpath.restful.redis module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hpath.chart_datatypes.html" class="btn btn-neutral float-right" title="hpath.chart_datatypes module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

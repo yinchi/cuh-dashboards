@@ -1,0 +1,23 @@
+hpath.process package
+=====================
+
+.. automodule:: hpath.process
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 4
+
+   hpath.process.p10_reception
+   hpath.process.p20_cutup
+   hpath.process.p30_processing
+   hpath.process.p40_microtomy
+   hpath.process.p50_staining
+   hpath.process.p60_labelling
+   hpath.process.p70_scanning
+   hpath.process.p80_qc
+   hpath.process.p90_reporting

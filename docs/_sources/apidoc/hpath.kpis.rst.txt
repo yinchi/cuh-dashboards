@@ -1,0 +1,7 @@
+hpath.kpis module
+=================
+
+.. automodule:: hpath.kpis
+   :members:
+   :undoc-members:
+   :show-inheritance:

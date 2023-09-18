@@ -1,0 +1,7 @@
+hpath.specimens module
+======================
+
+.. automodule:: hpath.specimens
+   :members:
+   :undoc-members:
+   :show-inheritance:

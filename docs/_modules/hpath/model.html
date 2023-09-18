@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.model &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/hpath.html">Python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hpath.model</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hpath.model</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The histopathology simulation model.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">dataclasses</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">import</span> <span class="nn">dacite</span>
+<span class="kn">import</span> <span class="nn">salabim</span> <span class="k">as</span> <span class="nn">sim</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">process</span><span class="p">,</span> <span class="n">kpis</span><span class="p">,</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">Config</span><span class="p">,</span> <span class="n">DistributionInfo</span><span class="p">,</span> <span class="n">IntDistributionInfo</span><span class="p">,</span> <span class="n">ResourceInfo</span>
+<span class="kn">from</span> <span class="nn">.distributions</span> <span class="kn">import</span> <span class="n">PERT</span><span class="p">,</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">Distribution</span><span class="p">,</span> <span class="n">IntPERT</span><span class="p">,</span> <span class="n">Tri</span>
+<span class="kn">from</span> <span class="nn">.process</span> <span class="kn">import</span> <span class="n">ArrivalGenerator</span><span class="p">,</span> <span class="n">ProcessType</span><span class="p">,</span> <span class="n">ResourceScheduler</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">dc_items</span>
+
+
+<div class="viewcode-block" id="Resources">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Resources">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eq</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Resources</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for tracking the resources of a :py:class:`Model`.</span>
+
+<span class="sd">    See also:</span>
+<span class="sd">        :py:class:`hpath.config.ResourcesInfo`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We use metadata here so that the allocation schedule of each resource can be looked up</span>
+    <span class="c1"># in the Excel file.</span>
+    <span class="n">booking_in_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Booking-in staff&#39;</span><span class="p">})</span>
+    <span class="n">bms</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;BMS&#39;</span><span class="p">})</span>
+    <span class="n">cut_up_assistant</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Cut-up assistant&#39;</span><span class="p">})</span>
+    <span class="n">processing_room_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Processing room staff&#39;</span><span class="p">})</span>
+    <span class="n">microtomy_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Microtomy staff&#39;</span><span class="p">})</span>
+    <span class="n">staining_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Staining staff&#39;</span><span class="p">})</span>
+    <span class="n">scanning_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Scanning staff&#39;</span><span class="p">})</span>
+    <span class="n">qc_staff</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;QC staff&#39;</span><span class="p">})</span>
+    <span class="n">histopathologist</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Histopathologist&#39;</span><span class="p">})</span>
+    <span class="n">bone_station</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Bone station&#39;</span><span class="p">})</span>
+    <span class="n">processing_machine</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Processing machine&#39;</span><span class="p">})</span>
+    <span class="n">staining_machine</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Staining machine&#39;</span><span class="p">})</span>
+    <span class="n">coverslip_machine</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Coverslip machine&#39;</span><span class="p">})</span>
+    <span class="n">scanning_machine_regular</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Scanning machine (regular)&#39;</span><span class="p">})</span>
+    <span class="n">scanning_machine_megas</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Scanning machine (megas)&#39;</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s1">&#39;Model&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="vm">__class__</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">_field</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span>
+            <span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="TaskDurations">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.TaskDurations">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eq</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">TaskDurations</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for tracking task durations in a :py:class:`Model`.</span>
+
+<span class="sd">    See also:</span>
+<span class="sd">        :py:class:`hpath.config.TaskDurationsInfo`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">receive_and_sort</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">pre_booking_in_investigation</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">booking_in_internal</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">booking_in_external</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">booking_in_investigation_internal_easy</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">booking_in_investigation_internal_hard</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">booking_in_investigation_external</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">cut_up_bms</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">cut_up_pool</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">cut_up_large_specimens</span><span class="p">:</span>  <span class="n">Distribution</span>
+    <span class="n">load_bone_station</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">decalc</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_bone_station</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_into_decalc_oven</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_from_decalc_oven</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_processing_machine</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_processing_machine</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">processing_urgent</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">processing_small_surgicals</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">processing_large_surgicals</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">processing_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">embedding_cooldown</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">block_trimming</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">microtomy_serials</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">microtomy_levels</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">microtomy_larges</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">microtomy_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_staining_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_staining_machine_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">staining_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">staining_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_staining_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_staining_machine_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_coverslip_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">coverslip_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">coverslip_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_coverslip_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">labelling</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_scanning_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">load_scanning_machine_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">scanning_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">scanning_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_scanning_machine_regular</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">unload_scanning_machine_megas</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">block_and_quality_check</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">assign_histopathologist</span><span class="p">:</span> <span class="n">Distribution</span>
+    <span class="n">write_report</span><span class="p">:</span> <span class="n">Distribution</span></div>
+
+
+
+<div class="viewcode-block" id="Wips">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Wips">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Wips</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for tracking work-in-progress counters for the :py:class:`Model` simulation.&quot;&quot;&quot;</span>
+    <span class="n">total</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_reception</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_cut_up</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_processing</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_microtomy</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_staining</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_labelling</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_scanning</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_qc</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+    <span class="n">in_reporting</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Environment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Total WIP&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_reception</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Reception&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_cut_up</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Cut-up&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_processing</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Processing&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_microtomy</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Microtomy&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_staining</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Staining&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_labelling</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Labelling&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_scanning</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Scanning&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_qc</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;QC&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_reporting</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Monitor</span><span class="p">(</span><span class="s1">&#39;Reporting stage&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;uint32&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Model">[docs]</a>
+<span class="k">class</span> <span class="nc">Model</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">Environment</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The simulation model.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        num_reps (int):</span>
+<span class="sd">            The number of simulation replications to run the model.</span>
+<span class="sd">        sim_length (float):</span>
+<span class="sd">            The duration of each simulation replication.</span>
+<span class="sd">        created (float):</span>
+<span class="sd">            UNIX timestamp of the model configuration&#39;s creation time.</span>
+<span class="sd">        analysis_id (int | None):</span>
+<span class="sd">            ID of the multi-scenario analysis, if this model is part of one.</span>
+<span class="sd">        resources (Resources):</span>
+<span class="sd">            The resources associated with this model, as a dataclass instance.</span>
+<span class="sd">        task_durations:</span>
+<span class="sd">            Dataclass instance containing the task durations for the model.</span>
+<span class="sd">        batch_sizes (hpath.config.BatchSizes):</span>
+<span class="sd">            Dataclass instance containing the batch sizes for various tasks in the model.</span>
+<span class="sd">        globals (hpath.config.Globals)</span>
+<span class="sd">            Dataclass instance containing global variables for the model.</span>
+
+<span class="sd">            **Note:** during initialisation from a</span>
+<span class="sd">            :py:class:`hpath.config.Config` object, globals of type</span>
+<span class="sd">            :py:class:`hpath.config.IntDistributionInfo` are converted to instances of the matching</span>
+<span class="sd">            distribution type in :py:mod:`hpath.distributions`.</span>
+<span class="sd">        completed_specimens (salabim.Store):</span>
+<span class="sd">            A store containing completed specimens, so that statistics can be computed.</span>
+<span class="sd">        wips (Wips):</span>
+<span class="sd">            Dataclass instance containing work-in-progress counters for the model.</span>
+<span class="sd">        processes (dict[str, hpath.process.Process | hpath.process.BatchingProcess | hpath.process.CollationProcess]):</span>
+<span class="sd">            Dict mapping strings to the processes of the simulation model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Model.__init__">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Model.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config (hpath.config.Config):</span>
+<span class="sd">                Configuration settings for the simulation model.</span>
+<span class="sd">            kwargs:</span>
+<span class="sd">                Additional parameters absorbed by the super() constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Change super() defaults</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;time_unit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;time_unit&#39;</span><span class="p">,</span> <span class="s1">&#39;hours&#39;</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;random_seed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;random_seed&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.setup">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Model.setup">[docs]</a>
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up the salabim :py:class:`~salabim.Environment`. Triggered as the last step in</span>
+<span class="sd">        object initialisation.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">num_reps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">hours</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">sim_hours</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">created</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">created</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">analysis_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">analysis_id</span>
+
+        <span class="c1"># ARRIVALS</span>
+        <span class="n">ArrivalGenerator</span><span class="p">(</span>
+            <span class="s1">&#39;Arrival Generator (cancer)&#39;</span><span class="p">,</span>
+            <span class="n">schedule</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">arrival_schedules</span><span class="o">.</span><span class="n">cancer</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="c1"># cls_args:</span>
+            <span class="n">cancer</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">ArrivalGenerator</span><span class="p">(</span>
+            <span class="s1">&#39;Arrival Generator (non-cancer)&#39;</span><span class="p">,</span>
+            <span class="n">schedule</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">arrival_schedules</span><span class="o">.</span><span class="n">noncancer</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="c1"># cls_args:</span>
+            <span class="n">cancer</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="c1"># RESOURCES AND RESOURCE SCHEDULERS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span> <span class="n">Resources</span> <span class="o">=</span> <span class="n">Resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">dc_items</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">):</span>
+            <span class="n">resource</span><span class="p">:</span> <span class="n">sim</span><span class="o">.</span><span class="n">Resource</span>
+            <span class="n">resource_info</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">resources_info</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="p">()</span> <span class="o">==</span> <span class="n">resource_info</span><span class="o">.</span><span class="n">name</span>
+
+            <span class="n">ResourceScheduler</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;Scheduler [</span><span class="si">{</span><span class="n">resource</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s1">]&#39;</span><span class="p">,</span>
+                <span class="n">resource</span><span class="o">=</span><span class="n">resource</span><span class="p">,</span>
+                <span class="n">schedule</span><span class="o">=</span><span class="n">resource_info</span><span class="o">.</span><span class="n">schedule</span><span class="p">,</span>
+                <span class="n">env</span><span class="o">=</span><span class="bp">self</span>
+            <span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">time_unit_full</span><span class="p">(</span><span class="n">abbr</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="s2">&quot;seconds&quot;</span> <span class="k">if</span> <span class="n">abbr</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span> <span class="k">else</span> <span class="s2">&quot;minutes&quot;</span> <span class="k">if</span> <span class="n">abbr</span> <span class="o">==</span> <span class="s1">&#39;m&#39;</span> <span class="k">else</span> <span class="s2">&quot;hours&quot;</span>
+
+        <span class="c1"># TASK DURATIONS</span>
+        <span class="n">task_durations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key1</span><span class="p">,</span> <span class="n">val1</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">task_durations_info</span><span class="p">):</span>
+            <span class="n">val1</span><span class="p">:</span> <span class="n">DistributionInfo</span>
+            <span class="n">task_durations</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">PERT</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">val1</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">val1</span><span class="o">.</span><span class="n">high</span><span class="p">,</span> <span class="n">time_unit_full</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">time_unit</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">val1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;PERT&#39;</span> <span class="k">else</span>
+                <span class="n">Tri</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">val1</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">val1</span><span class="o">.</span><span class="n">high</span><span class="p">,</span> <span class="n">time_unit_full</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">time_unit</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">val1</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;Triangular&#39;</span> <span class="k">else</span>
+                <span class="n">Constant</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">time_unit_full</span><span class="p">(</span><span class="n">val1</span><span class="o">.</span><span class="n">time_unit</span><span class="p">),</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_durations</span> <span class="o">=</span> <span class="n">dacite</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">TaskDurations</span><span class="p">,</span> <span class="n">task_durations</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_sizes</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_sizes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">globals</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">global_vars</span>
+
+        <span class="k">for</span> <span class="n">key2</span><span class="p">,</span> <span class="n">val2</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val2</span><span class="p">,</span> <span class="n">IntDistributionInfo</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">val2</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;IntPERT&#39;</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">,</span> <span class="n">key2</span><span class="p">,</span> <span class="n">IntPERT</span><span class="p">(</span><span class="n">val2</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="n">val2</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">val2</span><span class="o">.</span><span class="n">high</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribution type </span><span class="si">{</span><span class="n">val2</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s1"> not (yet) supported.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># DATA STORE FOR COMPLETED SPECIMENS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completed_specimens</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Store</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Completed specimens&#39;</span><span class="p">,</span>
+            <span class="n">env</span><span class="o">=</span><span class="bp">self</span>
+        <span class="p">)</span>
+
+        <span class="c1"># WORK-IN-PROGRESS COUNTERS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wips</span> <span class="o">=</span> <span class="n">Wips</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># REGISTER PROCESSES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">processes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ProcessType</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">process</span><span class="o">.</span><span class="n">p10_reception</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p20_cutup</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p30_processing</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p40_microtomy</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p50_staining</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p60_labelling</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p70_scanning</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p80_qc</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">process</span><span class="o">.</span><span class="n">p90_reporting</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># FREQUENTLY USED DISTRIBUTIONS</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u01</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">Uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time_unit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Model.run">
+<a class="viewcode-back" href="../../apidoc/hpath.model.html#hpath.model.Model.run">[docs]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=arguments-differ</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the simulation for the duration set in ``self.sim_length``.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_length</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">from_excel</span><span class="p">(</span><span class="s1">&#39;config.xlsx&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="o">*</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">kpis</span><span class="o">.</span><span class="n">Report</span><span class="o">.</span><span class="n">from_model</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">util</span><span class="o">.</span><span class="n">serialiser</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

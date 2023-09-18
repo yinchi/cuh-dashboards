@@ -1,0 +1,7 @@
+hpath.restful.server module
+===========================
+
+.. automodule:: hpath.restful.server
+   :members:
+   :undoc-members:
+   :show-inheritance:

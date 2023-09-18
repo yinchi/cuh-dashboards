@@ -3,7 +3,10 @@
 ~$*.xlsx
 
 __pycache__
-docs/build
-docs/source/apidoc
 
 test*.*
+
+docs/build
+docs/source/apidoc
+documentation/build
+documentation/source/apidoc/

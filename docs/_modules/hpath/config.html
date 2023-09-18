@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.config &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../apidoc/hpath.html">Python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">hpath.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for hpath.config</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module defining the configuration settings for the histopathology simulation model.</span>
+
+<span class="sd">The configuration settings are defined using Pydantic, and are fully convertable to JSON.</span>
+<span class="sd">To actually run a simulation, the configuration settings (as a :py:class:`hpath.config.Config`</span>
+<span class="sd">object) are converted to a :py:class:`hpath.model.Model` object, which contain the actual Python</span>
+<span class="sd">objects used for :py:class:`~salabim.Resource` tracking, etc.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">ty</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">openpyxl</span> <span class="k">as</span> <span class="nn">xl</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pydantic</span> <span class="k">as</span> <span class="nn">pyd</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">excel</span> <span class="k">as</span> <span class="n">xlh</span>
+
+<span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">confloat</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ArrivalSchedule">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ArrivalSchedule">[docs]</a>
+<span class="k">class</span> <span class="nc">ArrivalSchedule</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An arrival schedule for specimens.&quot;&quot;&quot;</span>
+    <span class="n">rates</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span><span class="p">]</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">field_validator</span><span class="p">(</span><span class="s1">&#39;rates&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_is_length_168</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enforce sequence length on  ``day_flags`` argument.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">==</span> <span class="mi">168</span><span class="p">,</span> <span class="s1">&#39;Length of sequence must be 168.&#39;</span>
+        <span class="k">return</span> <span class="n">seq</span>
+
+<div class="viewcode-block" id="ArrivalSchedule.from_pd">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ArrivalSchedule.from_pd">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_pd</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ArrivalSchedule&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct an arrival schedule from a dataframe with the 24 hours the day as rows</span>
+<span class="sd">        and the seven days of the week as columns (starting on Monday).  Each value is the</span>
+<span class="sd">        arrival rate for one hour of the week.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame):</span>
+<span class="sd">                The dataframe containing the arrival schedule information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="vm">__class__</span><span class="p">(</span><span class="n">rates</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="s1">&#39;F&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ArrivalSchedules">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ArrivalSchedules">[docs]</a>
+<span class="k">class</span> <span class="nc">ArrivalSchedules</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for tracking the specimen arrival schedules of a model.&quot;&quot;&quot;</span>
+
+    <span class="n">cancer</span><span class="p">:</span> <span class="n">ArrivalSchedule</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Arrival schedule for cancer pathway specimens.&quot;&quot;&quot;</span>
+
+    <span class="n">noncancer</span><span class="p">:</span> <span class="n">ArrivalSchedule</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Arrival schedule for non-cancer pathway specimens.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ResourceSchedule">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ResourceSchedule">[docs]</a>
+<span class="k">class</span> <span class="nc">ResourceSchedule</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A resource allocation schedule.&quot;&quot;&quot;</span>
+
+    <span class="n">day_flags</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;True/1 if resource is scheduled for the day (MON to SUN), False/0 otherwise.&quot;&quot;&quot;</span>
+
+    <span class="n">allocation</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeInt</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of resource units allocated for the day (in 30-min intervals),</span>
+<span class="sd">    if the corresponding day flag is set to 1. The list length is expected to be 48.&quot;&quot;&quot;</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">field_validator</span><span class="p">(</span><span class="s1">&#39;day_flags&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_is_length_7</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enforce sequence length on  ``day_flags`` argument.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;Length of sequence must be 7.&#39;</span>
+        <span class="k">return</span> <span class="n">seq</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">field_validator</span><span class="p">(</span><span class="s1">&#39;allocation&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_is_length_48</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enforce sequence length on  ``allocation`` argument.&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">==</span> <span class="mi">48</span><span class="p">,</span> <span class="s1">&#39;Length of sequence must be 48.&#39;</span>
+        <span class="k">return</span> <span class="n">seq</span>
+
+<div class="viewcode-block" id="ResourceSchedule.from_pd">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ResourceSchedule.from_pd">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_pd</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">row_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ResourceSchedule&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a resource schedule from a DataFrame row.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame):</span>
+<span class="sd">                The dataframe containing the resource allocation information.</span>
+<span class="sd">            row_name (str):</span>
+<span class="sd">                The name of the resource, matching a row index in the inputted dataframe.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="vm">__class__</span><span class="p">(</span>
+            <span class="n">day_flags</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row_name</span><span class="p">,</span> <span class="s1">&#39;MON&#39;</span><span class="p">:</span><span class="s1">&#39;SUN&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+            <span class="n">allocation</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">row_name</span><span class="p">,</span> <span class="s1">&#39;00:00&#39;</span><span class="p">:</span><span class="s1">&#39;23:30&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResourceInfo">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ResourceInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">ResourceInfo</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains information about a resource.&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The name of the resource, e.g. &quot;Scanning machine&quot;.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;staff&#39;</span><span class="p">,</span> <span class="s1">&#39;machine&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether the resource is a staff or machine resource.&quot;&quot;&quot;</span>
+
+    <span class="n">schedule</span><span class="p">:</span> <span class="n">ResourceSchedule</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A schedule defining the number of allocated resource units over the course of a week.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="ResourcesInfo">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ResourcesInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">ResourcesInfo</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dataclass for tracking the staff resources of a model.</span>
+
+<span class="sd">    The fields in this dataclass **MUST** match the rows of the configuration</span>
+<span class="sd">    Excel template (&quot;Resources&quot; tab), with all letters to lowercase, spaces to</span>
+<span class="sd">    underscores, and other characters removed.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">bms</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;BMS&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">cut_up_assistant</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cut-up assistant&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">processing_room_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing room staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">microtomy_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Microtomy staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">staining_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">scanning_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">qc_staff</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;QC staff&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">histopathologist</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Histopathologist&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;staff&#39;</span><span class="p">})</span>
+    <span class="n">bone_station</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Bone station&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+    <span class="n">processing_machine</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+    <span class="n">staining_machine</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining machine&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+    <span class="n">coverslip_machine</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Coverslip machine&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+    <span class="n">scanning_machine_regular</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning machine (regular)&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+    <span class="n">scanning_machine_megas</span><span class="p">:</span> <span class="n">ResourceInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning machine (megas)&#39;</span><span class="p">,</span> <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;resource_type&#39;</span><span class="p">:</span> <span class="s1">&#39;machine&#39;</span><span class="p">})</span>
+
+<div class="viewcode-block" id="ResourcesInfo.from_pd">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.ResourcesInfo.from_pd">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_pd</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;ResourcesInfo&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a ``ResourcesInfo`` object from a pandas dataframe.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame):</span>
+<span class="sd">                The dataframe containing the resource allocation information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">ResourceInfo</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">json_schema_extra</span><span class="p">[</span><span class="s1">&#39;resource_type&#39;</span><span class="p">],</span>
+                <span class="n">schedule</span><span class="o">=</span><span class="n">ResourceSchedule</span><span class="o">.</span><span class="n">from_pd</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">row_name</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="vm">__class__</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="vm">__class__</span><span class="p">(</span><span class="o">**</span><span class="n">resources</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DistributionInfo">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.DistributionInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">DistributionInfo</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information describing a three-point random distributions for task durations.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;Constant&#39;</span><span class="p">,</span> <span class="s1">&#39;Triangular&#39;</span><span class="p">,</span> <span class="s1">&#39;PERT&#39;</span><span class="p">]</span>  <span class="c1"># Supported distribution types</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The type of the distribution, one of &#39;Constant&#39;, &#39;Triangular&#39;, or &#39;PERT&#39;.&quot;&quot;&quot;</span>
+
+    <span class="n">low</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The minimum value of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">mode</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The most likely value of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">high</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The maximum of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">time_unit</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The time unit of the distribution, i.e. seconds, minutes, or hours.  Represented by the</span>
+<span class="sd">    first letter; the validator will accept any string starting with &#39;s&#39;, &#39;m&#39;, or &#39;h&#39;.&quot;&quot;&quot;</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">field_validator</span><span class="p">(</span><span class="s1">&#39;time_unit&#39;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;before&#39;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_first_letter</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">time_unit_str</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Take only the first letter from a time-unit string.</span>
+
+<span class="sd">        For simplicity, only the first character of time-unit strings are checked, i.e.</span>
+<span class="sd">        &quot;hours&quot;, &quot;hour&quot;, and &quot;hxar&quot; are identical.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">time_unit_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;m&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">time_unit_str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_enforce_ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DistributionInfo&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure that the the ``low``, ``mode`` and ``high`` parameters of the distribution</span>
+<span class="sd">        are in non-decreasing order.&quot;&quot;&quot;</span>
+        <span class="c1"># Constant case</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;Constant&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="vm">__class__</span><span class="o">.</span><span class="n">model_construct</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Constant&#39;</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+                <span class="n">time_unit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time_unit</span>
+            <span class="p">)</span>
+        <span class="c1"># Other cases</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="s1">&#39;Failed requirement: mode &gt;= low&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="s1">&#39;Failed requirement: high &gt;= mode&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+
+<div class="viewcode-block" id="TaskDurationsInfo">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.TaskDurationsInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">TaskDurationsInfo</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information for tracking task durations in a model.</span>
+
+<span class="sd">    The field titles in this class **MUST** match the rows of the Excel input file</span>
+<span class="sd">    (&quot;Task Durations&quot; tab).&quot;&quot;&quot;</span>
+
+    <span class="n">receive_and_sort</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Receive and sort&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time for reception to receive a new specimen and assign a priority value.&quot;&quot;&quot;</span>
+
+    <span class="n">pre_booking_in_investigation</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pre-booking-in investigation&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a pre-booking-in investigation, if required.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_internal</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in (internal)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to book in the specimen if the specimen was received internally, i.e. it already</span>
+<span class="sd">    exists on the EPIC sytem.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_external</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in (external)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to book in the specimen if the specimen was received externally, i.e. a new entry</span>
+<span class="sd">    must be created on EPIC.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_investigation_internal_easy</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in investigation (internal, easy)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a booking-in investigation for an internal specimen, if the investigation</span>
+<span class="sd">    is classified as &quot;easy&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_investigation_internal_hard</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in investigation (internal, hard)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a booking-in investigation for an internal specimen, if the investigation</span>
+<span class="sd">    is classified as &quot;hard&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">booking_in_investigation_external</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Booking-in investigation (external)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a booking-in investigation for an external specimen.&quot;&quot;&quot;</span>
+
+    <span class="n">cut_up_bms</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cut-up (BMS)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a BMS cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">cut_up_pool</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cut-up (pool)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a pool cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">cut_up_large_specimens</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cut-up (large specimens)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to conduct a large specimens cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">load_bone_station</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load bone station&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of blocks into a bone station.&quot;&quot;&quot;</span>
+
+    <span class="n">decalc</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Decalc&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to decalcify a bony specimen.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_bone_station</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload bone station&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of blocks into a bone station.&quot;&quot;&quot;</span>
+
+    <span class="n">load_into_decalc_oven</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load into decalc oven&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a single block into a bone station.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_from_decalc_oven</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload from decalc oven&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a single block into a bone station.&quot;&quot;&quot;</span>
+
+    <span class="n">load_processing_machine</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load processing machine&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of blocks into a processing machine.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_processing_machine</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload processing machine&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of blocks from a processing machine.&quot;&quot;&quot;</span>
+
+    <span class="n">processing_urgent</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (urgent)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Programme length for the processing of urgent blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">processing_small_surgicals</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (small surgicals)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Programme length for the processing of small surgical blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">processing_large_surgicals</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (large surgicals)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Programme length for the processing of large surgical blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">processing_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Programme length for the processing of mega blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">embedding</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Embedding&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to embed a block in paraffin wax (staffed).&quot;&quot;&quot;</span>
+
+    <span class="n">embedding_cooldown</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Embedding (cooldown)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time for a wax block to cool (unstaffed).&quot;&quot;&quot;</span>
+
+    <span class="n">block_trimming</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Block trimming&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to trim excess wax from the edges of a block.&quot;&quot;&quot;</span>
+
+    <span class="n">microtomy_serials</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Microtomy (serials)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to produce serial slides from a block.&quot;&quot;&quot;</span>
+
+    <span class="n">microtomy_levels</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Microtomy (levels)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to produce level slides from a block.&quot;&quot;&quot;</span>
+
+    <span class="n">microtomy_larges</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Microtomy (larges)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;Time to produce large-section slides from a block. These are regular-sized slides,</span>
+<span class="sd">    but with larger tissue sections.&quot;&quot;&quot;</span>
+
+    <span class="n">microtomy_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Microtomy (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to produce mega slides from a mega block.&quot;&quot;&quot;</span>
+
+    <span class="n">load_staining_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load staining machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of regular-sized slides into a staining machine.&quot;&quot;&quot;</span>
+
+    <span class="n">load_staining_machine_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load staining machine (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of mega slides into a staining machine.&quot;&quot;&quot;</span>
+
+    <span class="n">staining_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to stain a batch of regular slides.&quot;&quot;&quot;</span>
+
+    <span class="n">staining_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to stain a batch of mega slides.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_staining_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload staining machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of regular slides from a staining machine.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_staining_machine_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload staining machine (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of mega slides from a staining machine.&quot;&quot;&quot;</span>
+
+    <span class="n">load_coverslip_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load coverslip machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of regular slides into a coverslip machine.&quot;&quot;&quot;</span>
+
+    <span class="n">coverslip_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Coverslipping (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to affix coverslips to a batch of regular slides.&quot;&quot;&quot;</span>
+
+    <span class="n">coverslip_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Coverslipping (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to affix a coverslip to a mega slide (manual task).&quot;&quot;&quot;</span>
+
+    <span class="n">unload_coverslip_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload coverslip machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of regular slides into a coverslip machine.&quot;&quot;&quot;</span>
+
+    <span class="n">labelling</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Labelling&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to label a slide.&quot;&quot;&quot;</span>
+
+    <span class="n">load_scanning_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load scanning machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of regular slides into a scanning machine.&quot;&quot;&quot;</span>
+
+    <span class="n">load_scanning_machine_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Load scanning machine (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to load a batch of mega slides into a scanning machine. There are dedicated scanning</span>
+<span class="sd">    machines for mega slides.&quot;&quot;&quot;</span>
+
+    <span class="n">scanning_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to scan a batch of regular slides.&quot;&quot;&quot;</span>
+
+    <span class="n">scanning_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to scan a batch of mega slides.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_scanning_machine_regular</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload scanning machine (regular)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of regular slides from a scanning machine.&quot;&quot;&quot;</span>
+
+    <span class="n">unload_scanning_machine_megas</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unload scanning machine (megas)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to unload a batch of mega slides from a scanning machine.&quot;&quot;&quot;</span>
+
+    <span class="n">block_and_quality_check</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Block and quality check&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to perform the block and quality checks for a specimen.&quot;&quot;&quot;</span>
+
+    <span class="n">assign_histopathologist</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Assign histopathologist&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to assign a histopathologist to a specimen.&quot;&quot;&quot;</span>
+
+    <span class="n">write_report</span><span class="p">:</span> <span class="n">DistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Write histopathological report&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Time to write the histopathological report for a specimen.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="BatchSizes">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.BatchSizes">[docs]</a>
+<span class="k">class</span> <span class="nc">BatchSizes</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information for tracking batch sizes in a model.  This is the number of</span>
+<span class="sd">    specimens, blocks, or slides in a machine or delivery batch.  Batches in the model</span>
+<span class="sd">    are homogeneous, i.e. all items in a batch are of the same type.</span>
+
+<span class="sd">    The field titles in this class MUST match the rows of the Excel input file</span>
+<span class="sd">    (&quot;Batch Sizes&quot; tab).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_reception_to_cut_up</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (reception to cut-up)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, reception to cut-up (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_cut_up_to_processing</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (cut-up to processing)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, cut-up to processing (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_processing_to_microtomy</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (processing to microtomy)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, processing to microtomy (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_microtomy_to_staining</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (microtomy to staining)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, microtomy to staining (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_staining_to_labelling</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (staining to labelling)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, staining to labelling (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_labelling_to_scanning</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (labelling to scanning)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, labelling to scanning (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">deliver_scanning_to_qc</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Delivery (scanning to QC)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delivery batch size, scanning to QC (specimens).&quot;&quot;&quot;</span>
+
+    <span class="n">bone_station</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Bone station (blocks)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bone station (machine) batch size (blocks).&quot;&quot;&quot;</span>
+
+    <span class="n">processing_regular</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (regular blocks)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine batch size, regular blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">processing_megas</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Processing machine (mega blocks)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Processing machine batch size, mega blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">staining_regular</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining (regular slides)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Staining machine batch size, regular slides.&quot;&quot;&quot;</span>
+
+    <span class="n">staining_megas</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Staining (mega slides)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Staining machine batch size, mega slides.&quot;&quot;&quot;</span>
+
+    <span class="n">digital_scanning_regular</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning (regular slides)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning machine batch size, regular slides.&quot;&quot;&quot;</span>
+
+    <span class="n">digital_scanning_megas</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">PositiveInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Scanning (mega slides)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning machine batch size, mega slides.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="IntDistributionInfo">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.IntDistributionInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">IntDistributionInfo</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Information describing a discretised three-point random distribution.&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">ty</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s1">&#39;Constant&#39;</span><span class="p">,</span> <span class="s1">&#39;IntTriangular&#39;</span><span class="p">,</span> <span class="s1">&#39;IntPERT&#39;</span><span class="p">]</span>  <span class="c1"># Supported distribution types</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">low</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeInt</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum value of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="n">mode</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeInt</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Most likely value of the distribution, before discretisation.&quot;&quot;&quot;</span>
+
+    <span class="n">high</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeInt</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum value of the distribution.&quot;&quot;&quot;</span>
+
+    <span class="nd">@pyd</span><span class="o">.</span><span class="n">model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_enforce_ordering</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;DistributionInfo&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure that the the ``low``, ``mode`` and ``high`` parameters of the distribution</span>
+<span class="sd">        are in non-decreasing order.&quot;&quot;&quot;</span>
+        <span class="c1"># Constant case</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;Constant&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="vm">__class__</span><span class="o">.</span><span class="n">model_construct</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Constant&#39;</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+        <span class="c1"># Other cases</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">,</span> <span class="s1">&#39;Failed requirement: mode &gt;= low&#39;</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="s1">&#39;Failed requirement: high &gt;= mode&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+
+<div class="viewcode-block" id="Globals">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.Globals">[docs]</a>
+<span class="k">class</span> <span class="nc">Globals</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stores the global variables of a model.</span>
+
+<span class="sd">    Field titles should match the corresponding named range in the Excel input file</span>
+<span class="sd">    and therefore should not contain any spaces or symbols.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_internal</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbInternal&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a specimen comes from an internal source, i.e. one that uses the</span>
+<span class="sd">    EPIC system.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_urgent_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbUrgentCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a cancer-pathway specimen has Urgent priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_urgent_non_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbUrgentNonCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-cancer-pathway specimen has Urgent priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_priority_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbPriorityCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a cancer-pathway specimen has Priority priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_priority_non_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbPriorityNonCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-cancer-pathway specimen has Priority priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_routine_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbRoutineCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a cancer-pathway specimen has Routine/Cancer priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_routine_non_cancer</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbRoutineNonCancer&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-cancer-pathway specimen has Routine priority.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_prebook</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbPrebook&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a specimen requires pre-booking-in investigation.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_invest_easy</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbInvestEasy&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an internal specimen requires booking-in investigation, and</span>
+<span class="sd">    the investigation is classified as &quot;easy&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_invest_hard</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbInvestHard&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an internal specimen requires booking-in investigation, and</span>
+<span class="sd">    the investigation is classified as &quot;hard&quot;.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_invest_external</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbInvestExternal&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an external specimen requires booking-in investigation.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_bms_cutup</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbBMSCutup&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-urgent specimen goes to BMS cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_bms_cutup_urgent</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbBMSCutupUrgent&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an urgent specimen goes to BMS cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_large_cutup</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbLargeCutup&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-urgent specimen goes to large specimens cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_large_cutup_urgent</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbLargeCutupUrgent&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an urgent specimen goes to large specimens cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_pool_cutup</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbPoolCutup&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a non-urgent specimen goes to Pool cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_pool_cutup_urgent</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbPoolCutupUrgent&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an urgent specimen goes to Pool cut-up.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_mega_blocks</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbMegaBlocks&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a large specimen cut-up produces mega blocks. With the remaining</span>
+<span class="sd">    probability, large surgical blocks are produced instead.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_decalc_bone</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbDecalcBone&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an specimen requires decalcification at a bone station.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_decalc_oven</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbDecalcOven&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that an specimen requires decalcification in a decalc oven.&quot;&quot;&quot;</span>
+
+    <span class="n">prob_microtomy_levels</span><span class="p">:</span> <span class="n">Probability</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;ProbMicrotomyLevels&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Probability that a small surgical block produces a &quot;levels&quot; microtomy task.</span>
+<span class="sd">    With remaining probability, a &quot;serials&quot; microtomy task is produced.&quot;&quot;&quot;</span>
+
+    <span class="n">num_blocks_large_surgical</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span>\
+        <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumBlocksLargeSurgical&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of large surgical blocks produced in a cut-up that produces</span>
+<span class="sd">    such blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">num_blocks_mega</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumBlocksMega&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of mega blocks produced in a cut-up that produces such blocks.&quot;&quot;&quot;</span>
+
+    <span class="n">num_slides_larges</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumSlidesLarges&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of slides produced for a large surgical microtomy task.&quot;&quot;&quot;</span>
+
+    <span class="n">num_slides_levels</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumSlidesLarges&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of slides produced for a levels microtomy task.&quot;&quot;&quot;</span>
+
+    <span class="n">num_slides_megas</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumSlidesLarges&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of slides produced for a megas microtomy task.&quot;&quot;&quot;</span>
+
+    <span class="n">num_slides_serials</span><span class="p">:</span> <span class="n">IntDistributionInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;NumSlidesLarges&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters for the number of slides produced for a serials microtomy task.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Config">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.Config">[docs]</a>
+<span class="k">class</span> <span class="nc">Config</span><span class="p">(</span><span class="n">pyd</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration settings for the histopathlogy department model.&quot;&quot;&quot;</span>
+
+    <span class="n">arrival_schedules</span><span class="p">:</span> <span class="n">ArrivalSchedules</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Arrival Schedules&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Arrival schedules for cancer and non-cancer specimens.&quot;&quot;&quot;</span>
+
+    <span class="n">resources_info</span><span class="p">:</span> <span class="n">ResourcesInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Resources&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Allocation schedules for each resource.&quot;&quot;&quot;</span>
+
+    <span class="n">task_durations_info</span><span class="p">:</span> <span class="n">TaskDurationsInfo</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Task Durations&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Task duration distribution parameters.&quot;&quot;&quot;</span>
+
+    <span class="n">batch_sizes</span><span class="p">:</span> <span class="n">BatchSizes</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Batch Sizes&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Batch sizes for various machine and delivery tasks.&quot;&quot;&quot;</span>
+
+    <span class="n">global_vars</span><span class="p">:</span> <span class="n">Globals</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Global Variables&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Miscellaneous model-wide parameters.&quot;&quot;&quot;</span>
+
+    <span class="n">sim_hours</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeFloat</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Simulation length (hours)&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The simulation length in hours.&quot;&quot;&quot;</span>
+
+    <span class="n">num_reps</span><span class="p">:</span> <span class="n">pyd</span><span class="o">.</span><span class="n">NonNegativeInt</span> <span class="o">=</span> <span class="n">pyd</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Number of simulation replications&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of simulation replications to run.&quot;&quot;&quot;</span>
+
+    <span class="n">created</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="n">analysis_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Config.from_workbook">
+<a class="viewcode-back" href="../../apidoc/hpath.config.html#hpath.config.Config.from_workbook">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_workbook</span><span class="p">(</span>
+        <span class="c1"># path: os.PathLike,</span>
+        <span class="n">wbook</span><span class="p">:</span> <span class="n">xl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">,</span>
+        <span class="n">sim_hours</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">num_reps</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">analysis_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Config&#39;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Load a config from an Excel workbook.&quot;&quot;&quot;</span>
+        <span class="c1"># wbook = xl.load_workbook(path, data_only=True)</span>
+        <span class="n">arrival_schedule_cancer_df</span> <span class="o">=</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span>
+            <span class="n">wbook</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Arrival Schedules&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ArrivalScheduleCancer&#39;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Hour&#39;</span><span class="p">)</span>
+        <span class="n">arrival_schedule_noncancer_df</span> <span class="o">=</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span>
+            <span class="n">wbook</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Arrival Schedules&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ArrivalScheduleNonCancer&#39;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Hour&#39;</span><span class="p">)</span>
+        <span class="n">arrival_schedules</span> <span class="o">=</span> <span class="n">ArrivalSchedules</span><span class="p">(</span>
+            <span class="n">cancer</span><span class="o">=</span><span class="n">ArrivalSchedule</span><span class="o">.</span><span class="n">from_pd</span><span class="p">(</span><span class="n">arrival_schedule_cancer_df</span><span class="p">),</span>
+            <span class="n">noncancer</span><span class="o">=</span><span class="n">ArrivalSchedule</span><span class="o">.</span><span class="n">from_pd</span><span class="p">(</span><span class="n">arrival_schedule_noncancer_df</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">resources_df</span> <span class="o">=</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span>
+            <span class="n">wbook</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Resources&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Resources&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Resource&#39;</span><span class="p">)</span>
+        <span class="n">resources_info</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">ResourceInfo</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">json_schema_extra</span><span class="p">[</span><span class="s1">&#39;resource_type&#39;</span><span class="p">],</span>
+            <span class="n">schedule</span><span class="o">=</span><span class="n">ResourceSchedule</span><span class="o">.</span><span class="n">from_pd</span><span class="p">(</span><span class="n">resources_df</span><span class="p">,</span> <span class="n">row_name</span><span class="o">=</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">ResourcesInfo</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">resources_info</span> <span class="o">=</span> <span class="n">ResourcesInfo</span><span class="p">(</span><span class="o">**</span><span class="n">resources_info</span><span class="p">)</span>
+
+        <span class="n">tasks_df</span> <span class="o">=</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span>
+            <span class="n">wbook</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Task Durations&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;TaskDurations&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Task&#39;</span><span class="p">)</span>
+        <span class="n">task_durations_info</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">DistributionInfo</span><span class="p">(</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">tasks_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Distribution&#39;</span><span class="p">],</span>
+            <span class="n">low</span><span class="o">=</span><span class="n">tasks_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Optimistic&#39;</span><span class="p">],</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">tasks_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Most Likely&#39;</span><span class="p">],</span>
+            <span class="n">high</span><span class="o">=</span><span class="n">tasks_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Pessimistic&#39;</span><span class="p">],</span>
+            <span class="n">time_unit</span><span class="o">=</span><span class="n">tasks_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Units&#39;</span><span class="p">],</span>
+        <span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">TaskDurationsInfo</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">task_durations_info</span> <span class="o">=</span> <span class="n">TaskDurationsInfo</span><span class="p">(</span><span class="o">**</span><span class="n">task_durations_info</span><span class="p">)</span>
+
+        <span class="n">batch_sizes_df</span> <span class="o">=</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_table</span><span class="p">(</span>
+            <span class="n">wbook</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Batch Sizes&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;BatchSizes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Batch Name&#39;</span><span class="p">)</span>
+        <span class="n">batch_sizes</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">batch_sizes_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s1">&#39;Size&#39;</span><span class="p">]</span>
+                       <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">BatchSizes</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="n">globals_float</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">xlh</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">wbook</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">Globals</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">annotation</span> <span class="o">==</span> <span class="nb">float</span>
+        <span class="p">}</span>
+        <span class="n">globals_dists</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">key</span><span class="p">:</span> <span class="n">IntDistributionInfo</span><span class="p">(</span>
+                <span class="nb">type</span><span class="o">=</span><span class="n">xlh</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">wbook</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">low</span><span class="o">=</span><span class="n">xlh</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">wbook</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">mode</span><span class="o">=</span><span class="n">xlh</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">wbook</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">high</span><span class="o">=</span><span class="n">xlh</span><span class="o">.</span><span class="n">get_name</span><span class="p">(</span><span class="n">wbook</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">title</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">Globals</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">annotation</span> <span class="o">==</span> <span class="n">IntDistributionInfo</span>
+        <span class="p">}</span>
+        <span class="n">global_vars</span> <span class="o">=</span> <span class="n">Globals</span><span class="p">(</span><span class="o">**</span><span class="n">globals_float</span><span class="p">,</span> <span class="o">**</span><span class="n">globals_dists</span><span class="p">)</span>
+
+        <span class="c1"># Call __init__()</span>
+        <span class="k">return</span> <span class="n">Config</span><span class="p">(</span>
+            <span class="n">arrival_schedules</span><span class="o">=</span><span class="n">arrival_schedules</span><span class="p">,</span>
+            <span class="n">resources_info</span><span class="o">=</span><span class="n">resources_info</span><span class="p">,</span>
+            <span class="n">task_durations_info</span><span class="o">=</span><span class="n">task_durations_info</span><span class="p">,</span>
+            <span class="n">batch_sizes</span><span class="o">=</span><span class="n">batch_sizes</span><span class="p">,</span>
+            <span class="n">global_vars</span><span class="o">=</span><span class="n">global_vars</span><span class="p">,</span>
+            <span class="n">sim_hours</span><span class="o">=</span><span class="n">sim_hours</span><span class="p">,</span>
+            <span class="n">num_reps</span><span class="o">=</span><span class="n">num_reps</span><span class="p">,</span>
+            <span class="n">created</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+            <span class="n">analysis_id</span><span class="o">=</span><span class="n">analysis_id</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">from_workbook</span><span class="p">(</span><span class="n">xl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="s1">&#39;config.xlsx&#39;</span><span class="p">,</span> <span class="n">data_only</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="mi">6</span><span class="o">*</span><span class="mi">7</span><span class="o">*</span><span class="mi">24</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">())</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

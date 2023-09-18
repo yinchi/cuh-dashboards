@@ -1,0 +1,7 @@
+hpath.conf module
+=================
+
+.. automodule:: hpath.conf
+   :members:
+   :undoc-members:
+   :show-inheritance:

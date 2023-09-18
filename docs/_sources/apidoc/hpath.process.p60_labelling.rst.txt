@@ -1,0 +1,7 @@
+hpath.process.p60\_labelling module
+===================================
+
+.. automodule:: hpath.process.p60_labelling
+   :members:
+   :undoc-members:
+   :show-inheritance:

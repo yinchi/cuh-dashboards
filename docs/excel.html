@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Excel Configuration File &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Process Logic" href="process_logic.html" />
+    <link rel="prev" title="Installing and launching the server locally" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Excel Configuration File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arrival-schedules">Arrival Schedules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#task-durations">Task Durations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#runner-times-wip"><em>Runner times (WIP)</em></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-sizes">Batch Sizes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-global-variables">Additional Global Variables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="process_logic.html">Process Logic</a></li>
+<li class="toctree-l1"><a class="reference internal" href="apidoc/hpath.html">Python documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">The Excel Configuration File</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/excel.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-excel-configuration-file">
+<h1>The Excel Configuration File<a class="headerlink" href="#the-excel-configuration-file" title="Link to this heading"></a></h1>
+<p>Parameters are fed into the simulation program using named ranges and tables in an Excel workbook.</p>
+<section id="arrival-schedules">
+<h2>Arrival Schedules<a class="headerlink" href="#arrival-schedules" title="Link to this heading"></a></h2>
+<p>Arrival schedules are defined separately for cancer-pathway and non-cancer-pathway specimens.
+The arrival schedule for each pathway is defined in a table in the “Arrival Schedules” worksheet,
+with one cell for each hour of the week.  The value of each cell is the expected number of specimen
+arrivals in that hour.</p>
+<a class="reference internal image-reference" href="_images/arrival_schedules.png"><img alt="_images/arrival_schedules.png" src="_images/arrival_schedules.png" style="width: 300px;" /></a>
+</section>
+<section id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading"></a></h2>
+<p>Resources are defined in the “Resources” worksheet.  Each row contains the name of the resource,
+the days of the week which the resource is available (marked as seven columns of 0/1 entries),
+and the number of resource units available within each scheduled day, in 30-minute intervals.</p>
+<a class="reference internal image-reference" href="_images/resources.png"><img alt="_images/resources.png" src="_images/resources.png" style="width: 800px;" /></a>
+<p><strong>Note:</strong> It is currently assumed that the resource allocation for each resource is the same for
+each scheduled day.  Defining a different schedule for a specific day (e.g. Saturday) will require
+changes to the program design.</p>
+<p>Dragging a cell corner to fill the adjacent cells is a quick way of specifying the same resource
+allocation level for consecutive 30-minute intervals.</p>
+</section>
+<section id="task-durations">
+<h2>Task Durations<a class="headerlink" href="#task-durations" title="Link to this heading"></a></h2>
+<p>Task durations are defined in the worksheet of the same name.  Three distributions are supported:
+Constant, Triangular, and <a class="reference external" href="https://en.wikipedia.org/wiki/PERT_distribution">PERT</a>.
+The Triangular and PERT distributions are three-point (minimum, mode, and maximum) distributions,
+with the PERT distribution having more weight towards the mode (most likely value) of the
+distribution compared to the Triangular distribution.</p>
+<a class="reference internal image-reference" href="_images/task_durations.png"><img alt="_images/task_durations.png" src="_images/task_durations.png" style="width: 500px;" /></a>
+<p>The time units for each task duration distribution (seconds, minutes, or hours) can be selected
+from a drop-down menu.  For Constant values, the minimum and maximum values (Optimistic and
+Pessimistic table columns) are ignored.</p>
+</section>
+<section id="runner-times-wip">
+<h2><em>Runner times (WIP)</em><a class="headerlink" href="#runner-times-wip" title="Link to this heading"></a></h2>
+<p><em>Currently ignored by the simulation program (TODO)</em></p>
+</section>
+<section id="batch-sizes">
+<h2>Batch Sizes<a class="headerlink" href="#batch-sizes" title="Link to this heading"></a></h2>
+</section>
+<section id="additional-global-variables">
+<h2>Additional Global Variables<a class="headerlink" href="#additional-global-variables" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="install.html" class="btn btn-neutral float-left" title="Installing and launching the server locally" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="process_logic.html" class="btn btn-neutral float-right" title="Process Logic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

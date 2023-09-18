@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hpath.util module &mdash; CUH NHS Trust: Dashboard Server  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="hpath.specimens module" href="hpath.specimens.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            CUH NHS Trust: Dashboard Server
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Quickstart 🏎️</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart_sim.html">Quickstart: simulation dashboard</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">For developers 👩‍💻</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing and launching the server locally</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Frontend 🌐</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://lakeesiv.github.io/digital-twin">Documentation (external)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Simulation Server</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../excel.html">The Excel Configuration File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_logic.html">Process Logic</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hpath.html">Python documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="hpath.html#subpackages">Subpackages</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="hpath.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="hpath.chart_datatypes.html">hpath.chart_datatypes module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.conf.html">hpath.conf module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.config.html">hpath.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.distributions.html">hpath.distributions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.excel.html">hpath.excel module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.kpis.html">hpath.kpis module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.model.html">hpath.model module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.simulate.html">hpath.simulate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpath.specimens.html">hpath.specimens module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">hpath.util module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.dc_dict"><code class="docutils literal notranslate"><span class="pre">dc_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.dc_items"><code class="docutils literal notranslate"><span class="pre">dc_items()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.dc_names"><code class="docutils literal notranslate"><span class="pre">dc_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.dc_values"><code class="docutils literal notranslate"><span class="pre">dc_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.is_dataclass_instance"><code class="docutils literal notranslate"><span class="pre">is_dataclass_instance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.serialiser"><code class="docutils literal notranslate"><span class="pre">serialiser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.ARR_RATE_INTERVAL_HOURS"><code class="docutils literal notranslate"><span class="pre">ARR_RATE_INTERVAL_HOURS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hpath.util.RESOURCE_ALLOCATION_INTERVAL_HOURS"><code class="docutils literal notranslate"><span class="pre">RESOURCE_ALLOCATION_INTERVAL_HOURS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">CUH NHS Trust: Dashboard Server</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hpath.html">hpath package</a></li>
+      <li class="breadcrumb-item active">hpath.util module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/apidoc/hpath.util.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-hpath.util">
+<span id="hpath-util-module"></span><h1>hpath.util module<a class="headerlink" href="#module-hpath.util" title="Link to this heading"></a></h1>
+<p>Utility functions and constants.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.dc_dict">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">dc_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataclass_inst</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/util.html#dc_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.dc_dict" title="Link to this definition"></a></dt>
+<dd><p>Convert a dataclass instance to a dict.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.dc_items">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">dc_items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataclass_inst</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/util.html#dc_items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.dc_items" title="Link to this definition"></a></dt>
+<dd><p>Convert a dataclass instance to a list of tuples. Useful for iteration.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.dc_names">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">dc_names</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataclass_inst</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/hpath/util.html#dc_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.dc_names" title="Link to this definition"></a></dt>
+<dd><p>Get the field names of a dataclass instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.dc_values">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">dc_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataclass_inst</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></span></span><a class="reference internal" href="../_modules/hpath/util.html#dc_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.dc_values" title="Link to this definition"></a></dt>
+<dd><p>Get the field values of a dataclass instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.is_dataclass_instance">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">is_dataclass_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../_modules/hpath/util.html#is_dataclass_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.is_dataclass_instance" title="Link to this definition"></a></dt>
+<dd><p>Returns whether the object is a dataclass instance.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="hpath.util.serialiser">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">serialiser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></span><a class="reference internal" href="../_modules/hpath/util.html#serialiser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#hpath.util.serialiser" title="Link to this definition"></a></dt>
+<dd><p>Serialiser for <a class="reference external" href="https://docs.python.org/3/library/json.html#json.dump" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">json.dump()</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/json.html#json.dumps" title="(in Python v3.11)"><code class="xref py py-func docutils literal notranslate"><span class="pre">json.dumps()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="hpath.util.ARR_RATE_INTERVAL_HOURS">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">ARR_RATE_INTERVAL_HOURS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#hpath.util.ARR_RATE_INTERVAL_HOURS" title="Link to this definition"></a></dt>
+<dd><p>Interval duration for which specimen arrival rates are defined in the Excel config template.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="hpath.util.RESOURCE_ALLOCATION_INTERVAL_HOURS">
+<span class="sig-prename descclassname"><span class="pre">hpath.util.</span></span><span class="sig-name descname"><span class="pre">RESOURCE_ALLOCATION_INTERVAL_HOURS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.5</span></em><a class="headerlink" href="#hpath.util.RESOURCE_ALLOCATION_INTERVAL_HOURS" title="Link to this definition"></a></dt>
+<dd><p>Interval duration for which resource allocations are defined in the Excel config template.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hpath.specimens.html" class="btn btn-neutral float-left" title="hpath.specimens module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institute for Manufacturing, University of Cambridge.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
