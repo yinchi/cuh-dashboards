@@ -1,0 +1,47 @@
+services:
+  docs:
+    image: docs
+    volumes:
+      - ./docs:/docs:ro
+    build:
+      context: .
+      dockerfile: dockerfiles/docs-dev.dockerfile
+    ports:
+      - 8888:8888
+    tty: true
+  redis:
+    image: redis:alpine
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 10s
+      retries: 5
+  redis-worker:
+    image: backend
+    build:
+      context: .
+      dockerfile: dockerfiles/backend.dockerfile
+    volumes:
+      - ./hpath:/app/hpath:rw
+      - ./db:/db:rw
+    command: python -m hpath.restful.redis
+    depends_on:
+      - redis
+  backend:
+    image: backend
+    volumes:
+      - ./hpath:/app/hpath:rw
+      - ./db:/db:rw
+    command: python -m hpath.restful.server
+    ports:
+      - 5000:5000
+    depends_on:
+      - redis
+      - redis-worker
+  frontend:
+    image: frontend
+    build:
+      context: .
+      dockerfile: dockerfiles/frontend-lakee.dockerfile
+    ports:
+      - 80:3000
