@@ -1,3 +1,7 @@
+[MASTER]
+
+ignore=sensor  # NEEDS CLEANUP
+
 [BASIC]
 
 good-names=i,

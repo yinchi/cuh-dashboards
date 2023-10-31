@@ -1,3 +1,4 @@
+# alias dev="docker compose -f docker-compose.dev.yml"
 services:
   docs:
     image: docs
@@ -20,7 +21,7 @@ services:
     image: backend
     build:
       context: .
-      dockerfile: dockerfiles/backend.dockerfile
+      dockerfile: dockerfiles/backend-dev.dockerfile
     volumes:
       - ./hpath:/app/hpath:rw
       - ./db:/db:rw
@@ -45,3 +46,12 @@ services:
       dockerfile: dockerfiles/frontend-lakee.dockerfile
     ports:
       - 80:3000
+  sensors:
+    image: sensors
+    build:
+      context: .
+      dockerfile: dockerfiles/sensors-dev.dockerfile
+    volumes:
+      - ./sensors:/app/sensors:rw
+    ports:
+      - 8000:8000
