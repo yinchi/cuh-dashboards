@@ -20,7 +20,7 @@ const components: { title: string; href: string }[] = [
   },
   {
     title: "Documentation",
-    href: "http://localhost:8888",
+    href: "http://127.0.0.1:8888",
   },
 ];
 

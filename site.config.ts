@@ -8,11 +8,10 @@ const isProd = process.env.NODE_ENV === "production";
 const env = isProd ? prodEnv : devEnv;
 
 const HOST_NAME = "host.docker.internal"; // Change this for public server
+const VM_NAME = "192.168.56.101" // Virtualbox default for first VM on host-only network
 
 export const siteConfig = {
-  DH_API_URL: `http://${HOST_NAME}:${env.DH_PORT}`,
-  SENSOR_API_URL: `http://${HOST_NAME}:${env.SENSOR_PORT}`,
-  SENSOR_WS_URL: `ws://${HOST_NAME}:${env.SENSOR_PORT}/ws/`, // make sure to include trailing slash
+  DH_API_URL: `http://${HOST_NAME}:5000`,
+  SENSOR_API_URL: `http://${VM_NAME}:8000`,
+  SENSOR_WS_URL: `ws://${VM_NAME}:8000/ws/`, // make sure to include trailing slash
 };
-
-console.log(siteConfig.DH_API_URL);

@@ -46,12 +46,3 @@ services:
       dockerfile: dockerfiles/frontend-lakee.dockerfile
     ports:
       - 80:3000
-  sensors:
-    image: sensors
-    build:
-      context: .
-      dockerfile: dockerfiles/sensors-dev.dockerfile
-    volumes:
-      - ./sensors:/app/sensors:rw
-    ports:
-      - 8000:8000

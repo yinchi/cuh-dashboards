@@ -71,7 +71,7 @@ Continuing from above, run:
 6. Configure the frontend settings
 ----------------------------------
 
-By default, the frontend website is set up to communicate with the backend on ``localhost``.
+By default, the frontend website is set up to communicate with the backend on ``127.0.0.1``.
 Edit ``site.config.ts`` to change this if hosting the website on a network.
 
 .. image:: _static/frontend_config.png
@@ -87,9 +87,9 @@ In a WSL terminal, ``cd`` to the ``hpath`` directory (the root of the cloned rep
    docker compose build
    docker compose up
 
-This will launch the main server on ``http://localhost:80`` and the documentation server on
-``http://localhost:8000``.  The simulation backend server can also be accessed via
-``http://localhost:5000``.
+This will launch the main server on ``http://127.0.0.1:80`` and the documentation server on
+``http://127.0.0.1:8888``.  The simulation backend server can also be accessed via
+``http://127.0.0.1:5000``.
 
 The server can be stopped by typing **CTRL+C** in the terminal above, or using the Docker Desktop
 graphical interface. The terminated services can be removed using ``docker compose down``, and
