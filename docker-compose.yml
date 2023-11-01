@@ -6,8 +6,10 @@ services:
       context: .
       dockerfile: dockerfiles/docs.dockerfile
     ports:
-      - 8888:8888
+      - 0.0.0.0:8888:8888
     tty: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis:
     image: redis:alpine
     healthcheck:
@@ -15,6 +17,8 @@ services:
       interval: 1s
       timeout: 10s
       retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   redis-worker:
     image: backend
     build:
@@ -25,20 +29,17 @@ services:
     command: python -m hpath.restful.redis
     depends_on:
       - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   backend:
     image: backend
     volumes:
       - ./db:/db:rw
     command: python -m hpath.restful.server
     ports:
-      - 5000:5000
+      - 7000:7000
     depends_on:
       - redis
       - redis-worker
-  frontend:
-    image: frontend
-    build:
-      context: .
-      dockerfile: dockerfiles/frontend-lakee.dockerfile
-    ports:
-      - 80:3000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

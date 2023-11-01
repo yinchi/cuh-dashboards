@@ -178,6 +178,7 @@ def new_scenario(config: Config) -> dict[str, Any]:
 
 
 @app.route('/scenarios/', methods=['POST'])
+@app.route('/scenarios', methods=['POST'])
 def new_scenario_rest() -> Response:
     """Process POST request for creating a new scenario.  The scenario configuration is contained
     in the request's ``files`` and ``form`` data.
@@ -241,6 +242,7 @@ def status(scenario_id: int) -> dict[str, Any]:
 
 
 @app.route('/scenarios/<scenario_id>/status/')
+@app.route('/scenarios/<scenario_id>/status')
 def status_rest(scenario_id) -> Response:
     """Process GET request for querying scenario task status."""
     not_found_text = f"Cannot find scenario with ID: '{scenario_id}'."
@@ -259,6 +261,7 @@ def status_rest(scenario_id) -> Response:
 
 
 @app.route('/scenarios/')
+@app.route('/scenarios')
 def list_scenarios_rest() -> Response:
     """Return a list of scenarios on the server."""
     conn = sql.connect(DB_PATH)
@@ -286,6 +289,7 @@ def results_scenario(scenario_id: int) -> str:
 
 
 @app.route('/scenarios/<scenario_id>/results/')
+@app.route('/scenarios/<scenario_id>/results')
 def results_scenario_rest(scenario_id: int) -> Response:
     """Process GET request for reading a scenario simulation result."""
     not_found_text = f"Cannot find results for scenario with ID: '{scenario_id}'."
@@ -305,6 +309,7 @@ def results_scenario_rest(scenario_id: int) -> Response:
 
 
 @app.route('/multi/', methods=['POST'])
+@app.route('/multi', methods=['POST'])
 def new_multi_rest() -> Response:
     """Process POST request for creating a new multi-scenario analysis.
 
@@ -371,6 +376,7 @@ def status_multi(analysis_id: int) -> dict[str, Any]:
 
 
 @app.route('/multi/<analysis_id>/status/')
+@app.route('/multi/<analysis_id>/status')
 def status_multi_rest(analysis_id) -> Response:
     """Process a GET request for querying multi-scenario analysis status."""
     not_found_text = f"Cannot find analysis with ID: '{analysis_id}'."
@@ -389,6 +395,7 @@ def status_multi_rest(analysis_id) -> Response:
 
 
 @app.route('/multi/')
+@app.route('/multi')
 def list_multis_rest() -> Response:
     """Return a list of multi-scenario analyses on the server."""
     conn = sql.connect(DB_PATH)
@@ -403,6 +410,7 @@ def list_multis_rest() -> Response:
 
 
 @app.route('/multi/<analysis_id>/results/')
+@app.route('/multi/<analysis_id>/results')
 def results_multi_rest(analysis_id: int) -> Response:
     """Produce a JSON object for a multi-scenario analysis result."""
     not_found_text = f"Cannot find analysis with ID: '{analysis_id}'."

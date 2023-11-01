@@ -1,8 +1,4 @@
 -r hpath/requirements.in
--r sensor/requirements.in
-
-ipykernel
-nbstripout
 
 sphinx
 sphinx_rtd_theme
